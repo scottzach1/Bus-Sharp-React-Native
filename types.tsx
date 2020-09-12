@@ -11,36 +11,24 @@ export type BottomTabParamList = {
 };
 
 export type SearchTabParamList = {
-    search: undefined;
-    service: {
-        code: string
-    };
-    stop: {
-        code: string
-    };
+    SearchScreen: undefined;
+    ServiceScreen: undefined;
+    StopScreen: undefined;
 }
 
 export type MapTabParamList = {
-    map: undefined;
-    service: {
-        code: string
-    };
-    stop: {
-        code: string
-    };
+    MapScreen: undefined;
+    ServiceScreen: undefined;
+    StopScreen: undefined;
 }
 
 export type SavedTabParamList = {
-    saved: undefined;
-    service: {
-        code: string
-    };
-    stop: {
-        code: string
-    };
+    SavedScreen: undefined;
+    ServiceScreen: undefined;
+    StopScreen: undefined;
 }
 
 export type SettingsTabParamList = {
-    settings: undefined;
-    twitter: undefined;
+    SettingsScreen: undefined;
+    TwitterScreen: undefined;
 }

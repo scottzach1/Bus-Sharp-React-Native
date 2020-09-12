@@ -7,24 +7,27 @@ export default {
       Root: {
         screens: {
           SearchTab: {
+            path: 'search',
             screens: {
-              SearchScreen: 'search',
-              ServiceScreen: 'service',
-              StopScreen: 'stop'
+              SearchScreen: '',
+              ServiceScreen: 'service/:code',
+              StopScreen: 'stop/:code'
             }
           },
           MapTab: {
+            path: 'map',
             screens: {
-              MapScreen: 'map',
-              ServiceScreen: 'service',
-              StopScreen: 'stop'
+              MapScreen: '',
+              ServiceScreen: 'service/:code',
+              StopScreen: 'stop/:code'
             }
           },
           SavedTab: {
+            path: 'saved',
             screens: {
-              SavedScreen: 'saved',
-              ServiceScreen: 'service',
-              StopScreen: 'stop'
+              SavedScreen: '',
+              ServiceScreen: 'service/:code',
+              StopScreen: 'stop/:code'
             }
           },
           SettingsTab: {
