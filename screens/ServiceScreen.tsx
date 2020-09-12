@@ -1,19 +1,28 @@
 import React, {Component} from "react";
-import {StyleSheet, Text, View} from "react-native";
+import {Route, StyleSheet, Text, View} from "react-native";
 
 interface Props {
+    route: Route,
 }
 
 interface State {
+    code: string,
 }
 
 class ServiceScreen extends Component<Props, State> {
-    static path = "service";
+
+    constructor(props: Readonly<any>) {
+        super(props);
+
+        this.state = {
+            code: this.props.route.params.serviceCode
+        }
+    }
 
     render() {
         return (
             <View style={styles.container}>
-                <Text>Service!</Text>
+                <Text>Service {this.state.code}!</Text>
             </View>
         );
     }

@@ -1,17 +1,28 @@
 import React, {Component} from "react";
-import {StyleSheet, Text, View} from "react-native";
+import {Route, StyleSheet, Text, View} from "react-native";
 
 interface Props {
+    route: Route,
 }
 
 interface State {
+    code: string,
 }
 
 class StopScreen extends Component<Props, State> {
+
+    constructor(props: Readonly<any>) {
+        super(props);
+
+        this.state = {
+            code: this.props.route.params.stopCode
+        }
+    }
+
     render() {
         return (
             <View style={styles.container}>
-                <Text>Stop!</Text>
+                <Text>Service {this.state.code}!</Text>
             </View>
         );
     }

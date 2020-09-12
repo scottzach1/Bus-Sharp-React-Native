@@ -16,7 +16,9 @@ class SearchScreen extends Component<Props, State> {
                 <Text>Search!</Text>
                 <Button
                     title={"Visit Service Screen"}
-                    onPress={() => this.props.navigation.navigate("service")}
+                    onPress={() => this.props.navigation.navigate("service", {
+                        code: '7909'
+                    })}
                 />
             </View>
         );
