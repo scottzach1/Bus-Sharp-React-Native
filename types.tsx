@@ -11,17 +11,24 @@ export type BottomTabParamList = {
 };
 
 export type SearchTabParamList = {
-    SearchTabScreen: undefined;
+    search: undefined;
+    service: undefined;
+    stop: undefined;
 }
 
 export type MapTabParamList = {
-    MapTabScreen: undefined;
+    map: undefined;
+    service: undefined;
+    stop: undefined;
 }
 
 export type SavedTabParamList = {
-    SavedTabScreen: undefined;
+    saved: undefined;
+    service: undefined;
+    stop: undefined;
 }
 
 export type SettingsTabParamList = {
-    SettingsTabScreen: undefined;
+    settings: undefined;
+    twitter: undefined;
 }

@@ -12,8 +12,9 @@ import MapScreen from "../screens/MapScreen";
 import SavedScreen from "../screens/SavedScreen";
 import SettingsScreen from "../screens/SettingsScreen";
 import {createStackNavigator} from "@react-navigation/stack";
-import TabOneScreen from "../screens/TabOneScreen";
-import TabTwoScreen from "../screens/TabTwoScreen";
+import ServiceScreen from "../screens/ServiceScreen";
+import StopScreen from "../screens/StopScreen";
+import TwitterScreen from "../screens/TwitterScreen";
 
 const BottomTab = createBottomTabNavigator<BottomTabParamList>();
 
@@ -24,46 +25,32 @@ export default function BottomTabNavigator() {
         <BottomTab.Navigator
             initialRouteName="SearchTab"
             tabBarOptions={{activeTintColor: Colors[colorScheme].tint}}>
-            {/*<BottomTab.Screen*/}
-            {/*    name="TabOne"*/}
-            {/*    component={TabOneNavigator}*/}
-            {/*    options={{*/}
-            {/*        tabBarIcon: ({color}) => <TabBarIcon name="ios-code" color={color}/>,*/}
-            {/*    }}*/}
-            {/*/>*/}
-            {/*<BottomTab.Screen*/}
-            {/*    name="TabTwo"*/}
-            {/*    component={TabTwoNavigator}*/}
-            {/*    options={{*/}
-            {/*        tabBarIcon: ({color}) => <TabBarIcon name="ios-code" color={color}/>,*/}
-            {/*    }}*/}
-            {/*/>*/}
             <BottomTab.Screen
                 name={"SearchTab"}
                 component={SearchTabNavigator}
                 options={{
-                    tabBarIcon: ({color}) => <TabBarIcon name="ios-code" color={color}/>,
+                    tabBarIcon: ({color}) => <TabBarIcon name="ios-search" color={color}/>,
                 }}
             />
             <BottomTab.Screen
                 name={"MapTab"}
                 component={MapTabNavigator}
                 options={{
-                    tabBarIcon: ({color}) => <TabBarIcon name="ios-code" color={color}/>,
+                    tabBarIcon: ({color}) => <TabBarIcon name="ios-map" color={color}/>,
                 }}
             />
             <BottomTab.Screen
                 name={"SavedTab"}
                 component={SavedTabNavigator}
                 options={{
-                    tabBarIcon: ({color}) => <TabBarIcon name="ios-code" color={color}/>,
+                    tabBarIcon: ({color}) => <TabBarIcon name="ios-star" color={color}/>,
                 }}
             />
             <BottomTab.Screen
                 name={"SettingsTab"}
                 component={SettingsTabNavigator}
                 options={{
-                    tabBarIcon: ({color}) => <TabBarIcon name="ios-code" color={color}/>,
+                    tabBarIcon: ({color}) => <TabBarIcon name="ios-settings" color={color}/>,
                 }}
             />
         </BottomTab.Navigator>
@@ -85,9 +72,19 @@ function SearchTabNavigator() {
     return (
         <SearchTabStack.Navigator>
             <SearchTabStack.Screen
-                name={"SearchTabScreen"}
+                name={"search"}
                 component={SearchScreen}
                 options={{headerTitle: 'Search Tab'}}
+            />
+            <SearchTabStack.Screen
+                name={"service"}
+                component={ServiceScreen}
+                options={{headerTitle: 'Service Perspective'}}
+            />
+            <SearchTabStack.Screen
+                name={"stop"}
+                component={StopScreen}
+                options={{headerTitle: 'Stop Perspective'}}
             />
         </SearchTabStack.Navigator>
     )
@@ -99,9 +96,19 @@ function MapTabNavigator() {
     return (
         <MapTabStack.Navigator>
             <MapTabStack.Screen
-                name={"MapTabScreen"}
+                name={"map"}
                 component={MapScreen}
                 options={{headerTitle: 'Map Tab'}}
+            />
+            <SearchTabStack.Screen
+                name={"service"}
+                component={ServiceScreen}
+                options={{headerTitle: 'Service Perspective'}}
+            />
+            <SearchTabStack.Screen
+                name={"stop"}
+                component={StopScreen}
+                options={{headerTitle: 'Stop Perspective'}}
             />
         </MapTabStack.Navigator>
     )
@@ -113,14 +120,23 @@ function SavedTabNavigator() {
     return (
         <SavedTabStack.Navigator>
             <SavedTabStack.Screen
-                name={"SavedTabScreen"}
+                name={"saved"}
                 component={SavedScreen}
                 options={{headerTitle: 'Saved Tab'}}
+            />
+            <SearchTabStack.Screen
+                name={"service"}
+                component={ServiceScreen}
+                options={{headerTitle: 'Service Perspective'}}
+            />
+            <SearchTabStack.Screen
+                name={"stop"}
+                component={StopScreen}
+                options={{headerTitle: 'Stop Perspective'}}
             />
         </SavedTabStack.Navigator>
     )
 }
-
 
 const SettingsTabStack = createStackNavigator<SettingsTabParamList>();
 
@@ -128,9 +144,14 @@ function SettingsTabNavigator() {
     return (
         <SettingsTabStack.Navigator>
             <SettingsTabStack.Screen
-                name={"SettingsTabScreen"}
+                name={"settings"}
                 component={SettingsScreen}
                 options={{headerTitle: 'Settings Tab'}}
+            />
+            <SettingsTabStack.Screen
+                name={"twitter"}
+                component={TwitterScreen}
+                options={{headerTitle: 'Twitter Feed'}}
             />
         </SettingsTabStack.Navigator>
     )
