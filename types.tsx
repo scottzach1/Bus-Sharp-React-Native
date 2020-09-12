@@ -12,20 +12,32 @@ export type BottomTabParamList = {
 
 export type SearchTabParamList = {
     search: undefined;
-    service: undefined;
-    stop: undefined;
+    service: {
+        code: string
+    };
+    stop: {
+        code: string
+    };
 }
 
 export type MapTabParamList = {
     map: undefined;
-    service: undefined;
-    stop: undefined;
+    service: {
+        code: string
+    };
+    stop: {
+        code: string
+    };
 }
 
 export type SavedTabParamList = {
     saved: undefined;
-    service: undefined;
-    stop: undefined;
+    service: {
+        code: string
+    };
+    stop: {
+        code: string
+    };
 }
 
 export type SettingsTabParamList = {

@@ -8,22 +8,29 @@ export default {
         screens: {
           SearchTab: {
             screens: {
-              SearchScreen: 'search'
+              SearchScreen: 'search',
+              ServiceScreen: 'service',
+              StopScreen: 'stop'
             }
           },
           MapTab: {
             screens: {
-              MapScreen: 'map'
+              MapScreen: 'map',
+              ServiceScreen: 'service',
+              StopScreen: 'stop'
             }
           },
           SavedTab: {
             screens: {
-              SavedScreen: 'saved'
+              SavedScreen: 'saved',
+              ServiceScreen: 'service',
+              StopScreen: 'stop'
             }
           },
           SettingsTab: {
             screens: {
-              SettingsScreen: 'settings'
+              SettingsScreen: 'settings',
+              TwitterScreen: 'twitter'
             }
           }
         },
