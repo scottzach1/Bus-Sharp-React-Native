@@ -6,16 +6,26 @@ export default {
     screens: {
       Root: {
         screens: {
-          TabOne: {
+          SearchTab: {
             screens: {
-              TabOneScreen: 'one',
-            },
+              SearchScreen: 'search'
+            }
           },
-          TabTwo: {
+          MapTab: {
             screens: {
-              TabTwoScreen: 'two',
-            },
+              MapScreen: 'map'
+            }
           },
+          SavedTab: {
+            screens: {
+              SavedScreen: 'saved'
+            }
+          },
+          SettingsTab: {
+            screens: {
+              SettingsScreen: 'settings'
+            }
+          }
         },
       },
       NotFound: '*',
