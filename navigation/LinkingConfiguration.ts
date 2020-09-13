@@ -49,12 +49,22 @@ const linkingOptions: LinkingOptions = {
     getStateFromPath(path, config) {
         let state: any = getStateFromPath(path, config);
 
+        // State could not be found.
+        if (state!.routes[0].name === "NotFound") return state;
+
+        // Trim path as implemented within underlying library ('@react-navigation/native').
+        let cleanPath = path
+            .replace(/\/+/g, '/') // Replace multiple slash (//) with single ones
+            .replace(/^\//, '') // Remove extra leading slash
+            .replace(/\?.*$/, ''); // Remove query params which we will handle later
+
         // Check whether we should insert a previous state in the routes stack.
-        if (path.includes('/service/') || path.includes('/stop/')) {
+        if (new RegExp(['search', 'map', 'saved', 'settings'].join("|")).test(cleanPath)) {
             // Extract current stack (hard coded, but schema defined above ^).
             let routes: any[] = state!.routes[0].state!.routes[0].state!.routes;
             console.log('alt', routes, JSON.stringify(routes));
 
+            // Conditionally get screen name.
             let tab: string;
 
             if (path.includes('/search/'))
@@ -63,6 +73,8 @@ const linkingOptions: LinkingOptions = {
                 tab = 'Map';
             else if (path.includes('/saved/'))
                 tab = 'Saved';
+            else if (path.includes('/settings/'))
+                tab = 'Settings';
             else
                 return undefined;
 
