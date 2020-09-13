@@ -5,7 +5,11 @@ import * as React from 'react';
 import Colors from '../constants/Colors';
 import useColorScheme from '../hooks/useColorScheme';
 import {
-    BottomTabParamList, MapTabParamList, SavedTabParamList, SearchTabParamList, SettingsTabParamList
+    BottomTabParamList,
+    MapTabParamList,
+    SavedTabParamList,
+    SearchTabParamList,
+    SettingsTabParamList
 } from '../types';
 import SearchScreen from "../screens/SearchScreen";
 import MapScreen from "../screens/MapScreen";
@@ -70,19 +74,19 @@ const SearchTabStack = createStackNavigator<SearchTabParamList>();
 
 function SearchTabNavigator() {
     return (
-        <SearchTabStack.Navigator>
+        <SearchTabStack.Navigator initialRouteName={"SearchHomeScreen"}>
             <SearchTabStack.Screen
-                name={"search"}
+                name={"SearchHomeScreen"}
                 component={SearchScreen}
                 options={{headerTitle: 'Search Tab'}}
             />
             <SearchTabStack.Screen
-                name={"service"}
+                name={"SearchServiceScreen"}
                 component={ServiceScreen}
                 options={{headerTitle: 'Service Perspective'}}
             />
             <SearchTabStack.Screen
-                name={"stop"}
+                name={"SearchStopScreen"}
                 component={StopScreen}
                 options={{headerTitle: 'Stop Perspective'}}
             />
@@ -94,19 +98,19 @@ const MapTabStack = createStackNavigator<MapTabParamList>();
 
 function MapTabNavigator() {
     return (
-        <MapTabStack.Navigator>
+        <MapTabStack.Navigator initialRouteName={"MapHomeScreen"}>
             <MapTabStack.Screen
-                name={"map"}
+                name={"MapHomeScreen"}
                 component={MapScreen}
                 options={{headerTitle: 'Map Tab'}}
             />
-            <SearchTabStack.Screen
-                name={"service"}
+            <MapTabStack.Screen
+                name={"MapServiceScreen"}
                 component={ServiceScreen}
                 options={{headerTitle: 'Service Perspective'}}
             />
-            <SearchTabStack.Screen
-                name={"stop"}
+            <MapTabStack.Screen
+                name={"MapStopScreen"}
                 component={StopScreen}
                 options={{headerTitle: 'Stop Perspective'}}
             />
@@ -118,19 +122,19 @@ const SavedTabStack = createStackNavigator<SavedTabParamList>();
 
 function SavedTabNavigator() {
     return (
-        <SavedTabStack.Navigator>
+        <SavedTabStack.Navigator initialRouteName={"SavedHomeScreen"}>
             <SavedTabStack.Screen
-                name={"saved"}
+                name={"SavedHomeScreen"}
                 component={SavedScreen}
                 options={{headerTitle: 'Saved Tab'}}
             />
-            <SearchTabStack.Screen
-                name={"service"}
+            <SavedTabStack.Screen
+                name={"SavedServiceScreen"}
                 component={ServiceScreen}
                 options={{headerTitle: 'Service Perspective'}}
             />
-            <SearchTabStack.Screen
-                name={"stop"}
+            <SavedTabStack.Screen
+                name={"SavedStopScreen"}
                 component={StopScreen}
                 options={{headerTitle: 'Stop Perspective'}}
             />
@@ -142,14 +146,14 @@ const SettingsTabStack = createStackNavigator<SettingsTabParamList>();
 
 function SettingsTabNavigator() {
     return (
-        <SettingsTabStack.Navigator>
+        <SettingsTabStack.Navigator initialRouteName={"SettingsHomeScreen"}>
             <SettingsTabStack.Screen
-                name={"settings"}
+                name={"SettingsHomeScreen"}
                 component={SettingsScreen}
                 options={{headerTitle: 'Settings Tab'}}
             />
             <SettingsTabStack.Screen
-                name={"twitter"}
+                name={"SettingsTwitterScreen"}
                 component={TwitterScreen}
                 options={{headerTitle: 'Twitter Feed'}}
             />

@@ -1,8 +1,10 @@
 import React, {Component} from "react";
 import {Route, StyleSheet, Text, View} from "react-native";
+import {StackNavigationProp} from "@react-navigation/stack";
 
 interface Props {
     route: Route,
+    navigation: StackNavigationProp<any>,
 }
 
 interface State {
