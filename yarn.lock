@@ -1722,6 +1722,25 @@
     "@babel/runtime" "^7.7.2"
     core-js "^3.4.1"
 
+"@react-google-maps/api@^1.10.1":
+  version "1.10.1"
+  resolved "https://registry.yarnpkg.com/@react-google-maps/api/-/api-1.10.1.tgz#a1ebaac789771a8a8df66803edbc1f7b22dad4c6"
+  integrity sha512-hb8urUcwZw99Cu3yQnZWUbXjR1Ym/8C21kSX6B02I29l6DXNxDbJ5Jo/T5swhnizPKY7TNhR1oTctC/HY7SQWA==
+  dependencies:
+    "@react-google-maps/infobox" "1.10.0"
+    "@react-google-maps/marker-clusterer" "1.10.0"
+    invariant "2.2.4"
+
+"@react-google-maps/infobox@1.10.0":
+  version "1.10.0"
+  resolved "https://registry.yarnpkg.com/@react-google-maps/infobox/-/infobox-1.10.0.tgz#b1982043bb2f3b31d3d9fb703635e04efb55c674"
+  integrity sha512-MhT2nMmjeG7TCxRv/JdylDyNd/n66ggSQQhTWVjJJTtdB/xqd0T8BHCkBWDN9uF0i0yCZzMFl2P2Y1zJ+xppBg==
+
+"@react-google-maps/marker-clusterer@1.10.0":
+  version "1.10.0"
+  resolved "https://registry.yarnpkg.com/@react-google-maps/marker-clusterer/-/marker-clusterer-1.10.0.tgz#d7591332b11f951dd8b0c42b7495797677dc6a9e"
+  integrity sha512-3GLVgeXNStVcdiLMxzi3cBjr32ctlexLPPGQguwcYd6yPLaCcnVCwyzhV68KvL00xqOAD1c3aABV9EGgY8u6Qw==
+
 "@react-native-community/cli-debugger-ui@^4.9.0":
   version "4.9.0"
   resolved "https://registry.yarnpkg.com/@react-native-community/cli-debugger-ui/-/cli-debugger-ui-4.9.0.tgz#4177764ba69243c97aa26829d59d9501acb2bd71"
@@ -1921,6 +1940,11 @@
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/@types/color-name/-/color-name-1.1.1.tgz#1c1261bbeaa10a8055bbc5d8ab84b7b2afc846a0"
   integrity sha512-rr+OQyAjxze7GgWrSaJwydHStIhHq2lvY3BOC2Mj7KnzI7XK0Uw1TOOdI9lDoajEbSWLiYgoo4f1R51erQfhPQ==
+
+"@types/googlemaps@^3.39.13":
+  version "3.39.13"
+  resolved "https://registry.yarnpkg.com/@types/googlemaps/-/googlemaps-3.39.13.tgz#a2649ac618cb15bd04ad8700c41693c8c1f90e21"
+  integrity sha512-R/k5WKe8zQHo9oFRINuX/1haKYRkKEfItnBGrSjspbXXITakRdsj6daQIdL1+Pt84lnzduWurxNA5k0fgPMQUg==
 
 "@types/graceful-fs@^4.1.2":
   version "4.1.3"
@@ -4338,7 +4362,7 @@ inquirer@^3.0.6:
     strip-ansi "^4.0.0"
     through "^2.3.6"
 
-invariant@^2.2.2, invariant@^2.2.4:
+invariant@2.2.4, invariant@^2.2.2, invariant@^2.2.4:
   version "2.2.4"
   resolved "https://registry.yarnpkg.com/invariant/-/invariant-2.2.4.tgz#610f3c92c9359ce1db616e538008d23ff35158e6"
   integrity sha512-phJfQVBuaJM5raOpJjSfkiD6BpbCE4Ns//LaXl6wGYtUBY83nWS6Rf9tXm2e8VaK60JEjYldbPif/A2B1C2gNA==

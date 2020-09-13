@@ -1,5 +1,6 @@
 import React, {Component} from "react";
 import {StyleSheet, Text, View} from "react-native";
+import GoogleMapWidget from "../components/google-maps/GoogleMapWidget";
 
 interface Props {
 }
@@ -18,7 +19,10 @@ class MapScreen extends Component<Props, State> {
     render() {
         return (
             <View style={styles.container}>
-                <Text>Map!</Text>
+                <GoogleMapWidget
+                    routePaths={[]}
+                    stopMarkers={[]}
+                />
             </View>
         );
     }
