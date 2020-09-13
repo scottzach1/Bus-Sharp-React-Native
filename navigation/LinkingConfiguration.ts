@@ -52,8 +52,6 @@ const linkingOptions: LinkingOptions = {
         // State could not be found.
         if (state?.routes[0].name === "NotFound") return state;
 
-        console.log('state', state);
-
         // Trim path as implemented within underlying library ('@react-navigation/native').
         let cleanPath = path
             .replace(/\/+/g, '/') // Replace multiple slash (//) with single ones
@@ -61,7 +59,7 @@ const linkingOptions: LinkingOptions = {
             .replace(/\?.*$/, ''); // Remove query params which we will handle later
 
         // Valid sub-paths to inject previous tab.
-        const subNames = ['stop', 'service', 'twitter', 'account']
+        const subNames = ['stop', 'service', 'twitter', 'account'];
 
         // Apply changes.
         if (subNames.find((name) => cleanPath.includes(name))) {
