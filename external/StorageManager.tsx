@@ -301,9 +301,11 @@ export const setSavedStops = async (savedStops: any, user?: firebase.User) => {
 
     const stringData = JSON.stringify(savedStops);
 
+    // Update locally.
     AsyncStorage.setItem(key, stringData)
         .then(() => {
-            if (user) updateUserDocument(user, {savedStops: stringData});
+            // Update in cloud.
+            if (user && user.uid) updateUserDocument(user, {savedStops: stringData});
         })
         .catch((e) => console.error('Failed to save stop data', e))
 }
@@ -320,9 +322,11 @@ export const setSavedServices = async (savedServices: any, user?: firebase.User)
 
     const stringData = JSON.stringify(savedServices);
 
+    // Update locally.
     AsyncStorage.setItem(key, stringData)
         .then(() => {
-            if (user) updateUserDocument(user, {savedServices: stringData});
+            // Sync with cloud.
+            if (user && user.uid) updateUserDocument(user, {savedServices: stringData});
         })
         .catch((e) => console.error('Failed to save stop data', e))
 }
