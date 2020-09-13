@@ -1,12 +1,14 @@
 import React, {Component} from "react";
 import {Route, StyleSheet, Text, View} from "react-native";
+import {fetchStopData} from "../external/StorageManager";
 
 interface Props {
     route: Route,
 }
 
 interface State {
-    code: string,
+    stopData: any | null,
+    errorMessage: string | null,
 }
 
 class StopScreen extends Component<Props, State> {
@@ -15,14 +17,30 @@ class StopScreen extends Component<Props, State> {
         super(props);
 
         this.state = {
-            code: this.props.route.params.stopCode
+            stopData: undefined,
+            errorMessage: null,
         }
+    }
+
+    getCode() {
+        return this.props.route.params.code;
+    }
+
+    componentDidMount() {
+        if (!this.state.stopData || this.state.errorMessage)
+            fetchStopData(this.getCode()).then((resp) => {
+                this.setState({
+                    stopData: resp.data,
+                    errorMessage: resp.errorMessage,
+                });
+            });
     }
 
     render() {
         return (
             <View style={styles.container}>
-                <Text>Service {this.state.code}!</Text>
+                <Text>Service {this.getCode()}!</Text>
+                <Text>{this.state.errorMessage}</Text>
             </View>
         );
     }
