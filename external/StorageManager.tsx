@@ -84,7 +84,6 @@ export const initStops = async () => {
     const setToDefault = async () => readRemoteFile(proxy + url, {
         download: true, header: true,
         complete: async (results: any) => {
-            console.log('results', results);
             let stopData: any = {};
 
             for (const stopEntry of results.data)
@@ -399,7 +398,7 @@ export const clearSavedData = async (user?: firebase.User) => {
     if (user && user.uid) updateUserDocument(user, {
         savedStops: JSON.stringify([]),
         savedServices: JSON.stringify([])
-    }).catch((e) => console.log('Failed to clear cloud data', e));
+    }).catch((e) => console.error('Failed to clear cloud data', e));
 }
 
 /**
