@@ -250,7 +250,7 @@ export const getSavedServices = async () => {
  *
  * @return response containing success / failure as well as any relevant errors or data.
  */
-export const getStops = async () => {
+export const getAllStops = async () => {
     const key = StorageKeys.allStops;
 
     return await AsyncStorage.getItem(key)
@@ -271,7 +271,7 @@ export const getStops = async () => {
  *
  * @return response containing success / failure as well as any relevant errors or data.
  */
-export const getServices = async () => {
+export const getAllServices = async () => {
     const key = StorageKeys.allServices;
 
     return await AsyncStorage.getItem(key)
@@ -282,7 +282,7 @@ export const getServices = async () => {
             return new StorageResponse(true, null, services);
         })
         .catch((error) => {
-            initStops();
+            initServices();
             return new StorageResponse(false, error.message, null);
         });
 }
