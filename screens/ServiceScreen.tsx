@@ -22,8 +22,6 @@ class ServiceScreen extends Component<Props, State> {
     }
 
     render() {
-        console.log('this', this, 'state', this.props.navigation.dangerouslyGetState());
-
         return (
             <View style={styles.container}>
                 <Text>Service {this.state.code}!</Text>

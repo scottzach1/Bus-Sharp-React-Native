@@ -11,8 +11,6 @@ interface State {
 
 class SearchScreen extends Component<Props, State> {
     render() {
-        console.log('this', this);
-
         return (
             <View style={styles.container}>
                 <Text>Search!</Text>
