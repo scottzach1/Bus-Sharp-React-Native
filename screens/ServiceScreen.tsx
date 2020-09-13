@@ -44,6 +44,7 @@ class ServiceScreen extends Component<Props, State> {
             <View style={styles.container}>
                 <Text>Service {this.getCode()}!</Text>
                 <Text>{this.state.errorMessage}</Text>
+                <Text>{this.state.serviceData? 'data loaded' : undefined}</Text>
             </View>
         );
     }

@@ -41,6 +41,7 @@ class StopScreen extends Component<Props, State> {
             <View style={styles.container}>
                 <Text>Stop {this.getCode()}!</Text>
                 <Text>{this.state.errorMessage}</Text>
+                <Text>{this.state.stopData? 'data loaded' : undefined}</Text>
             </View>
         );
     }
