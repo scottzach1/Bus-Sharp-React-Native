@@ -1,6 +1,5 @@
 import * as Linking from 'expo-linking';
-import {LinkingOptions} from '@react-navigation/native';
-import {getStateFromPath} from '@react-navigation/native';
+import {getStateFromPath, LinkingOptions} from '@react-navigation/native';
 
 const linkingOptions: LinkingOptions = {
     prefixes: [Linking.makeUrl('/')],
@@ -48,10 +47,36 @@ const linkingOptions: LinkingOptions = {
         },
     },
     getStateFromPath(path, config) {
-        const state = getStateFromPath(path, config);
+        let state: any = getStateFromPath(path, config);
 
-        // console.log('state', state)
+        // Check whether we should insert a previous state in the routes stack.
+        if (path.includes('/service/') || path.includes('/stop/')) {
+            // Extract current stack (hard coded, but schema defined above ^).
+            let routes: any[] = state!.routes[0].state!.routes[0].state!.routes;
+            console.log('alt', routes, JSON.stringify(routes));
 
+            let tab: string;
+
+            if (path.includes('/search/'))
+                tab = 'Search';
+            else if (path.includes('/map/'))
+                tab = 'Map';
+            else if (path.includes('/saved/'))
+                tab = 'Saved';
+            else
+                return undefined;
+
+            // Insert to the first index of list (how elegant JS!).
+            routes = [{
+                name: tab + "HomeScreen",
+                params: null
+            }].concat(routes);
+
+            // Update the state
+            state!.routes[0].state!.routes[0].state!.routes = routes;
+        }
+
+        // Bob's ya aunty!
         return state;
     }
 };
