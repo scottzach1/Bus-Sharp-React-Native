@@ -39,7 +39,7 @@ class StopScreen extends Component<Props, State> {
     render() {
         return (
             <View style={styles.container}>
-                <Text>Service {this.getCode()}!</Text>
+                <Text>Stop {this.getCode()}!</Text>
                 <Text>{this.state.errorMessage}</Text>
             </View>
         );
