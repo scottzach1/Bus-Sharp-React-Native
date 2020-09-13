@@ -1,44 +1,59 @@
 import * as Linking from 'expo-linking';
+import {LinkingOptions} from '@react-navigation/native';
+import {getStateFromPath} from '@react-navigation/native';
 
-export default {
-  prefixes: [Linking.makeUrl('/')],
-  config: {
-    screens: {
-      Root: {
+const linkingOptions: LinkingOptions = {
+    prefixes: [Linking.makeUrl('/')],
+    config: {
         screens: {
-          SearchTab: {
-            path: 'search',
-            screens: {
-              SearchScreen: '',
-              ServiceScreen: 'service/:code',
-              StopScreen: 'stop/:code'
-            }
-          },
-          MapTab: {
-            path: 'map',
-            screens: {
-              MapScreen: '',
-              ServiceScreen: 'service/:code',
-              StopScreen: 'stop/:code'
-            }
-          },
-          SavedTab: {
-            path: 'saved',
-            screens: {
-              SavedScreen: '',
-              ServiceScreen: 'service/:code',
-              StopScreen: 'stop/:code'
-            }
-          },
-          SettingsTab: {
-            screens: {
-              SettingsScreen: 'settings',
-              TwitterScreen: 'twitter'
-            }
-          }
+            Root: {
+                screens: {
+                    SearchTab: {
+                        path: 'search',
+                        screens: {
+                            SearchHomeScreen: '',
+                            SearchServiceScreen: 'service/:code',
+                            SearchStopScreen: 'stop/:code'
+                        }
+                    },
+                    MapTab: {
+                        path: 'map',
+                        screens: {
+                            MapHomeScreen: '',
+                            MapServiceScreen: 'service/:code',
+                            MapStopScreen: 'stop/:code'
+                        }
+                    },
+                    SavedTab: {
+                        path: 'saved',
+                        screens: {
+                            SavedHomeScreen: '',
+                            SavedServiceScreen: 'service/:code',
+                            SavedStopScreen: 'stop/:code'
+                        }
+                    },
+                    SettingsTab: {
+                        path: 'settings',
+                        screens: {
+                            SettingsHomeScreen: '',
+                            SettingsTwitterScreen: 'twitter',
+                            SettingsAccountLoginScreen: 'account/login',
+                            SettingsAccountSignupScreen: 'account/signup',
+                            SettingsAccountInfoScreen: 'account/info',
+                        }
+                    }
+                },
+            },
+            NotFound: '*',
         },
-      },
-      NotFound: '*',
     },
-  },
+    getStateFromPath(path, config) {
+        const state = getStateFromPath(path, config);
+
+        // console.log('state', state)
+
+        return state;
+    }
 };
+
+export default linkingOptions;

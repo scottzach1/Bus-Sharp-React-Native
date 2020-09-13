@@ -11,12 +11,14 @@ interface State {
 
 class SearchScreen extends Component<Props, State> {
     render() {
+        console.log('this', this);
+
         return (
             <View style={styles.container}>
                 <Text>Search!</Text>
                 <Button
                     title={"Visit Service Screen"}
-                    onPress={() => this.props.navigation.navigate("ServiceScreen", {
+                    onPress={() => this.props.navigation.navigate("SearchServiceScreen", {
                         code: '21',
                     })}
                 />

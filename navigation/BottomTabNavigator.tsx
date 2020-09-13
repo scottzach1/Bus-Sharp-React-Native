@@ -74,19 +74,19 @@ const SearchTabStack = createStackNavigator<SearchTabParamList>();
 
 function SearchTabNavigator() {
     return (
-        <SearchTabStack.Navigator initialRouteName={"SearchScreen"}>
+        <SearchTabStack.Navigator initialRouteName={"SearchHomeScreen"}>
             <SearchTabStack.Screen
-                name={"SearchScreen"}
+                name={"SearchHomeScreen"}
                 component={SearchScreen}
                 options={{headerTitle: 'Search Tab'}}
             />
             <SearchTabStack.Screen
-                name={"ServiceScreen"}
+                name={"SearchServiceScreen"}
                 component={ServiceScreen}
                 options={{headerTitle: 'Service Perspective'}}
             />
             <SearchTabStack.Screen
-                name={"StopScreen"}
+                name={"SearchStopScreen"}
                 component={StopScreen}
                 options={{headerTitle: 'Stop Perspective'}}
             />
@@ -98,19 +98,19 @@ const MapTabStack = createStackNavigator<MapTabParamList>();
 
 function MapTabNavigator() {
     return (
-        <MapTabStack.Navigator initialRouteName={"MapScreen"}>
+        <MapTabStack.Navigator initialRouteName={"MapHomeScreen"}>
             <MapTabStack.Screen
-                name={"MapScreen"}
+                name={"MapHomeScreen"}
                 component={MapScreen}
                 options={{headerTitle: 'Map Tab'}}
             />
-            <SearchTabStack.Screen
-                name={"ServiceScreen"}
+            <MapTabStack.Screen
+                name={"MapServiceScreen"}
                 component={ServiceScreen}
                 options={{headerTitle: 'Service Perspective'}}
             />
-            <SearchTabStack.Screen
-                name={"StopScreen"}
+            <MapTabStack.Screen
+                name={"MapStopScreen"}
                 component={StopScreen}
                 options={{headerTitle: 'Stop Perspective'}}
             />
@@ -122,19 +122,19 @@ const SavedTabStack = createStackNavigator<SavedTabParamList>();
 
 function SavedTabNavigator() {
     return (
-        <SavedTabStack.Navigator initialRouteName={"SavedScreen"}>
+        <SavedTabStack.Navigator initialRouteName={"SavedHomeScreen"}>
             <SavedTabStack.Screen
-                name={"SavedScreen"}
+                name={"SavedHomeScreen"}
                 component={SavedScreen}
                 options={{headerTitle: 'Saved Tab'}}
             />
-            <SearchTabStack.Screen
-                name={"ServiceScreen"}
+            <SavedTabStack.Screen
+                name={"SavedServiceScreen"}
                 component={ServiceScreen}
                 options={{headerTitle: 'Service Perspective'}}
             />
-            <SearchTabStack.Screen
-                name={"StopScreen"}
+            <SavedTabStack.Screen
+                name={"SavedStopScreen"}
                 component={StopScreen}
                 options={{headerTitle: 'Stop Perspective'}}
             />
@@ -146,14 +146,14 @@ const SettingsTabStack = createStackNavigator<SettingsTabParamList>();
 
 function SettingsTabNavigator() {
     return (
-        <SettingsTabStack.Navigator initialRouteName={"SettingsScreen"}>
+        <SettingsTabStack.Navigator initialRouteName={"SettingsHomeScreen"}>
             <SettingsTabStack.Screen
-                name={"SettingsScreen"}
+                name={"SettingsHomeScreen"}
                 component={SettingsScreen}
                 options={{headerTitle: 'Settings Tab'}}
             />
             <SettingsTabStack.Screen
-                name={"TwitterScreen"}
+                name={"SettingsTwitterScreen"}
                 component={TwitterScreen}
                 options={{headerTitle: 'Twitter Feed'}}
             />
