@@ -1,10 +1,11 @@
-import React, {FC} from "react";
-import {GoogleMap, useLoadScript} from "@react-google-maps/api";
+import React, {FC, useState} from "react";
+import {GoogleMap, Marker, Polyline, useLoadScript} from "@react-google-maps/api";
 import "./GoogleMapWidget.css";
 import {mapStyles} from "./GoogleMapWidgetStyles";
 import {Text} from 'react-native';
 import {View} from "../common/Themed";
 import Constants from 'expo-constants';
+import {getLatLng} from "react-places-autocomplete";
 
 
 interface Props {
@@ -61,6 +62,15 @@ let googleLoaded = false;
 let stopOneLoaded = false;
 
 const GoogleMapWidget: FC<Props> = (props) => {
+    // ALL STOP DATA
+    const [stopData, setStopData] = useState<any | null>(null);
+
+    // TOAST
+    const [showToast, setShowToast] = useState<boolean>(false)
+
+    // SELECTED ITEM
+    // A StopMarker used to represent the item, maintains information about the selected item.
+    const [selectedItem, setSelectedItem] = useState<StopMarker | null>(null)
 
     const {isLoaded, loadError} = useLoadScript({
         googleMapsApiKey: Constants.manifest.extra.REACT_APP_GOOGLE_MAPS_API_KEY,
@@ -70,24 +80,92 @@ const GoogleMapWidget: FC<Props> = (props) => {
     // -------------------------------------------------------------------------------------------------------------
     // CHECKS RUN EVERY RENDER
     // -------------------------------------------------------------------------------------------------------------
+    if (!userLocation && navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(successfulPosition);
+    }
 
-// -------------------------------------------------------------------------------------------------------------
-// FUNCTIONS
-// -------------------------------------------------------------------------------------------------------------
+    // -------------------------------------------------------------------------------------------------------------
+    // FUNCTIONS
+    // -------------------------------------------------------------------------------------------------------------
+    /**
+     * Asynchronously get the stop data currently available.
+     */
+    async function getStopData() {
+        // TODO: STORAGE MANAGER
+    }
+
+    /**
+     * Get the name of a marker on the map-tab. Used when a marker has been clicked on.
+     * @param stop - A StopMarker
+     */
+    function getStopName(stop: StopMarker) {
+        if (stop.name) return stop.name;
+        else if (stopData[stop.code]) return stopData[stop.code];
+        else return stop.code + " - unknown";
+    }
+
+    /**
+     * Check that the parsed in search location is different to the currently stored location.
+     * Returning TRUE means that the search location will be avoided. In this case, returning true is the fail safe
+     * method.
+     */
+    function setSearchLocation() {
+        if (props.geoCoderResult === undefined) return
+
+        getLatLng(props.geoCoderResult)
+            .then(latLng => {
+                if (searchLocation === undefined
+                    || searchLocation.location.latitude !== latLng.lat
+                    || searchLocation.location.longitude !== latLng.lng) {
+                    searchLocation = new StopMarker(
+                        null,
+                        "SearchLocation",
+                        props.geoCoderResult?.formatted_address ? props.geoCoderResult.formatted_address : "",
+                        "",
+                        new Position(latLng.lat, latLng.lng))
+                    selectedId = "Search"
+                    selectItem(searchLocation)
+                }
+            })
+    }
+
+    /**
+     * A function to create a user location if the geoLocation is successful in getting the current position.
+     * @param position - The geoLocation of the user.
+     */
+    function successfulPosition(position: any) {
+        userLocation = new StopMarker(
+            "User Location",
+            "USR_LOC",
+            "USR_LOC",
+            undefined,
+            new Position(parseFloat(position.coords.latitude), parseFloat(position.coords.longitude), undefined))
+        setShowToast(true)
+        console.log(userLocation.location, center)
+    }
+
+
+    function selectItem(marker: StopMarker) {
+        if (mapRef != null) {
+            mapRef.panTo({lat: marker.location.latitude, lng: marker.location.longitude})
+        }
+        setSelectedItem(marker);
+    }
+
+    function deselectItem() {
+        selectedId = "";
+        setSelectedItem(null)
+    }
 
     function onLoad(map: google.maps.Map<Element> | null) {
         if (map)
             mapRef = map
-
         googleLoaded = true
     }
 
-// -------------------------------------------------------------------------------------------------------------
-// RETURNING MAP
-// -------------------------------------------------------------------------------------------------------------
-
-    console.log('errors:', isLoaded, loadError, options);
-
+    // -------------------------------------------------------------------------------------------------------------
+    // RETURNING MAP
+    // -------------------------------------------------------------------------------------------------------------
     return (
         <>
             {(loadError || !isLoaded) ? <View><Text>Welp</Text></View> :
@@ -101,6 +179,42 @@ const GoogleMapWidget: FC<Props> = (props) => {
                         map && (onLoad(map))
                     }}
                 >
+
+                    {userLocation && (
+                        <Marker
+                            key={userLocation.name}
+                            position={{
+                                lat: userLocation.location.latitude,
+                                lng: userLocation.location.longitude,
+                            }}
+                        />
+                    )}
+
+                    {props.stopMarkers?.map((marker) => (
+                        <Marker
+                            key={marker.key}
+                            position={{
+                                lat: marker.location.latitude,
+                                lng: marker.location.longitude,
+                            }}
+                            onClick={() => {
+                                selectedId = "Stop"
+                                selectItem(marker)
+                            }}
+                        />
+                    ))}
+
+                    {props.routePaths?.map((route) => (
+                        <Polyline
+                            key={route.key}
+                            path={route.path.map(position => ({
+                                lat: position.latitude,
+                                lng: position.longitude,
+                            }))}
+                            options={{strokeColor: route.color}}
+                        />
+                    ))}
+
                 </GoogleMap>}
         </>
     )
