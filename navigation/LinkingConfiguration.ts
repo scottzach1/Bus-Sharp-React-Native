@@ -65,7 +65,6 @@ const linkingOptions: LinkingOptions = {
         if (subNames.find((name) => cleanPath.includes(name))) {
             // Extract current stack (hard coded, but schema defined above ^).
             let routes: any[] = state!.routes[0].state!.routes[0].state!.routes;
-            console.log('alt', routes, JSON.stringify(routes));
 
             // Capitalise first letter.
             let tabName = cleanPath.split('/')[0];
