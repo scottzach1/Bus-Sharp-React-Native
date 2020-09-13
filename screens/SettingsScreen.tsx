@@ -9,12 +9,6 @@ interface State {
 }
 
 class SettingsScreen extends Component<Props, State> {
-
-    componentDidMount() {
-        fetchStopData('7909').then((res) => console.log('stop', res));
-        fetchServiceData('21').then((res) => console.log('service', res));
-    }
-
     render() {
         return (
             <View style={styles.container}>
