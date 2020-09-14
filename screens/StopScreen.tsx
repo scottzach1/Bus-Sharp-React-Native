@@ -1,6 +1,8 @@
 import React, {Component} from "react";
-import {Route, StyleSheet, Text, View} from "react-native";
+import {Route, StyleSheet} from "react-native";
 import {fetchStopData} from "../external/StorageManager";
+import StopInfo from "../components/stops/StopInfo";
+import StopTimetable from "../components/stops/StopTimetable";
 
 interface Props {
     route: Route,
@@ -38,11 +40,15 @@ class StopScreen extends Component<Props, State> {
 
     render() {
         return (
-            <View style={styles.container}>
-                <Text>Stop {this.getCode()}!</Text>
-                <Text>{this.state.errorMessage}</Text>
-                <Text>{this.state.stopData? 'data loaded' : undefined}</Text>
-            </View>
+            // <View style={styles.container}>
+            //     <Text>Stop {this.getCode()}!</Text>
+            //     <Text>{this.state.errorMessage}</Text>
+            //     <Text>{this.state.stopData? 'data loaded' : undefined}</Text>
+            // </View>
+            <>
+                <StopInfo stopData={this.state.stopData} code={this.getCode()} errorMessage={this.state.errorMessage}/>
+                <StopTimetable stopData={this.state.stopData} errorMessage={this.state.errorMessage}/>
+            </>
         );
     }
 }
