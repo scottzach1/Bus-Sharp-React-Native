@@ -5,7 +5,7 @@ import {SafeAreaProvider} from 'react-native-safe-area-context';
 import useCachedResources from './hooks/useCachedResources';
 import useColorScheme from './hooks/useColorScheme';
 import Navigation from './navigation';
-import {initServices, initStops, initTheme} from "./external/StorageManager";
+import {initSavedServices, initSavedStops, initServices, initStops, initTheme} from "./external/StorageManager";
 
 export default function App() {
     const isLoadingComplete = useCachedResources();
@@ -14,6 +14,8 @@ export default function App() {
     initTheme().then();
     initStops().then();
     initServices().then();
+    initSavedServices().then();
+    initSavedStops().then();
 
     if (!isLoadingComplete) {
         return null;

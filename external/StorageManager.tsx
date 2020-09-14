@@ -411,24 +411,30 @@ export const clearSavedData = async (user?: firebase.User) => {
  * @return boolean: `true` if added, `false` otherwise.
  */
 export const toggleSavedStop = async (stopCode: string, user?: firebase.User) => {
-    return getSavedStops().then((resp) => {
-        let savedStops = (resp.data) ? resp.data : [];
+    return getSavedStops()
+        .then((resp) => {
+            let savedStops = (resp.data) ? resp.data : [];
 
-        // Remove from saved stops.
-        if (savedStops.includes(stopCode))
-            savedStops.splice(savedStops.indexOf(stopCode), 1);
-        // Add to saved stops.
-        else
-            savedStops.push(stopCode);
-        // Update Storage.
-        setSavedStops(savedStops);
+            // Remove from saved stops.
+            if (savedStops.includes(stopCode))
+                savedStops.splice(savedStops.indexOf(stopCode), 1);
+            // Add to saved stops.
+            else
+                savedStops.push(stopCode);
+            // Update Storage.
+            setSavedStops(savedStops);
 
-        // Update Firestore
-        if (user) updateUserDocument(user, {savedStops: JSON.stringify(savedStops)})
-            .catch((e) => console.error("Couldn't backup to cloud", e))
+            // Update Firestore
+            if (user) updateUserDocument(user, {savedStops: JSON.stringify(savedStops)})
+                .catch((e) => console.error("Couldn't backup to cloud", e))
 
-        return savedStops.includes(stopCode);
-    });
+            const respObj = {
+                state: savedStops.includes(stopCode),
+                savedServices: savedStops,
+            }
+
+            return new StorageResponse(true, null, respObj);        })
+        .catch((e) => new StorageResponse(false, 'Failed to toggle saved: ' + e.message, []));
 }
 
 /**
@@ -441,24 +447,31 @@ export const toggleSavedStop = async (stopCode: string, user?: firebase.User) =>
  * @return boolean: `true` if added, `false` otherwise.
  */
 export const toggleSavedService = async (serviceCode: string, user?: firebase.User) => {
-    return getSavedServices().then((resp) => {
-        let savedServices = (resp.data) ? resp.data : [];
+    return getSavedServices()
+        .then((resp) => {
+            let savedServices = (resp.data) ? resp.data : [];
 
-        // Remove from saved stops.
-        if (savedServices.includes(serviceCode))
-            savedServices.splice(savedServices.indexOf(serviceCode), 1);
-        // Add to saved stops.
-        else
-            savedServices.push(serviceCode);
-        // Update Storage.
-        setSavedStops(savedServices);
+            // Remove from saved stops.
+            if (savedServices.includes(serviceCode))
+                savedServices.splice(savedServices.indexOf(serviceCode), 1);
+            // Add to saved stops.
+            else
+                savedServices.push(serviceCode);
+            // Update Storage.
+            setSavedStops(savedServices);
 
-        // Update Firestore
-        if (user) updateUserDocument(user, {savedStops: JSON.stringify(savedServices)})
-            .catch((e) => console.error("Couldn't backup to cloud", e))
+            // Update Firestore
+            if (user) updateUserDocument(user, {savedStops: JSON.stringify(savedServices)})
+                .catch((e) => console.error("Couldn't backup to cloud", e))
 
-        return savedServices.includes(serviceCode);
-    });
+            const respObj = {
+                state: savedServices.includes(serviceCode),
+                savedServices: savedServices,
+            }
+
+            return new StorageResponse(true, null, respObj);
+        })
+        .catch((e) => new StorageResponse(false, 'Failed to toggle saved: ' + e.message, []));
 }
 
 /* Firestore Syncing (Merge local and cloud storage). */
@@ -511,7 +524,7 @@ class StorageResponse {
      * @param errorMessage: (Optional) to notify user.
      * @param data: (Optional) the returned data.
      */
-    constructor(success: boolean, errorMessage?: string | null, data?: string | null) {
+    constructor(success: boolean, errorMessage?: string | null, data?: any | null) {
         this.success = success;
         this.errorMessage = (errorMessage) ? errorMessage : null;
         this.data = (data) ? data : null;
