@@ -1,7 +1,9 @@
 import React, {Component} from "react";
-import {Card, Text} from "react-native-elements";
+import {Card} from "react-native-elements";
+import {StackNavigationProp} from "@react-navigation/stack";
 
 interface Props {
+    navigation: StackNavigationProp<any>,
     stopData: any | null | undefined,
     code: string,
     errorMessage: string | null,

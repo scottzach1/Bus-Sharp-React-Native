@@ -1,11 +1,13 @@
 import React, {Component} from "react";
-import {Route, StyleSheet} from "react-native";
+import {Route, ScrollView} from "react-native";
 import {fetchStopData} from "../external/StorageManager";
 import StopInfo from "../components/stops/StopInfo";
 import StopTimetable from "../components/stops/StopTimetable";
+import {StackNavigationProp} from "@react-navigation/stack";
 
 interface Props {
     route: Route,
+    navigation: StackNavigationProp<any>,
 }
 
 interface State {
@@ -40,25 +42,21 @@ class StopScreen extends Component<Props, State> {
 
     render() {
         return (
-            // <View style={styles.container}>
-            //     <Text>Stop {this.getCode()}!</Text>
-            //     <Text>{this.state.errorMessage}</Text>
-            //     <Text>{this.state.stopData? 'data loaded' : undefined}</Text>
-            // </View>
-            <>
-                <StopInfo stopData={this.state.stopData} code={this.getCode()} errorMessage={this.state.errorMessage}/>
-                <StopTimetable stopData={this.state.stopData} errorMessage={this.state.errorMessage}/>
-            </>
+            <ScrollView>
+                <StopInfo
+                    stopData={this.state.stopData}
+                    code={this.getCode()}
+                    errorMessage={this.state.errorMessage}
+                    navigation={this.props.navigation}
+                />
+                <StopTimetable
+                    stopData={this.state.stopData}
+                    errorMessage={this.state.errorMessage}
+                    navigation={this.props.navigation}
+                />
+            </ScrollView>
         );
     }
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-    }
-})
 
 export default StopScreen;

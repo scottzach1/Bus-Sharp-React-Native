@@ -1,8 +1,9 @@
 import React, {Component} from "react";
-import {Badge, Card, ListItem, ThemeProvider} from "react-native-elements";
+import {Card, ThemeProvider} from "react-native-elements";
 import {StackNavigationProp} from "@react-navigation/stack";
-import {ScrollView, StyleSheet} from "react-native";
 import {View} from "../Themed";
+import {ActivityIndicator} from "react-native";
+import MetlinkListItem from "../common/MetlinkListItem";
 
 const theme = {
     colors: {
@@ -62,32 +63,24 @@ class StopTimetable extends Component<Props, State> {
             return a.AimedArrival - b.AimedArrival;
         });
 
-        let counter = 0;
         for (const service of services) {
             // Parse the time information from the response json.
 
-            const serviceName: string[] = service.Service.Name.split("-");
+            const serviceName: string = service.Service.Name.split("-")[0];
             const serviceCode: string = service.ServiceID;
             const isLive: boolean = service.IsRealtime;
-            let badgeSpacing = "";
-            for (let i = serviceCode.length; i < 3; ++i) badgeSpacing += " ";
             const timeRemaining: string = (this.state.showHours) ?
                 this.getHoursRemaining(service.AimedArrival) : this.getTime(service.AimedArrival);
 
             listItems.push(
-                <ListItem
-                    key={'stop-card-' + counter++}
-                    // onPress={() => this.props.navigation.navigate("SearchServiceScreen", {code: serviceCode})}
-                    onPress={() => document.location.href = '/search/service/' + serviceCode}
-                    bottomDivider
-                >
-                    <Badge status={"warning"} value={serviceCode}/>
-                    <ListItem.Content>
-                        <ListItem.Title>{badgeSpacing}{serviceName[0]}</ListItem.Title>
-                        <ListItem.Subtitle>{badgeSpacing}{timeRemaining}</ListItem.Subtitle>
-                    </ListItem.Content>
-                    {isLive && <Badge status={"success"} value={"live"}/>}
-                </ListItem>
+                <MetlinkListItem
+                    navigation={this.props.navigation}
+                    code={serviceCode}
+                    name={serviceName}
+                    isLive={isLive}
+                    isStop={false}
+                    timeRemaining={timeRemaining}
+                />
             )
         }
 
@@ -95,31 +88,18 @@ class StopTimetable extends Component<Props, State> {
     }
 
     render() {
-        console.log('stop data', this.props.stopData);
-
         return (
             <ThemeProvider theme={theme}>
-                <Card>
-                    <Card.Title>Upcoming Services</Card.Title>
-                    <View style={styles.listCard}>
+                <View style={{height: '100%'}}>
+                    <Card>
+                        <Card.Title>Upcoming Services</Card.Title>
                         <Card.Divider/>
-                        <ScrollView>
-                            {this.generateStops()}
-                        </ScrollView>
-                    </View>
-                </Card>
+                        {this.props.stopData ? this.generateStops() : <ActivityIndicator/>}
+                    </Card>
+                </View>
             </ThemeProvider>
         );
     }
 }
-
-const styles = StyleSheet.create({
-    listCard: {
-        flex: 1,
-        // justifyContent: 'center',
-        // alignItems: 'center',
-        height: '50vh',
-    }
-})
 
 export default StopTimetable;
