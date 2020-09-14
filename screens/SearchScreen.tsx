@@ -1,7 +1,12 @@
 import React, {Component} from "react";
-import {Button, StyleSheet, Text, View} from "react-native";
+import {ScrollView, StyleSheet} from "react-native";
 import {StackNavigationProp} from "@react-navigation/stack";
 import {getAllServices, getAllStops} from "../external/StorageManager";
+import {SearchBar} from "react-native-elements";
+import {View} from "../components/Themed";
+import SearchTabSearchbarDescriptionCard from "../components/search-tab/SearchTabSearchbarDescription";
+import SearchTabTabsDescription from "../components/search-tab/SearchTabTabsDescription";
+import SearchTabFilter from "../components/search-tab/SearchTabFilter";
 
 interface Props {
     navigation: StackNavigationProp<any>,
@@ -12,6 +17,8 @@ interface State {
     servicesData: any | null,
     stopsErrorMessage: string | null,
     servicesErrorMessage: string | null,
+    searchText: string,
+    selectedIndex: number
 }
 
 class SearchScreen extends Component<Props, State> {
@@ -24,6 +31,8 @@ class SearchScreen extends Component<Props, State> {
             servicesData: undefined,
             stopsErrorMessage: null,
             servicesErrorMessage: null,
+            searchText: "",
+            selectedIndex: 0
         }
     }
 
@@ -47,16 +56,27 @@ class SearchScreen extends Component<Props, State> {
         }
     }
 
+    updateIndex(newValue: number) {
+        this.setState({selectedIndex: newValue})
+    }
+
     render() {
         return (
             <View style={styles.container}>
-                <Text>Search!</Text>
-                <Button
-                    title={"Visit Service Screen"}
-                    onPress={() => this.props.navigation.navigate("SearchServiceScreen", {
-                        code: '21',
-                    })}
+                <SearchBar
+                    placeholder={"Search Here..."}
+                    onChangeText={(e) => this.setState({searchText: e})}
+                    value={this.state.searchText ? this.state.searchText : ""}
                 />
+                <SearchTabFilter updateIndex={this.updateIndex.bind(this)}/>
+                <ScrollView>
+                    {!this.state.searchText && (
+                        <SearchTabSearchbarDescriptionCard/>
+                    )}
+                    {!this.state.searchText && (
+                        <SearchTabTabsDescription/>
+                    )}
+                </ScrollView>
             </View>
         );
     }
@@ -65,8 +85,6 @@ class SearchScreen extends Component<Props, State> {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
     }
 })
 
