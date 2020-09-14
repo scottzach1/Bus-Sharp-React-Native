@@ -1,7 +1,8 @@
 import React, {Component} from "react";
-import {Badge, ListItem} from "react-native-elements";
+import {Badge, Icon, ListItem} from "react-native-elements";
 import {StackNavigationProp} from "@react-navigation/stack";
 import {navigateToMetlink} from "../../navigation/LinkingConfiguration";
+import {View} from "../Themed";
 
 interface Props {
     navigation: StackNavigationProp<any>,
@@ -9,17 +10,29 @@ interface Props {
     name: string,
     isStop: boolean,
     isLive?: boolean,
+    isFavourite: boolean,
+    toggleFavourite: () => void,
     timeRemaining?: string,
 }
 
 interface State {
+    saved: boolean,
 }
 
 class MetlinkListItem extends Component<Props, State> {
     constructor(props: Readonly<Props>) {
         super(props);
 
-        this.state = {}
+        this.state = {
+            saved: false,
+        }
+    }
+
+    componentDidMount() {
+    }
+
+    toggleFavourite() {
+
     }
 
     render() {
@@ -29,7 +42,7 @@ class MetlinkListItem extends Component<Props, State> {
         return (
             <ListItem
                 onPress={() => {
-                    navigateToMetlink(this.props.code, this.props.isStop, this.props.navigation);
+                    // navigateToMetlink(this.props.code, this.props.isStop, this.props.navigation);
                 }}
                 bottomDivider
             >
@@ -40,6 +53,11 @@ class MetlinkListItem extends Component<Props, State> {
                     <ListItem.Subtitle>{badgeSpacing}{this.props.timeRemaining}</ListItem.Subtitle>}
                 </ListItem.Content>
                 {this.props.isLive && <Badge status={"success"} value={"live"}/>}
+                <Icon
+                    name={(this.props.isFavourite) ? "star" : "star-outline"}
+                    type={"material-community"}
+                    onPress={() => this.props.toggleFavourite()}
+                />
             </ListItem>
         );
     }

@@ -4,6 +4,7 @@ import {StackNavigationProp} from "@react-navigation/stack";
 import {View} from "../Themed";
 import {ActivityIndicator} from "react-native";
 import MetlinkListItem from "../common/MetlinkListItem";
+import {getSavedServices, toggleSavedStop} from "../../external/StorageManager";
 
 const theme = {
     colors: {
@@ -23,6 +24,7 @@ interface Props {
 
 interface State {
     showHours: boolean,
+    savedServices: any[] | undefined,
 }
 
 class StopTimetable extends Component<Props, State> {
@@ -31,7 +33,14 @@ class StopTimetable extends Component<Props, State> {
 
         this.state = {
             showHours: true,
+            savedServices: undefined,
         }
+    }
+
+    componentDidMount() {
+        getSavedServices().then((resp) => {
+            this.setState({savedServices: resp.data});
+        });
     }
 
     getHoursRemaining(arrivalTime: string) {
@@ -51,6 +60,17 @@ class StopTimetable extends Component<Props, State> {
             minute: 'numeric'
         });
         return dateTimeFormat.format(arrivalDate);
+    }
+
+    checkFavourite(serviceCode: string) {
+        if (!this.state.savedServices) return false;
+        else return this.state.savedServices.includes(serviceCode);
+    }
+
+    toggleFavourite(serviceCode: string) {
+        toggleSavedStop(serviceCode)
+            .then((resp) => this.setState({savedServices: resp.data.savedServices}))
+            .catch((resp) => this.setState({savedServices: resp.data.savedServices}));
     }
 
     generateStops() {
@@ -79,6 +99,8 @@ class StopTimetable extends Component<Props, State> {
                     name={serviceName}
                     isLive={isLive}
                     isStop={false}
+                    isFavourite={this.checkFavourite(serviceCode)}
+                    toggleFavourite={() => this.toggleFavourite(serviceCode)}
                     timeRemaining={timeRemaining}
                 />
             )

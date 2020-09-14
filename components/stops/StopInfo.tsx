@@ -37,8 +37,6 @@ class StopInfo extends Component<Props, State> {
     }
 
     render() {
-        console.log('info', this.props.stopData);
-
         return (
             <Card>
                 <Card.Title>{this.getStopName()}</Card.Title>
