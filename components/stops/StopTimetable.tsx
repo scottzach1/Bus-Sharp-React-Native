@@ -1,5 +1,8 @@
 import React, {Component} from "react";
-import {Badge, Card, ListItem, ThemeProvider, Text} from "react-native-elements";
+import {Badge, Card, ListItem, ThemeProvider} from "react-native-elements";
+import {StackNavigationProp} from "@react-navigation/stack";
+import {ScrollView, StyleSheet} from "react-native";
+import {View} from "../Themed";
 
 const theme = {
     colors: {
@@ -12,6 +15,7 @@ const theme = {
 };
 
 interface Props {
+    navigation: StackNavigationProp<any>,
     stopData: any | null | undefined,
     errorMessage: string | null,
 }
@@ -71,7 +75,12 @@ class StopTimetable extends Component<Props, State> {
                 this.getHoursRemaining(service.AimedArrival) : this.getTime(service.AimedArrival);
 
             listItems.push(
-                <ListItem key={'stop-card-' + counter++} bottomDivider>
+                <ListItem
+                    key={'stop-card-' + counter++}
+                    // onPress={() => this.props.navigation.navigate("SearchServiceScreen", {code: serviceCode})}
+                    onPress={() => document.location.href = '/search/service/' + serviceCode}
+                    bottomDivider
+                >
                     <Badge status={"warning"} value={serviceCode}/>
                     <ListItem.Content>
                         <ListItem.Title>{badgeSpacing}{serviceName[0]}</ListItem.Title>
@@ -92,12 +101,25 @@ class StopTimetable extends Component<Props, State> {
             <ThemeProvider theme={theme}>
                 <Card>
                     <Card.Title>Upcoming Services</Card.Title>
-                    <Card.Divider/>
-                    {this.generateStops()}
+                    <View style={styles.listCard}>
+                        <Card.Divider/>
+                        <ScrollView>
+                            {this.generateStops()}
+                        </ScrollView>
+                    </View>
                 </Card>
             </ThemeProvider>
         );
     }
 }
+
+const styles = StyleSheet.create({
+    listCard: {
+        flex: 1,
+        // justifyContent: 'center',
+        // alignItems: 'center',
+        height: '50vh',
+    }
+})
 
 export default StopTimetable;
