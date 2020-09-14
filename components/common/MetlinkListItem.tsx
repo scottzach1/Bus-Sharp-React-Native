@@ -2,7 +2,6 @@ import React, {Component} from "react";
 import {Badge, Icon, ListItem} from "react-native-elements";
 import {StackNavigationProp} from "@react-navigation/stack";
 import {navigateToMetlink} from "../../navigation/LinkingConfiguration";
-import {View} from "../Themed";
 
 interface Props {
     navigation: StackNavigationProp<any>,
@@ -28,22 +27,13 @@ class MetlinkListItem extends Component<Props, State> {
         }
     }
 
-    componentDidMount() {
-    }
-
-    toggleFavourite() {
-
-    }
-
     render() {
         let badgeSpacing = "";
         for (let i = this.props.name.length; i < 4; ++i) badgeSpacing += " ";
 
         return (
             <ListItem
-                onPress={() => {
-                    // navigateToMetlink(this.props.code, this.props.isStop, this.props.navigation);
-                }}
+                onPress={() => navigateToMetlink(this.props.code, this.props.isStop, this.props.navigation)}
                 bottomDivider
             >
                 <Badge status={(this.props.isStop) ? "primary" : "warning"} value={this.props.code}/>
