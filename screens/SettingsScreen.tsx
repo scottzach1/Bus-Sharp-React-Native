@@ -1,6 +1,7 @@
 import React, {Component} from "react";
-import {StyleSheet, Text, View} from "react-native";
-import {fetchServiceData, fetchStopData} from "../external/StorageManager";
+import {View} from "react-native";
+import {Card} from "react-native-elements";
+import SettingsFeedbackEntry from "../components/settings/SettingsFeedbackEntry";
 
 interface Props {
 }
@@ -11,19 +12,15 @@ interface State {
 class SettingsScreen extends Component<Props, State> {
     render() {
         return (
-            <View style={styles.container}>
-                <Text>Settings!</Text>
+            <View>
+                <Card>
+                    <Card.Title>General</Card.Title>
+                    <Card.Divider/>
+                    <SettingsFeedbackEntry/>
+                </Card>
             </View>
         );
     }
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-    }
-})
 
 export default SettingsScreen;
