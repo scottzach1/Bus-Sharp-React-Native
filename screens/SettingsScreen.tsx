@@ -1,8 +1,9 @@
 import React, {Component} from "react";
 import {StyleSheet, Text, View} from "react-native";
-import {fetchServiceData, fetchStopData} from "../external/StorageManager";
+import {StackNavigationProp} from "@react-navigation/stack";
 
 interface Props {
+    navigation: StackNavigationProp<any>,
 }
 
 interface State {
@@ -13,6 +14,7 @@ class SettingsScreen extends Component<Props, State> {
         return (
             <View style={styles.container}>
                 <Text>Settings!</Text>
+                <Text onPress={() => this.props.navigation.navigate('SettingsTwitterScreen')}>Twitter Link</Text>
             </View>
         );
     }
