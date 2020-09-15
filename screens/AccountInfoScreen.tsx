@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import {ActivityIndicator, Route} from "react-native";
+import {ActivityIndicator, Route, ScrollView} from "react-native";
 import {Card} from "react-native-elements";
 import {UserContext} from "../providers/UserProvider";
 import {getUserDocument, signOut} from "../external/Firebase";
@@ -74,14 +74,16 @@ class AccountInfoScreen extends Component<Props, State> {
 
         return (
             <AccountRedirectWrapper navigation={this.props.navigation} route={this.props.route}>
-                <Card>
-                    <Card.Title>User Profile {this.getName()}</Card.Title>
-                    <Card.Divider/>
-                    {this.generateTable()}
-                    <Card.Divider/>
-                    <AccountActionButton type={"logout"} submit={() => this.signOut()}/>
-                </Card>
-                <ErrorCard errorMessage={this.state.errorMessage}/>
+                <ScrollView>
+                    <Card>
+                        <Card.Title>User Profile {this.getName()}</Card.Title>
+                        <Card.Divider/>
+                        {this.generateTable()}
+                        <Card.Divider/>
+                        <AccountActionButton type={"logout"} submit={() => this.signOut()}/>
+                    </Card>
+                    <ErrorCard errorMessage={this.state.errorMessage}/>
+                </ScrollView>
             </AccountRedirectWrapper>
         );
     }

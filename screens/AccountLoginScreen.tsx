@@ -5,7 +5,7 @@ import PasswordInput from "../components/account/PasswordInput";
 import AccountActionButton from "../components/account/AccountActionButton";
 import LoginWithGoogleButton from "../components/account/LoginWithGoogleButton";
 import {Text} from "../components/common/Themed";
-import {Route} from "react-native";
+import {Route, ScrollView} from "react-native";
 import {StackNavigationProp} from "@react-navigation/stack";
 import ErrorCard from "../components/account/ErrorCard";
 import AuthenticationResponse, {signInWithCredentials} from "../external/Firebase";
@@ -47,22 +47,24 @@ class AccountLoginScreen extends Component<Props, State> {
     render() {
         return (
             <AccountRedirectWrapper navigation={this.props.navigation} route={this.props.route}>
-                <Card>
-                    <Card.Title>Sign In</Card.Title>
-                    <Card.Divider/>
-                    <EmailInput setEmail={(email) => this.setState({email: email})}/>
-                    <PasswordInput setPassword={(password) => this.setState({password: password})}/>
-                    <AccountActionButton type={"login"} submit={() => this.login()}/>
-                </Card>
-                <Card>
-                    <Card.Title onPress={() => this.props.navigation.navigate('SettingsAccountSignupScreen')}>
-                        Don't have an account? <u>Click here</u>.
-                    </Card.Title>
-                    <Card.Divider/>
-                    <Text style={{alignSelf: "center"}}>Alternatively, you may</Text><br/>
-                    <LoginWithGoogleButton type={"login"}/>
-                </Card>
-                <ErrorCard errorMessage={this.state.errorMessage}/>
+                <ScrollView>
+                    <Card>
+                        <Card.Title>Sign In</Card.Title>
+                        <Card.Divider/>
+                        <EmailInput setEmail={(email) => this.setState({email: email})}/>
+                        <PasswordInput setPassword={(password) => this.setState({password: password})}/>
+                        <AccountActionButton type={"login"} submit={() => this.login()}/>
+                    </Card>
+                    <Card>
+                        <Card.Title onPress={() => this.props.navigation.navigate('SettingsAccountSignupScreen')}>
+                            Don't have an account? <u>Click here</u>.
+                        </Card.Title>
+                        <Card.Divider/>
+                        <Text style={{alignSelf: "center"}}>Alternatively, you may</Text><br/>
+                        <LoginWithGoogleButton type={"login"}/>
+                    </Card>
+                    <ErrorCard errorMessage={this.state.errorMessage}/>
+                </ScrollView>
             </AccountRedirectWrapper>
         );
     }
