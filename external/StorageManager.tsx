@@ -430,7 +430,7 @@ export const toggleSavedStop = async (stopCode: string, user?: firebase.User) =>
 
             const respObj = {
                 state: savedStops.includes(stopCode),
-                savedServices: savedStops,
+                savedStops: savedStops,
             }
 
             return new StorageResponse(true, null, respObj);        })
