@@ -1,29 +1,19 @@
 import React, {FC} from "react";
-import {Icon, ListItem, ThemeProvider} from "react-native-elements";
-
-const theme = {
-    colors: {
-        platform: {
-            "default": {
-                "grey": "#FFF"
-            }
-        }
-    }
-};
+import {Icon, ListItem} from "react-native-elements";
 
 const SettingsFeedbackEntry: FC = () => {
+    const mailto = "mailto:feedback@welly.live";
+
     return (
-        <ThemeProvider theme={theme}>
-            <ListItem key={"settings-feedback-entry"} onPress={() => window.location.href="mailto:feedback@welly.live"}>
-                <Icon name={"material-community-help-circle"}/>
-                <ListItem.Content>
-                    <ListItem.Title>
-                        Help and Feedback
-                    </ListItem.Title>
-                </ListItem.Content>
-                <ListItem.Chevron/>
-            </ListItem>
-        </ThemeProvider>
+        <ListItem key={"settings-feedback-entry"} onPress={() => window.location.href = mailto}>
+            <Icon name={"help-circle"} type={"material-community"}/>
+            <ListItem.Content>
+                <ListItem.Title>
+                    Help and Feedback
+                </ListItem.Title>
+            </ListItem.Content>
+            <ListItem.Chevron/>
+        </ListItem>
     )
 }
 
