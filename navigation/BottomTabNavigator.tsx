@@ -20,6 +20,9 @@ import ServiceScreen from "../screens/ServiceScreen";
 import StopScreen from "../screens/StopScreen";
 import TwitterScreen from "../screens/TwitterScreen";
 import {Icon} from "react-native-elements";
+import AccountLoginScreen from "../screens/AccountLoginScreen";
+import AccountSignupScreen from "../screens/AccountSignupScreen";
+import AccountInfoScreen from "../screens/AccountInfoScreen";
 
 const BottomTab = createBottomTabNavigator<BottomTabParamList>();
 
@@ -164,6 +167,21 @@ function SettingsTabNavigator() {
                 name={"SettingsTwitterScreen"}
                 component={TwitterScreen}
                 options={{headerTitle: 'Twitter Feed'}}
+            />
+            <SettingsTabStack.Screen
+                name={"SettingsAccountLoginScreen"}
+                component={AccountLoginScreen}
+                options={{headerTitle: 'Account Login'}}
+            />
+            <SettingsTabStack.Screen
+                name={"SettingsAccountSignupScreen"}
+                component={AccountSignupScreen}
+                options={{headerTitle: 'Account Signup'}}
+            />
+            <SettingsTabStack.Screen
+                name={"SettingsAccountInfoScreen"}
+                component={AccountInfoScreen}
+                options={{headerTitle: 'Account Profile'}}
             />
         </SettingsTabStack.Navigator>
     )
