@@ -1,8 +1,8 @@
 import React, {Component} from "react";
 import {Card} from "react-native-elements";
 import {StackNavigationProp} from "@react-navigation/stack";
+import {Text, View} from "../common/Themed";
 import {ActivityIndicator} from "react-native";
-import {View, Text} from "../common/Themed";
 
 interface Props {
     navigation: StackNavigationProp<any>,
@@ -38,17 +38,19 @@ class StopInfo extends Component<Props, State> {
 
     render() {
         return (
-            <Card>
-                <Card.Title>{this.getStopName()}</Card.Title>
-                <Card.Divider/>
-                {this.props.stopData ?
-                    <View>
-                        <Text>Code {this.props.code}</Text>
-                        <Text>Faze zone {this.getFareZone()}</Text>
-                        <Text>Notices {this.getNumberNotices()}</Text>
-                    </View>
-                    : <ActivityIndicator/>}
-            </Card>
+            <View>
+                <Card>
+                    <Card.Title>{this.getStopName()}</Card.Title>
+                    <Card.Divider/>
+                    {this.props.stopData ?
+                        <View>
+                            <Text>Code {this.props.code}</Text>
+                            <Text>Faze zone {this.getFareZone()}</Text>
+                            <Text>Notices {this.getNumberNotices()}</Text>
+                        </View>
+                        : <ActivityIndicator/>}
+                </Card>
+            </View>
         );
     }
 }

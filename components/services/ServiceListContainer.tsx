@@ -1,18 +1,20 @@
 import {StackNavigationProp} from "@react-navigation/stack";
 import React, {Component} from "react";
 import MetlinkListItem from "../common/MetlinkListItem";
-import {getSavedServices, toggleSavedStop} from "../../external/StorageManager";
+import {getSavedServices, toggleSavedService} from "../../external/StorageManager";
 import {View} from "../common/Themed";
 
 interface Props {
     navigation: StackNavigationProp<any>,
-    stopData: any | null | undefined,
-    showHours: boolean,
+    services: ServiceListProp[],
+    showHours?: boolean,
+    // Optional callback if the parent wants to be notified of any updates to saved services.
+    setSavedServices?: (services: string[]) => void,
 }
 
 interface State {
     showHours: boolean,
-    savedServices: any[] | undefined,
+    savedServices: string[] | undefined,
 }
 
 class ServiceListContainer extends Component<Props, State> {
@@ -20,10 +22,10 @@ class ServiceListContainer extends Component<Props, State> {
     constructor(props: Readonly<Props>) {
         super(props);
 
-        this.setState({
+        this.state = {
             showHours: false,
             savedServices: undefined,
-        });
+        };
     }
 
     componentDidMount() {
@@ -37,10 +39,10 @@ class ServiceListContainer extends Component<Props, State> {
         else return this.state.savedServices.includes(serviceCode);
     }
 
-    toggleFavourite(serviceCode: string) {
-        toggleSavedStop(serviceCode)
-            .then((resp) => this.setState({savedServices: resp.data.savedServices}))
-            .catch((resp) => this.setState({savedServices: resp.data.savedServices}));
+    async toggleFavourite(serviceCode: string) {
+        const savedServices = (await toggleSavedService(serviceCode)).data.savedServices;
+        this.setState({savedServices: savedServices});
+        if (this.props.setSavedServices) await this.props.setSavedServices(savedServices);
     }
 
     getHoursRemaining(arrivalTime: string) {
@@ -62,32 +64,24 @@ class ServiceListContainer extends Component<Props, State> {
         return dateTimeFormat.format(arrivalDate);
     }
 
-    generateStops() {
-        if (!this.props.stopData) return undefined;
+    generateServices() {
+        if (!this.props.services) return undefined;
 
-        let services: any[] = this.props.stopData.Services;
-
-        services.sort(function (a: { AimedArrival: number; }, b: { AimedArrival: number; }) {
-            return a.AimedArrival - b.AimedArrival;
-        });
+        let services: ServiceListProp[] = this.props.services;
 
         return services.map((service) => {
-            // Parse the time information from the response json.
-            const serviceName: string = service.Service.Name.split("-")[0];
-            const serviceCode: string = service.ServiceID;
-            const isLive: boolean = service.IsRealtime;
-            const timeRemaining: string = (this.props.showHours) ?
-                this.getHoursRemaining(service.AimedArrival) : this.getTime(service.AimedArrival);
+            const timeRemaining: string = (service.arrival) ? ((this.props.showHours) ?
+                this.getHoursRemaining(service.arrival) : this.getTime(service.arrival)) : ' ';
 
             return (
                 <MetlinkListItem
                     navigation={this.props.navigation}
-                    code={serviceCode}
-                    name={serviceName}
-                    isLive={isLive}
+                    code={service.code}
+                    name={service.name}
+                    isLive={service.live}
                     isStop={false}
-                    isFavourite={this.checkFavourite(serviceCode)}
-                    toggleFavourite={() => this.toggleFavourite(serviceCode)}
+                    isFavourite={this.checkFavourite(service.code)}
+                    toggleFavourite={() => this.toggleFavourite(service.code)}
                     timeRemaining={timeRemaining}
                 />
             );
@@ -97,9 +91,23 @@ class ServiceListContainer extends Component<Props, State> {
     render() {
         return (
             <View>
-                {this.generateStops()}
+                {this.generateServices()}
             </View>
         );
+    }
+}
+
+export class ServiceListProp {
+    public name: string;
+    public code: string;
+    public live?: boolean;
+    public arrival?: string;
+
+    constructor(name: string, code: string, live?: boolean, arrival?: string) {
+        this.name = name;
+        this.code = code;
+        this.live = live;
+        this.arrival = arrival;
     }
 }
 

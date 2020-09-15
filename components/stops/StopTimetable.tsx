@@ -1,19 +1,9 @@
 import React, {Component} from "react";
-import {Card, ThemeProvider} from "react-native-elements";
+import {Card} from "react-native-elements";
 import {StackNavigationProp} from "@react-navigation/stack";
-import {ActivityIndicator} from "react-native";
-import ServiceListContainer from "../services/ServiceListContainer";
 import {View} from "../common/Themed";
-
-const theme = {
-    colors: {
-        platform: {
-            "default": {
-                "grey": "#FFF"
-            }
-        }
-    }
-};
+import {ActivityIndicator} from "react-native";
+import ServiceListContainer, {ServiceListProp} from "../services/ServiceListContainer";
 
 interface Props {
     navigation: StackNavigationProp<any>,
@@ -34,23 +24,41 @@ class StopTimetable extends Component<Props, State> {
         }
     }
 
+    generateListContainerProps() {
+        if (!this.props.stopData?.Services) return [];
+
+        let containerProps: ServiceListProp[] = this.props.stopData.Services.map((service: any) => {
+            // Parse the time information from the response json.
+            const name: string = service.Service.Name.split("-")[0];
+            const code: string = service.ServiceID;
+            const isLive: boolean = service.IsRealtime;
+            const timeRemaining: string = service.AimedArrival;
+
+            return new ServiceListProp(name, code, isLive, timeRemaining);
+        });
+
+        containerProps.sort(function (a, b) {
+            return (a.arrival && b.arrival) ? a.arrival.localeCompare(b.arrival) : -1;
+        });
+
+        return containerProps;
+    }
+
     render() {
         return (
-            <ThemeProvider theme={theme}>
-                <View style={{height: '100%'}}>
-                    <Card>
-                        <Card.Title>Upcoming Services</Card.Title>
-                        <Card.Divider/>
-                        {this.props.stopData ?
-                            <ServiceListContainer
-                                navigation={this.props.navigation}
-                                stopData={this.props.stopData}
-                                showHours={true}
-                            /> :
-                            <ActivityIndicator/>}
-                    </Card>
-                </View>
-            </ThemeProvider>
+            <View style={{height: '100%'}}>
+                <Card>
+                    <Card.Title>Upcoming Services</Card.Title>
+                    <Card.Divider/>
+                    {this.props.stopData ?
+                        <ServiceListContainer
+                            navigation={this.props.navigation}
+                            services={this.generateListContainerProps()}
+                            showHours={true}
+                        /> :
+                        <ActivityIndicator/>}
+                </Card>
+            </View>
         );
     }
 }
