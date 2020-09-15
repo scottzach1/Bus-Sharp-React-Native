@@ -8,17 +8,8 @@ import useCachedResources from './hooks/useCachedResources';
 import useColorScheme from './hooks/useColorScheme';
 import Navigation from './navigation';
 import {initSavedServices, initSavedStops, initServices, initStops, initTheme} from "./external/StorageManager";
-import {ThemeProvider} from "react-native-elements";
-
-const theme = {
-    colors: {
-        platform: {
-            "default": {
-                "grey": "#FFF"
-            }
-        }
-    }
-};
+import CustomThemeProvider from "./providers/ThemeProvider";
+import UserProvider from "./providers/UserProvider";
 
 export default function App() {
     const isLoadingComplete = useCachedResources();
@@ -34,13 +25,15 @@ export default function App() {
         return null;
     } else {
         return (
-            <ThemeProvider theme={theme}>
-                <SafeAreaProvider>
-                    <Navigation colorScheme={colorScheme}/>
-                    <Toast ref={(ref: any) => Toast.setRef(ref)}/>
-                    <StatusBar/>
-                </SafeAreaProvider>
-            </ThemeProvider>
+            <UserProvider>
+                <CustomThemeProvider>
+                    <SafeAreaProvider>
+                        <Navigation colorScheme={colorScheme}/>
+                        <Toast ref={(ref: any) => Toast.setRef(ref)}/>
+                        <StatusBar/>
+                    </SafeAreaProvider>
+                </CustomThemeProvider>
+            </UserProvider>
         );
     }
 }

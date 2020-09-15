@@ -9,6 +9,7 @@ import {Route} from "react-native";
 import {StackNavigationProp} from "@react-navigation/stack";
 import SettingsVersionEntry from "../components/settings/SettingsVersionEntry";
 import SettingsAboutDevsEntry from "../components/settings/SettingsAboutDevsEntry";
+import SettingsAccountEntry from "../components/settings/SettingsAccountEntry";
 
 interface Props {
     route: Route,
@@ -27,10 +28,8 @@ class SettingsScreen extends Component<Props, State> {
                     <Card.Divider/>
                     <SettingsFeedbackEntry/>
                     <SettingsSourceCodeEntry/>
-                    <SettingsTwitterFeedEntry
-                        navigation={this.props.navigation}
-                        route={this.props.route}
-                    />
+                    <SettingsAccountEntry navigation={this.props.navigation}/>
+                    <SettingsTwitterFeedEntry navigation={this.props.navigation}/>
                     <SettingsShareEntry/>
                 </Card>
                 <Card>
