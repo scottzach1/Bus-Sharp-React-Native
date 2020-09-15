@@ -3,7 +3,7 @@ import {ScrollView, StyleSheet} from "react-native";
 import {StackNavigationProp} from "@react-navigation/stack";
 import {getAllServices, getAllStops} from "../external/StorageManager";
 import {SearchBar} from "react-native-elements";
-import {View} from "../components/Themed";
+import {View} from "../components/common/Themed";
 import SearchTabSearchbarDescriptionCard from "../components/search-tab/SearchTabSearchbarDescription";
 import SearchTabTabsDescription from "../components/search-tab/SearchTabTabsDescription";
 import SearchTabFilter from "../components/search-tab/SearchTabFilter";
