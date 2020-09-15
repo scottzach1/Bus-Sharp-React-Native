@@ -1,8 +1,8 @@
 import React, {Component} from "react";
 import {Card} from "react-native-elements";
 import {StackNavigationProp} from "@react-navigation/stack";
-import {Text, View} from "../Themed";
 import {ActivityIndicator} from "react-native";
+import {View, Text} from "../common/Themed";
 
 interface Props {
     navigation: StackNavigationProp<any>,

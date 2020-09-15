@@ -2,7 +2,7 @@ import {StackNavigationProp} from "@react-navigation/stack";
 import React, {Component} from "react";
 import MetlinkListItem from "../common/MetlinkListItem";
 import {getSavedServices, toggleSavedStop} from "../../external/StorageManager";
-import {View} from "../Themed";
+import {View} from "../common/Themed";
 
 interface Props {
     navigation: StackNavigationProp<any>,

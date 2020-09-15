@@ -1,16 +1,17 @@
 import React, {FC, useState} from "react";
-import {GoogleMap, Marker, Polyline, useLoadScript} from "@react-google-maps/api";
+import {GoogleMap, InfoWindow, Marker, Polyline, useLoadScript} from "@react-google-maps/api";
 import "./GoogleMapWidget.css";
 import {mapStyles} from "./GoogleMapWidgetStyles";
 import {Text} from 'react-native';
 import {View} from "../common/Themed";
 import Constants from 'expo-constants';
 import {getLatLng} from "react-places-autocomplete";
+import {MaterialCommunityIcons} from "@expo/vector-icons";
 
 
 interface Props {
     stopMarkers: StopMarker[] | null,
-    routePaths: ServiceRoute[] | null,
+    routePaths: any | null,
     geoCoderResult?: google.maps.GeocoderResult,
 }
 
@@ -62,9 +63,6 @@ let googleLoaded = false;
 let stopOneLoaded = false;
 
 const GoogleMapWidget: FC<Props> = (props) => {
-    // ALL STOP DATA
-    const [stopData, setStopData] = useState<any | null>(null);
-
     // TOAST
     const [showToast, setShowToast] = useState<boolean>(false)
 
@@ -80,29 +78,40 @@ const GoogleMapWidget: FC<Props> = (props) => {
     // -------------------------------------------------------------------------------------------------------------
     // CHECKS RUN EVERY RENDER
     // -------------------------------------------------------------------------------------------------------------
+
+    if (props.geoCoderResult) {
+        setSearchLocation()
+    }
+
     if (!userLocation && navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(successfulPosition);
+    }
+
+    if (props.routePaths && !routeLoaded && googleLoaded) {
+        if (props.routePaths.length !== 0) {
+            let route = props.routePaths[Math.round(props.routePaths.length / 2) - 1]
+            let midLoc = route.path[Math.round(route.path.length / 2) - 1]
+            selectedId = "Route"
+            selectItem(new StopMarker(
+                "Route",
+                route.key,
+                route.key,
+                "",
+                new Position(midLoc.latitude, midLoc.longitude)))
+            routeLoaded = true
+        }
+    }
+
+
+    if (props.stopMarkers?.length === 1 && googleLoaded && !stopOneLoaded) {
+        stopOneLoaded = true
+        selectedId = "Stop"
+        selectItem(props.stopMarkers[0])
     }
 
     // -------------------------------------------------------------------------------------------------------------
     // FUNCTIONS
     // -------------------------------------------------------------------------------------------------------------
-    /**
-     * Asynchronously get the stop data currently available.
-     */
-    async function getStopData() {
-        // TODO: STORAGE MANAGER
-    }
-
-    /**
-     * Get the name of a marker on the map-tab. Used when a marker has been clicked on.
-     * @param stop - A StopMarker
-     */
-    function getStopName(stop: StopMarker) {
-        if (stop.name) return stop.name;
-        else if (stopData[stop.code]) return stopData[stop.code];
-        else return stop.code + " - unknown";
-    }
 
     /**
      * Check that the parsed in search location is different to the currently stored location.
@@ -111,7 +120,6 @@ const GoogleMapWidget: FC<Props> = (props) => {
      */
     function setSearchLocation() {
         if (props.geoCoderResult === undefined) return
-
         getLatLng(props.geoCoderResult)
             .then(latLng => {
                 if (searchLocation === undefined
@@ -141,7 +149,6 @@ const GoogleMapWidget: FC<Props> = (props) => {
             undefined,
             new Position(parseFloat(position.coords.latitude), parseFloat(position.coords.longitude), undefined))
         setShowToast(true)
-        console.log(userLocation.location, center)
     }
 
 
@@ -168,13 +175,13 @@ const GoogleMapWidget: FC<Props> = (props) => {
     // -------------------------------------------------------------------------------------------------------------
     return (
         <>
-            {(loadError || !isLoaded) ? <View><Text>Welp</Text></View> :
+            {!isLoaded ? <View><Text>Loading...</Text></View> :
                 <GoogleMap
                     mapContainerClassName={"map"}
                     zoom={16}
                     center={center}
                     options={options}
-                    // onDragStart={deselectItem}
+                    onDragStart={deselectItem}
                     onLoad={(map) => {
                         map && (onLoad(map))
                     }}
@@ -187,6 +194,13 @@ const GoogleMapWidget: FC<Props> = (props) => {
                                 lat: userLocation.location.latitude,
                                 lng: userLocation.location.longitude,
                             }}
+                            onClick={() => {
+                                if (userLocation) {
+                                    selectedId = "User"
+                                    selectItem(userLocation);
+                                }
+                            }}
+                            icon="https://www.robotwoods.com/dev/misc/bluecircle.png"
                         />
                     )}
 
@@ -204,7 +218,7 @@ const GoogleMapWidget: FC<Props> = (props) => {
                         />
                     ))}
 
-                    {props.routePaths?.map((route) => (
+                    {props.routePaths?.map((route: { key: string | number | null | undefined; path: any[]; color: any; }) => (
                         <Polyline
                             key={route.key}
                             path={route.path.map(position => ({
@@ -215,6 +229,59 @@ const GoogleMapWidget: FC<Props> = (props) => {
                         />
                     ))}
 
+                    {(selectedId === "User" && userLocation) && (
+                        <InfoWindow
+                            key={userLocation.name}
+                            position={{
+                                lat: userLocation.location.latitude,
+                                lng: userLocation.location.longitude,
+                            }}
+                            onCloseClick={() => {
+                                deselectItem()
+                            }}
+                        >
+                            <div id="selected-stop-popup">
+                                <strong>User Location</strong>
+                            </div>
+                        </InfoWindow>
+                    )}
+
+                    {(selectedId === "Stop" && selectedItem) && (
+                        <InfoWindow
+                            key={selectedItem.key + "-selected"}
+                            position={{
+                                lat: selectedItem.location.latitude,
+                                lng: selectedItem.location.longitude,
+                            }}
+                            onCloseClick={() => {
+                                deselectItem()
+                            }}
+                        >
+                            <div id="selected-stop-popup">
+                                <a href={'/stop/' + selectedItem.code}>
+                                    <MaterialCommunityIcons name="map-marker" size={16} color="grey" />
+                                    <strong>{selectedItem.code + ": " + selectedItem.name}</strong>
+                                </a>
+                            </div>
+                        </InfoWindow>
+                    )}
+
+                    {(selectedId === "Search" && searchLocation) && (
+                        <InfoWindow
+                            key={searchLocation.key}
+                            position={{
+                                lat: searchLocation.location.latitude,
+                                lng: searchLocation.location.longitude,
+                            }}
+                            onCloseClick={() => {
+                                deselectItem()
+                            }}
+                        >
+                            <div id="selected-stop-popup">
+                                <strong>{searchLocation.key}</strong>
+                            </div>
+                        </InfoWindow>
+                    )}
                 </GoogleMap>}
         </>
     )

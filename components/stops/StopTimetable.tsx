@@ -1,9 +1,9 @@
 import React, {Component} from "react";
 import {Card, ThemeProvider} from "react-native-elements";
 import {StackNavigationProp} from "@react-navigation/stack";
-import {View} from "../Themed";
 import {ActivityIndicator} from "react-native";
 import ServiceListContainer from "../services/ServiceListContainer";
+import {View} from "../common/Themed";
 
 const theme = {
     colors: {
