@@ -1,7 +1,7 @@
 import React, {Component} from "react";
-import {View} from "react-native";
 import {Card} from "react-native-elements";
 import SettingsFeedbackEntry from "../components/settings/SettingsFeedbackEntry";
+import {View} from "../components/common/Themed";
 
 interface Props {
 }
