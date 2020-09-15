@@ -1,11 +1,24 @@
 import {StatusBar} from 'expo-status-bar';
 import React from 'react';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
+// @ts-ignore Webstorm won't recognize this, functions normally.
+import Toast from 'react-native-toast-message';
 
 import useCachedResources from './hooks/useCachedResources';
 import useColorScheme from './hooks/useColorScheme';
 import Navigation from './navigation';
 import {initSavedServices, initSavedStops, initServices, initStops, initTheme} from "./external/StorageManager";
+import {ThemeProvider} from "react-native-elements";
+
+const theme = {
+    colors: {
+        platform: {
+            "default": {
+                "grey": "#FFF"
+            }
+        }
+    }
+};
 
 export default function App() {
     const isLoadingComplete = useCachedResources();
@@ -21,10 +34,13 @@ export default function App() {
         return null;
     } else {
         return (
-            <SafeAreaProvider>
-                <Navigation colorScheme={colorScheme}/>
-                <StatusBar/>
-            </SafeAreaProvider>
+            <ThemeProvider theme={theme}>
+                <SafeAreaProvider>
+                    <Navigation colorScheme={colorScheme}/>
+                    <Toast ref={(ref: any) => Toast.setRef(ref)}/>
+                    <StatusBar/>
+                </SafeAreaProvider>
+            </ThemeProvider>
         );
     }
 }
