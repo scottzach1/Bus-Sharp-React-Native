@@ -1,19 +1,9 @@
 import React, {Component} from "react";
-import {Card, ThemeProvider} from "react-native-elements";
+import {Card} from "react-native-elements";
 import {StackNavigationProp} from "@react-navigation/stack";
-import {View} from "../Themed";
+import {View} from "../common/Themed";
 import {ActivityIndicator} from "react-native";
 import ServiceListContainer, {ServiceListProp} from "../services/ServiceListContainer";
-
-const theme = {
-    colors: {
-        platform: {
-            "default": {
-                "grey": "#FFF"
-            }
-        }
-    }
-};
 
 interface Props {
     navigation: StackNavigationProp<any>,
@@ -56,21 +46,19 @@ class StopTimetable extends Component<Props, State> {
 
     render() {
         return (
-            <ThemeProvider theme={theme}>
-                <View style={{height: '100%'}}>
-                    <Card>
-                        <Card.Title>Upcoming Services</Card.Title>
-                        <Card.Divider/>
-                        {this.props.stopData ?
-                            <ServiceListContainer
-                                navigation={this.props.navigation}
-                                services={this.generateListContainerProps()}
-                                showHours={true}
-                            /> :
-                            <ActivityIndicator/>}
-                    </Card>
-                </View>
-            </ThemeProvider>
+            <View style={{height: '100%'}}>
+                <Card>
+                    <Card.Title>Upcoming Services</Card.Title>
+                    <Card.Divider/>
+                    {this.props.stopData ?
+                        <ServiceListContainer
+                            navigation={this.props.navigation}
+                            services={this.generateListContainerProps()}
+                            showHours={true}
+                        /> :
+                        <ActivityIndicator/>}
+                </Card>
+            </View>
         );
     }
 }

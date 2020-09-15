@@ -89,6 +89,8 @@ export const initStops = async () => {
             for (const stopEntry of results.data)
                 stopData[stopEntry.stop_id] = stopEntry;
 
+            stopData[''] = undefined; // Dataset contains empty entry :-/
+
             await AsyncStorage.setItem(key, JSON.stringify(stopData));
         }
     });
@@ -114,6 +116,8 @@ export const initServices = async () => {
 
             for (const serviceEntry of results.data)
                 serviceData[serviceEntry.route_short_name] = serviceEntry;
+
+            serviceData[''] = undefined; // Dataset contains empty entry :-/
 
             await AsyncStorage.setItem(key, JSON.stringify(serviceData));
         }
@@ -430,10 +434,11 @@ export const toggleSavedStop = async (stopCode: string, user?: firebase.User) =>
 
             const respObj = {
                 state: savedStops.includes(stopCode),
-                savedServices: savedStops,
+                savedStops: savedStops,
             }
 
-            return new StorageResponse(true, null, respObj);        })
+            return new StorageResponse(true, null, respObj);
+        })
         .catch((e) => new StorageResponse(false, 'Failed to toggle saved: ' + e.message, []));
 }
 
@@ -458,7 +463,7 @@ export const toggleSavedService = async (serviceCode: string, user?: firebase.Us
             else
                 savedServices.push(serviceCode);
             // Update Storage.
-            setSavedStops(savedServices);
+            setSavedServices(savedServices);
 
             // Update Firestore
             if (user) updateUserDocument(user, {savedStops: JSON.stringify(savedServices)})
