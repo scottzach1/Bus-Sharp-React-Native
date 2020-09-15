@@ -19,9 +19,9 @@ class StopListContainer extends Component<Props, State> {
     constructor(props: Readonly<Props>) {
         super(props);
 
-        this.setState({
+        this.state = {
             savedStops: undefined,
-        });
+        };
     }
 
     componentDidMount() {

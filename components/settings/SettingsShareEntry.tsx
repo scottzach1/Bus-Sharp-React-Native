@@ -1,13 +1,15 @@
 import React, {FC} from "react";
 import {Icon, ListItem} from "react-native-elements";
-import {Share, ToastAndroid} from "react-native";
+import {Share} from "react-native";
+// @ts-ignore Unfortunately it doesn't seem to find the import. Works totally fine however.
+import Toast from "react-native-toast-message";
 
 const SettingsShareEntry: FC = () => {
     const onShare = async () => {
         try {
             const result = await Share.share({
                 title: "Bus Sharp",
-                message: "The new way to track public transport in Wellington.",
+                message: "Bus Sharp | The new way to track public transport in Wellington. Visit https://welly.live!",
                 url: "https://welly.live",
             });
 
@@ -25,8 +27,24 @@ const SettingsShareEntry: FC = () => {
         } catch (e) {
             // Failed to open share API, resort to clipboard share.
             navigator.clipboard.writeText('https://welly.live')
-                // .then(() => this.setState({showToast: true}))
-                .catch((e) => console.error(e))
+                .then(() => {
+                    Toast.show({
+                        position: 'bottom',
+                        type: 'info',
+                        text1: 'Copied to clipboard',
+                        visibilityTime: 4000,
+                        autoHide: true
+                    })
+                })
+                .catch(() => {
+                    Toast.show({
+                        position: 'bottom',
+                        type: 'error',
+                        text1: 'Failed to share or copy to clipboard',
+                        visibilityTime: 4000,
+                        autoHide: true
+                    })
+                })
         }
     }
 
