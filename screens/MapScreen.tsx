@@ -140,6 +140,7 @@ class MapScreen extends Component<Props, State> {
                     routePaths={[]}
                     stopMarkers={this.state.stopMarkers}
                     geoCoderResult={this.state.searchLocation}
+                    navigation={this.props.navigation}
                 />
                 <SearchBar
                     placeholder="Type Here..."

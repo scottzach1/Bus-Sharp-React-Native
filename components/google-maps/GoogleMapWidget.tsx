@@ -7,10 +7,13 @@ import {View} from "../common/Themed";
 import Constants from 'expo-constants';
 import {getLatLng} from "react-places-autocomplete";
 import {MaterialCommunityIcons} from "@expo/vector-icons";
+import {StackNavigationProp} from "@react-navigation/stack";
+import {navigateToMetlink} from "../../navigation/LinkingConfiguration";
 
 
 interface Props {
     stopMarkers: StopMarker[] | null,
+    navigation: StackNavigationProp<any>,
     routePaths: any | null,
     geoCoderResult?: google.maps.GeocoderResult,
 }
@@ -257,11 +260,14 @@ const GoogleMapWidget: FC<Props> = (props) => {
                                 deselectItem()
                             }}
                         >
-                            <div id="selected-stop-popup">
-                                <a href={'/stop/' + selectedItem.code}>
-                                    <MaterialCommunityIcons name="map-marker" size={16} color="grey" />
-                                    <strong>{selectedItem.code + ": " + selectedItem.name}</strong>
-                                </a>
+                            <div
+                                id="selected-stop-popup"
+                                onClick={() => navigateToMetlink(selectedItem.code, true, props.navigation)}
+                            >
+                                <Text>
+                                    <MaterialCommunityIcons name="map-marker" size={16} color="black"/>
+                                    <strong> {selectedItem.code + ": " + selectedItem.name}</strong>
+                                </Text>
                             </div>
                         </InfoWindow>
                     )}
