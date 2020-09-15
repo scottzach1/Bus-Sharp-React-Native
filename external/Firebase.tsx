@@ -134,8 +134,8 @@ export const createUserWithCredentials = async (email: string, password: string,
 
         await generateUserDocument(user, {
             displayName: displayName,
-            savedStops: JSON.stringify(await getSavedStops()),
-            savedServices: JSON.stringify(await getSavedServices()),
+            savedStops: JSON.stringify((await getSavedStops()).data),
+            savedServices: JSON.stringify((await getSavedServices()).data),
         });
         return new AuthenticationResponse(true);
     } catch (error) {
