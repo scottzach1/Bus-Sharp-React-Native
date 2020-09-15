@@ -21,10 +21,13 @@ interface State {
     servicesErrorMessage: string | null,
     searchText: string,
     selectedIndex: number,
+    flipper: boolean
 }
 
-let prevSearch: string = ""
-let prevFilter: number = 0
+const viewCount = 7
+let stopDisplayMultiplier = 1;
+let serviceDisplayMultiplier = 1;
+
 let remainingStops: number = 0
 let remainingServices: number = 0
 
@@ -40,6 +43,8 @@ class SearchScreen extends Component<Props, State> {
             servicesErrorMessage: null,
             searchText: "",
             selectedIndex: 0,
+            flipper: false
+
         }
     }
 
@@ -47,7 +52,9 @@ class SearchScreen extends Component<Props, State> {
         if (this.state.stopsData.length === 0) {
             getAllStops().then((resp) => {
                 this.setState({
-                    stopsData: Object.entries(resp.data).map((stop: any) => new StopListProp(stop[1].stop_name, stop[1].stop_id)),
+                    stopsData: Object.entries(resp.data)
+                        .map((stop: any) => new StopListProp(stop[1].stop_name, stop[1].stop_id))
+                        .sort(function (a, b){return a.code.localeCompare(b.code)}),
                     stopsErrorMessage: resp.errorMessage,
                 })
             });
@@ -56,7 +63,9 @@ class SearchScreen extends Component<Props, State> {
         if (this.state.servicesData.length === 0) {
             getAllServices().then((resp) => {
                 this.setState({
-                    servicesData: Object.entries(resp.data).map((route: any) => new ServiceListProp(route[1].route_long_name, route[1].route_id)),
+                    servicesData: Object.entries(resp.data)
+                        .map((route: any) => new ServiceListProp(route[1].route_long_name, route[1].route_id))
+                        .sort(function (a, b){return a.code.localeCompare(b.code)}),
                     servicesErrorMessage: resp.errorMessage
                 })
             });
@@ -65,6 +74,7 @@ class SearchScreen extends Component<Props, State> {
 
     updateIndex(newValue: number) {
         this.setState({selectedIndex: newValue})
+        this.resetMultipliers()
     }
 
     filterStops() {
@@ -77,9 +87,9 @@ class SearchScreen extends Component<Props, State> {
         let filtered = this.state.stopsData
             .filter((stop: StopListProp) => this.filterListElement(stop.name, stop.code))
 
-        remainingStops = filtered.length - 5
+        remainingStops = filtered.length - (viewCount * stopDisplayMultiplier)
 
-        return filtered.slice(0, Math.min(filtered.length, 5))
+        return filtered.slice(0, Math.min(filtered.length, (viewCount * stopDisplayMultiplier)))
     }
 
     filterServices() {
@@ -92,18 +102,25 @@ class SearchScreen extends Component<Props, State> {
         let filtered = this.state.servicesData
             .filter((service: ServiceListProp) => this.filterListElement(service.name, service.code))
 
-        remainingServices = filtered.length - 5
+        remainingServices = filtered.length - (viewCount * serviceDisplayMultiplier)
 
-        return filtered.slice(0, Math.min(filtered.length, 5))
+        return filtered.slice(0, Math.min(filtered.length, (viewCount * serviceDisplayMultiplier)))
     }
 
 
     filterListElement(name: string, code: string) {
         if (name === undefined || code === undefined) return false
 
-        return this.state.selectedIndex !== 4 ?
-            (name.includes(this.state.searchText) || code.includes(this.state.searchText)) :
-            (name.startsWith(this.state.searchText) || code.startsWith(this.state.searchText))
+        return this.state.selectedIndex !== 3 ?
+            (name.toLowerCase().includes(this.state.searchText.toLowerCase())
+                || code.toLowerCase().includes(this.state.searchText.toLowerCase())) :
+            (name.toLowerCase().startsWith(this.state.searchText.toLowerCase())
+                || code.toLowerCase().startsWith(this.state.searchText.toLowerCase()))
+    }
+
+    resetMultipliers(){
+        stopDisplayMultiplier = 1;
+        serviceDisplayMultiplier = 1;
     }
 
     render() {
@@ -117,7 +134,8 @@ class SearchScreen extends Component<Props, State> {
                 <SearchBar
                     placeholder={"Search Here..."}
                     onChangeText={(e) => {
-                        this.setState({searchText: e});
+                        this.setState({searchText: e})
+                        this.resetMultipliers()
                     }}
                     value={this.state.searchText}
                 />
@@ -138,7 +156,14 @@ class SearchScreen extends Component<Props, State> {
                                 services={services}
                             />
                             {remainingServices > 0 && (
-                                <Button title={"more..."} type={"outline"}/>)}
+                                <Button
+                                    title={"more..."}
+                                    type={"outline"}
+                                    onPress={() => {
+                                        serviceDisplayMultiplier++;
+                                        this.setState({flipper: !this.state.flipper})
+                                    }}
+                                />)}
                         </Card>
                     )}
                     {(stops && stops.length > 0) && (
@@ -150,7 +175,14 @@ class SearchScreen extends Component<Props, State> {
                                 stops={stops}
                             />
                             {remainingStops > 0 && (
-                                <Button title={"more..."} type={"outline"}/>)}
+                                <Button
+                                    title={"more..."}
+                                    type={"outline"}
+                                    onPress={() => {
+                                        stopDisplayMultiplier++;
+                                        this.setState({flipper: !this.state.flipper})
+                                    }}
+                                />)}
                         </Card>
                     )}
                 </ScrollView>

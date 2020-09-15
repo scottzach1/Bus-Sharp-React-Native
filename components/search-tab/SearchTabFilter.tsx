@@ -32,7 +32,7 @@ class SearchTabFilter extends Component<Props, State> {
                 onPress={(e) => this.updateIndex(e)}
                 selectedIndex={selectedIndex}
                 buttons={buttons}
-                containerStyle={{height: "10%"}}
+                containerStyle={{height: 50}}
             />
         )
     }
