@@ -1,21 +1,18 @@
 import React, {Component} from "react";
-import {Card, ThemeProvider} from "react-native-elements";
+import {Card} from "react-native-elements";
 import SettingsFeedbackEntry from "../components/settings/SettingsFeedbackEntry";
 import {View} from "../components/common/Themed";
 import SettingsSourceCodeEntry from "../components/settings/SettingsSourceCodeEntry";
 import SettingsShareEntry from "../components/settings/SettingsShareEntry";
-
-const theme = {
-    colors: {
-        platform: {
-            "default": {
-                "grey": "#FFF"
-            }
-        }
-    }
-};
+import SettingsTwitterFeedEntry from "../components/settings/SettingsTwitterFeedEntry";
+import {Route} from "react-native";
+import {StackNavigationProp} from "@react-navigation/stack";
+import SettingsVersionEntry from "../components/settings/SettingsVersionEntry";
+import SettingsAboutDevsEntry from "../components/settings/SettingsAboutDevsEntry";
 
 interface Props {
+    route: Route,
+    navigation: StackNavigationProp<any>,
 }
 
 interface State {
@@ -24,17 +21,25 @@ interface State {
 class SettingsScreen extends Component<Props, State> {
     render() {
         return (
-            <ThemeProvider theme={theme}>
-                <View>
-                    <Card>
-                        <Card.Title>General</Card.Title>
-                        <Card.Divider/>
-                        <SettingsFeedbackEntry/>
-                        <SettingsSourceCodeEntry/>
-                        <SettingsShareEntry/>
-                    </Card>
-                </View>
-            </ThemeProvider>
+            <View>
+                <Card>
+                    <Card.Title>General</Card.Title>
+                    <Card.Divider/>
+                    <SettingsFeedbackEntry/>
+                    <SettingsSourceCodeEntry/>
+                    <SettingsTwitterFeedEntry
+                        navigation={this.props.navigation}
+                        route={this.props.route}
+                    />
+                    <SettingsShareEntry/>
+                </Card>
+                <Card>
+                    <Card.Title>About</Card.Title>
+                    <Card.Divider/>
+                    <SettingsVersionEntry/>
+                    <SettingsAboutDevsEntry/>
+                </Card>
+            </View>
         );
     }
 }

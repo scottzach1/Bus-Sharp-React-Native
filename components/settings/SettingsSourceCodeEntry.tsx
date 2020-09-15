@@ -5,7 +5,7 @@ const SettingsSourceCodeEntry: FC = () => {
     const url = "https://gitlab.ecs.vuw.ac.nz/late-for-the-bus/bus-sharp-react-native";
 
     return (
-        <ListItem key={"settings-feedback-entry"} onPress={() => window.location.href = url}>
+        <ListItem key={"settings-sourcecode-entry"} onPress={() => window.location.href = url}>
             <Icon name={"gitlab"} type={"material-community"}/>
             <ListItem.Content>
                 <ListItem.Title>

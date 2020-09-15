@@ -49,7 +49,7 @@ const SettingsShareEntry: FC = () => {
     }
 
     return (
-        <ListItem key={"settings-feedback-entry"} onPress={() => onShare()}>
+        <ListItem key={"settings-share-entry"} onPress={() => onShare()}>
             <Icon name={"share"} type={"material-community"}/>
             <ListItem.Content>
                 <ListItem.Title>
