@@ -1,10 +1,8 @@
 import React, {FC} from "react";
 import {Icon, ListItem} from "react-native-elements";
-import {Route} from "react-native";
 import {StackNavigationProp} from "@react-navigation/stack";
 
 interface Props {
-    route: Route,
     navigation: StackNavigationProp<any>,
 }
 
