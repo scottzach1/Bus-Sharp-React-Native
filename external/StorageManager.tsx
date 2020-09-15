@@ -1,7 +1,7 @@
 import AsyncStorage from '@react-native-community/async-storage';
-import {readRemoteFile} from "react-papaparse";
 import firebase from "firebase";
 import {getUserDocument, updateUserDocument} from "./Firebase";
+import csv from 'csvtojson';
 
 const StorageKeys = {
     savedServices: '@savedServices',
@@ -81,19 +81,23 @@ export const initStops = async () => {
     const key = StorageKeys.allStops;
     const url = "http://transitfeeds.com/p/metlink/22/latest/download/stops.txt";
 
-    const setToDefault = async () => readRemoteFile(proxy + url, {
-        download: true, header: true,
-        complete: async (results: any) => {
-            let stopData: any = {};
+    const setToDefault = async () => {
+        await fetch(proxy + url)
+            .then((resp) => resp.text())
+            .then((text) => {
+                csv().fromString(text)
+                    .then((jsonObj) => {
+                        let stopData: any = {};
 
-            for (const stopEntry of results.data)
-                stopData[stopEntry.stop_id] = stopEntry;
+                        for (const stopEntry of jsonObj)
+                            stopData[stopEntry.stop_id] = stopEntry;
 
-            stopData[''] = undefined; // Dataset contains empty entry :-/
+                        stopData[''] = undefined; // Dataset contains empty entry :-/
 
-            await AsyncStorage.setItem(key, JSON.stringify(stopData));
-        }
-    });
+                        AsyncStorage.setItem(key, JSON.stringify(stopData));
+                    });
+            });
+    }
 
     const response = await AsyncStorage.getItem(key).catch((e) => console.error('Failed to initialise all stops.', e));
 
@@ -109,19 +113,23 @@ export const initServices = async () => {
     const key = StorageKeys.allServices;
     const url = "http://transitfeeds.com/p/metlink/22/latest/download/routes.txt";
 
-    const setToDefault = () => readRemoteFile(proxy + url, {
-        download: true, header: true,
-        complete: async (results: any) => {
-            let serviceData: any = {};
+    const setToDefault = async () => {
+        await fetch(proxy + url)
+            .then((resp) => resp.text())
+            .then((text) => {
+                csv().fromString(text)
+                    .then((jsonObj) => {
+                        let serviceData: any = {};
 
-            for (const serviceEntry of results.data)
-                serviceData[serviceEntry.route_short_name] = serviceEntry;
+                        for (const serviceEntry of jsonObj)
+                            serviceData[serviceEntry.route_short_name] = serviceEntry;
 
-            serviceData[''] = undefined; // Dataset contains empty entry :-/
+                        serviceData[''] = undefined; // Dataset contains empty entry :-/
 
-            await AsyncStorage.setItem(key, JSON.stringify(serviceData));
-        }
-    });
+                        AsyncStorage.setItem(key, JSON.stringify(serviceData))
+                    });
+            });
+    }
 
     const response = await AsyncStorage.getItem(key).catch((e) => console.error('Failed to initialise all services.', e));
 

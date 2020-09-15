@@ -22,10 +22,10 @@ class ServiceListContainer extends Component<Props, State> {
     constructor(props: Readonly<Props>) {
         super(props);
 
-        this.setState({
+        this.state = {
             showHours: false,
             savedServices: undefined,
-        });
+        };
     }
 
     componentDidMount() {
