@@ -2,12 +2,14 @@ import {StackNavigationProp} from "@react-navigation/stack";
 import React, {Component} from "react";
 import MetlinkListItem from "../common/MetlinkListItem";
 import {getSavedServices, toggleSavedService} from "../../external/StorageManager";
-import {View} from "../Themed";
+import {View} from "../common/Themed";
 
 interface Props {
     navigation: StackNavigationProp<any>,
     services: ServiceListProp[],
     showHours?: boolean,
+    // Optional callback if the parent wants to be notified of any updates to saved services.
+    setSavedServices?: (services: string[]) => void,
 }
 
 interface State {
@@ -37,10 +39,10 @@ class ServiceListContainer extends Component<Props, State> {
         else return this.state.savedServices.includes(serviceCode);
     }
 
-    toggleFavourite(serviceCode: string) {
-        toggleSavedService(serviceCode)
-            .then((resp) => this.setState({savedServices: resp.data.savedServices}))
-            .catch((resp) => this.setState({savedServices: resp.data.savedServices}));
+    async toggleFavourite(serviceCode: string) {
+        const savedServices = (await toggleSavedService(serviceCode)).data.savedServices;
+        this.setState({savedServices: savedServices});
+        if (this.props.setSavedServices) await this.props.setSavedServices(savedServices);
     }
 
     getHoursRemaining(arrivalTime: string) {

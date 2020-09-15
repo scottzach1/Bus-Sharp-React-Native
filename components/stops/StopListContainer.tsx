@@ -2,17 +2,20 @@ import {StackNavigationProp} from "@react-navigation/stack";
 import React, {Component} from "react";
 import {getSavedStops, toggleSavedStop} from "../../external/StorageManager";
 import MetlinkListItem from "../common/MetlinkListItem";
+import {View} from "react-native";
 
 interface Props {
     navigation: StackNavigationProp<any>,
     stops: StopListProp[],
+    // Optional callback if the parent wants to be notified of any updates to saved stops.
+    setSavedStops?: (stops: string[]) => void,
 }
 
 interface State {
     savedStops: string[] | undefined,
 }
 
-class ServiceListContainer extends Component<Props, State> {
+class StopListContainer extends Component<Props, State> {
     constructor(props: Readonly<Props>) {
         super(props);
 
@@ -32,10 +35,10 @@ class ServiceListContainer extends Component<Props, State> {
         else return this.state.savedStops.includes(stopCode);
     }
 
-    toggleFavourite(stopCode: string) {
-        toggleSavedStop(stopCode)
-            .then((resp) => this.setState({savedStops: resp.data.savedStops}))
-            .catch((resp) => this.setState({savedStops: resp.data.savedStops}));
+    async toggleFavourite(stopCode: string) {
+        const savedStops = (await toggleSavedStop(stopCode)).data.savedStops;
+        this.setState({savedStops: savedStops});
+        if (this.props.setSavedStops) await this.props.setSavedStops(savedStops);
     }
 
     generateStops() {
@@ -52,7 +55,11 @@ class ServiceListContainer extends Component<Props, State> {
                 isFavourite={this.checkFavourite(stop.code)}
                 toggleFavourite={() => this.toggleFavourite(stop.code)}
             />
-        ))
+        ));
+    }
+
+    render() {
+        return <View>{this.generateStops()}</View>;
     }
 }
 
@@ -65,3 +72,5 @@ export class StopListProp {
         this.code = code;
     }
 }
+
+export default StopListContainer;
