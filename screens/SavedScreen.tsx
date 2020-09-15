@@ -1,7 +1,12 @@
 import React, {Component} from "react";
-import {StyleSheet, Text, View} from "react-native";
+import {Route, ScrollView} from "react-native";
+import SavedStopList from "../components/stops/SavedStopList";
+import {StackNavigationProp} from "@react-navigation/stack";
+import SavedServiceList from "../components/services/SavedServiceList";
 
 interface Props {
+    route: Route,
+    navigation: StackNavigationProp<any>,
 }
 
 interface State {
@@ -10,19 +15,12 @@ interface State {
 class SavedScreen extends Component<Props, State> {
     render() {
         return (
-            <View style={styles.container}>
-                <Text>Saved!</Text>
-            </View>
+            <ScrollView>
+                <SavedStopList route={this.props.route} navigation={this.props.navigation}/>
+                <SavedServiceList route={this.props.route} navigation={this.props.navigation}/>
+            </ScrollView>
         );
     }
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-    }
-})
 
 export default SavedScreen;

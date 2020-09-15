@@ -1,8 +1,18 @@
 import React, {Component} from "react";
-import {StyleSheet, Text, View} from "react-native";
-import {fetchServiceData, fetchStopData} from "../external/StorageManager";
+import {Card} from "react-native-elements";
+import SettingsFeedbackEntry from "../components/settings/SettingsFeedbackEntry";
+import {View} from "../components/common/Themed";
+import SettingsSourceCodeEntry from "../components/settings/SettingsSourceCodeEntry";
+import SettingsShareEntry from "../components/settings/SettingsShareEntry";
+import SettingsTwitterFeedEntry from "../components/settings/SettingsTwitterFeedEntry";
+import {Route} from "react-native";
+import {StackNavigationProp} from "@react-navigation/stack";
+import SettingsVersionEntry from "../components/settings/SettingsVersionEntry";
+import SettingsAboutDevsEntry from "../components/settings/SettingsAboutDevsEntry";
 
 interface Props {
+    route: Route,
+    navigation: StackNavigationProp<any>,
 }
 
 interface State {
@@ -11,19 +21,27 @@ interface State {
 class SettingsScreen extends Component<Props, State> {
     render() {
         return (
-            <View style={styles.container}>
-                <Text>Settings!</Text>
+            <View>
+                <Card>
+                    <Card.Title>General</Card.Title>
+                    <Card.Divider/>
+                    <SettingsFeedbackEntry/>
+                    <SettingsSourceCodeEntry/>
+                    <SettingsTwitterFeedEntry
+                        navigation={this.props.navigation}
+                        route={this.props.route}
+                    />
+                    <SettingsShareEntry/>
+                </Card>
+                <Card>
+                    <Card.Title>About</Card.Title>
+                    <Card.Divider/>
+                    <SettingsVersionEntry/>
+                    <SettingsAboutDevsEntry/>
+                </Card>
             </View>
         );
     }
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-    }
-})
 
 export default SettingsScreen;

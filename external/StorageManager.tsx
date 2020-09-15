@@ -1,7 +1,7 @@
 import AsyncStorage from '@react-native-community/async-storage';
-import {readRemoteFile} from "react-papaparse";
 import firebase from "firebase";
 import {getUserDocument, updateUserDocument} from "./Firebase";
+import csv from 'csvtojson';
 
 const StorageKeys = {
     savedServices: '@savedServices',
@@ -81,17 +81,23 @@ export const initStops = async () => {
     const key = StorageKeys.allStops;
     const url = "http://transitfeeds.com/p/metlink/22/latest/download/stops.txt";
 
-    const setToDefault = async () => readRemoteFile(proxy + url, {
-        download: true, header: true,
-        complete: async (results: any) => {
-            let stopData: any = {};
+    const setToDefault = async () => {
+        await fetch(proxy + url)
+            .then((resp) => resp.text())
+            .then((text) => {
+                csv().fromString(text)
+                    .then((jsonObj) => {
+                        let stopData: any = {};
 
-            for (const stopEntry of results.data)
-                stopData[stopEntry.stop_id] = stopEntry;
+                        for (const stopEntry of jsonObj)
+                            stopData[stopEntry.stop_id] = stopEntry;
 
-            await AsyncStorage.setItem(key, JSON.stringify(stopData));
-        }
-    });
+                        stopData[''] = undefined; // Dataset contains empty entry :-/
+
+                        AsyncStorage.setItem(key, JSON.stringify(stopData));
+                    });
+            });
+    }
 
     const response = await AsyncStorage.getItem(key).catch((e) => console.error('Failed to initialise all stops.', e));
 
@@ -107,17 +113,23 @@ export const initServices = async () => {
     const key = StorageKeys.allServices;
     const url = "http://transitfeeds.com/p/metlink/22/latest/download/routes.txt";
 
-    const setToDefault = () => readRemoteFile(proxy + url, {
-        download: true, header: true,
-        complete: async (results: any) => {
-            let serviceData: any = {};
+    const setToDefault = async () => {
+        await fetch(proxy + url)
+            .then((resp) => resp.text())
+            .then((text) => {
+                csv().fromString(text)
+                    .then((jsonObj) => {
+                        let serviceData: any = {};
 
-            for (const serviceEntry of results.data)
-                serviceData[serviceEntry.route_short_name] = serviceEntry;
+                        for (const serviceEntry of jsonObj)
+                            serviceData[serviceEntry.route_short_name] = serviceEntry;
 
-            await AsyncStorage.setItem(key, JSON.stringify(serviceData));
-        }
-    });
+                        serviceData[''] = undefined; // Dataset contains empty entry :-/
+
+                        AsyncStorage.setItem(key, JSON.stringify(serviceData))
+                    });
+            });
+    }
 
     const response = await AsyncStorage.getItem(key).catch((e) => console.error('Failed to initialise all services.', e));
 
@@ -430,10 +442,11 @@ export const toggleSavedStop = async (stopCode: string, user?: firebase.User) =>
 
             const respObj = {
                 state: savedStops.includes(stopCode),
-                savedServices: savedStops,
+                savedStops: savedStops,
             }
 
-            return new StorageResponse(true, null, respObj);        })
+            return new StorageResponse(true, null, respObj);
+        })
         .catch((e) => new StorageResponse(false, 'Failed to toggle saved: ' + e.message, []));
 }
 
@@ -458,7 +471,7 @@ export const toggleSavedService = async (serviceCode: string, user?: firebase.Us
             else
                 savedServices.push(serviceCode);
             // Update Storage.
-            setSavedStops(savedServices);
+            setSavedServices(savedServices);
 
             // Update Firestore
             if (user) updateUserDocument(user, {savedStops: JSON.stringify(savedServices)})

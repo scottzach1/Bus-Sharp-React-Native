@@ -1,4 +1,4 @@
-import {Ionicons} from '@expo/vector-icons';
+import {Ionicons, MaterialIcons} from '@expo/vector-icons';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import * as React from 'react';
 
@@ -19,6 +19,7 @@ import {createStackNavigator} from "@react-navigation/stack";
 import ServiceScreen from "../screens/ServiceScreen";
 import StopScreen from "../screens/StopScreen";
 import TwitterScreen from "../screens/TwitterScreen";
+import {Icon} from "react-native-elements";
 
 const BottomTab = createBottomTabNavigator<BottomTabParamList>();
 
@@ -33,28 +34,28 @@ export default function BottomTabNavigator() {
                 name={"SearchTab"}
                 component={SearchTabNavigator}
                 options={{
-                    tabBarIcon: ({color}) => <TabBarIcon name="ios-search" color={color}/>,
+                    tabBarIcon: ({color}) => <TabBarIcon type="material-community" name="search" color={color}/>,
                 }}
             />
             <BottomTab.Screen
                 name={"MapTab"}
                 component={MapTabNavigator}
                 options={{
-                    tabBarIcon: ({color}) => <TabBarIcon name="ios-map" color={color}/>,
+                    tabBarIcon: ({color}) => <TabBarIcon type="material-community" name="map" color={color}/>,
                 }}
             />
             <BottomTab.Screen
                 name={"SavedTab"}
                 component={SavedTabNavigator}
                 options={{
-                    tabBarIcon: ({color}) => <TabBarIcon name="ios-star" color={color}/>,
+                    tabBarIcon: ({color}) => <TabBarIcon type="material-community" name="star" color={color}/>,
                 }}
             />
             <BottomTab.Screen
                 name={"SettingsTab"}
                 component={SettingsTabNavigator}
                 options={{
-                    tabBarIcon: ({color}) => <TabBarIcon name="ios-settings" color={color}/>,
+                    tabBarIcon: ({color}) => <TabBarIcon type="material-community" name="settings" color={color}/>,
                 }}
             />
         </BottomTab.Navigator>
@@ -63,8 +64,15 @@ export default function BottomTabNavigator() {
 
 // You can explore the built-in icon families and icons on the web at:
 // https://icons.expo.fyi/
-function TabBarIcon(props: { name: string; color: string }) {
-    return <Ionicons size={30} style={{marginBottom: -3}} {...props} />;
+function TabBarIcon(props: { name: string; color: string; type: string }) {
+    switch (props.type) {
+        case 'ion-icon':
+            return <Ionicons size={30} style={{marginBottom: -3}} {...props} />;
+        case 'material-community':
+            return <MaterialIcons name={props.name} size={24} color={"grey"}/>
+        default:
+            return <Icon name={"INVALID"}/>
+    }
 }
 
 // Each tab has its own navigation stack, you can read more about this pattern here:
