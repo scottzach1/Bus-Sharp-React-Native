@@ -3,7 +3,7 @@ import {Card, ThemeProvider} from "react-native-elements";
 import {StackNavigationProp} from "@react-navigation/stack";
 import {View} from "../Themed";
 import {ActivityIndicator} from "react-native";
-import ServiceListContainer from "../services/ServiceListContainer";
+import ServiceListContainer, {ServiceListProp} from "../services/ServiceListContainer";
 
 const theme = {
     colors: {
@@ -34,6 +34,26 @@ class StopTimetable extends Component<Props, State> {
         }
     }
 
+    generateListContainerProps() {
+        if (!this.props.stopData?.Services) return [];
+
+        let containerProps: ServiceListProp[] = this.props.stopData.Services.map((service: any) => {
+            // Parse the time information from the response json.
+            const name: string = service.Service.Name.split("-")[0];
+            const code: string = service.ServiceID;
+            const isLive: boolean = service.IsRealtime;
+            const timeRemaining: string = service.AimedArrival;
+
+            return new ServiceListProp(name, code, isLive, timeRemaining);
+        });
+
+        containerProps.sort(function (a, b) {
+            return (a.arrival && b.arrival) ? a.arrival.localeCompare(b.arrival) : -1;
+        });
+
+        return containerProps;
+    }
+
     render() {
         return (
             <ThemeProvider theme={theme}>
@@ -44,7 +64,7 @@ class StopTimetable extends Component<Props, State> {
                         {this.props.stopData ?
                             <ServiceListContainer
                                 navigation={this.props.navigation}
-                                stopData={this.props.stopData}
+                                services={this.generateListContainerProps()}
                                 showHours={true}
                             /> :
                             <ActivityIndicator/>}

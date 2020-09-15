@@ -6,8 +6,8 @@ import {View} from "../Themed";
 
 interface Props {
     navigation: StackNavigationProp<any>,
-    stopData: any | null | undefined,
-    showHours: boolean,
+    services: ServiceListProp[],
+    showHours?: boolean,
 }
 
 interface State {
@@ -63,31 +63,23 @@ class ServiceListContainer extends Component<Props, State> {
     }
 
     generateStops() {
-        if (!this.props.stopData) return undefined;
+        if (!this.props.services) return undefined;
 
-        let services: any[] = this.props.stopData.Services;
-
-        services.sort(function (a: { AimedArrival: number; }, b: { AimedArrival: number; }) {
-            return a.AimedArrival - b.AimedArrival;
-        });
+        let services: ServiceListProp[] = this.props.services;
 
         return services.map((service) => {
-            // Parse the time information from the response json.
-            const serviceName: string = service.Service.Name.split("-")[0];
-            const serviceCode: string = service.ServiceID;
-            const isLive: boolean = service.IsRealtime;
-            const timeRemaining: string = (this.props.showHours) ?
-                this.getHoursRemaining(service.AimedArrival) : this.getTime(service.AimedArrival);
+            const timeRemaining: string = (service.arrival) ? ((this.props.showHours) ?
+                this.getHoursRemaining(service.arrival) : this.getTime(service.arrival)) : ' ';
 
             return (
                 <MetlinkListItem
                     navigation={this.props.navigation}
-                    code={serviceCode}
-                    name={serviceName}
-                    isLive={isLive}
+                    code={service.code}
+                    name={service.name}
+                    isLive={service.live}
                     isStop={false}
-                    isFavourite={this.checkFavourite(serviceCode)}
-                    toggleFavourite={() => this.toggleFavourite(serviceCode)}
+                    isFavourite={this.checkFavourite(service.code)}
+                    toggleFavourite={() => this.toggleFavourite(service.code)}
                     timeRemaining={timeRemaining}
                 />
             );
@@ -100,6 +92,20 @@ class ServiceListContainer extends Component<Props, State> {
                 {this.generateStops()}
             </View>
         );
+    }
+}
+
+export class ServiceListProp {
+    public name: string;
+    public code: string;
+    public live?: boolean;
+    public arrival?: string;
+
+    constructor(name: string, code: string, live?:boolean, arrival?: string) {
+        this.name = name;
+        this.code = code;
+        this.live = live;
+        this.arrival = arrival;
     }
 }
 
