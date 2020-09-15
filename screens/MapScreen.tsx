@@ -3,19 +3,9 @@ import {ScrollView, StyleSheet, View} from "react-native";
 import GoogleMapWidget, {Position, StopMarker} from "../components/google-maps/GoogleMapWidget";
 import {getAllStops} from "../external/StorageManager";
 import {StackNavigationProp} from "@react-navigation/stack";
-import {Card, ListItem, SearchBar, ThemeProvider} from "react-native-elements";
+import {Card, ListItem, SearchBar} from "react-native-elements";
 import Constants from "expo-constants";
 import {geocodeByAddress} from "react-places-autocomplete";
-
-const theme = {
-    colors: {
-        platform: {
-            "default": {
-                "grey": "#FFF"
-            }
-        }
-    }
-};
 
 interface Props {
     navigation: StackNavigationProp<any>,
@@ -79,25 +69,23 @@ class MapScreen extends Component<Props, State> {
 
     getPredictions(data: any) {
         return (
-            <ThemeProvider theme={theme}>
-                <ScrollView>
-                    <Card>
-                        {data.map((result: any) =>
-                            <ListItem
-                                style={styles.listItem}
-                                onPress={() => this.loadLocation(result)}
-                                bottomDivider
-                            >
-                                <ListItem.Content>
-                                    <ListItem.Title>
-                                        {result.description}
-                                    </ListItem.Title>
-                                </ListItem.Content>
-                            </ListItem>
-                        )}
-                    </Card>
-                </ScrollView>
-            </ThemeProvider>
+            <ScrollView>
+                <Card>
+                    {data.map((result: any) =>
+                        <ListItem
+                            style={styles.listItem}
+                            onPress={() => this.loadLocation(result)}
+                            bottomDivider
+                        >
+                            <ListItem.Content>
+                                <ListItem.Title>
+                                    {result.description}
+                                </ListItem.Title>
+                            </ListItem.Content>
+                        </ListItem>
+                    )}
+                </Card>
+            </ScrollView>
         )
     }
 
