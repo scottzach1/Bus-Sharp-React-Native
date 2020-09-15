@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import {ScrollView, StyleSheet} from "react-native";
 import {StackNavigationProp} from "@react-navigation/stack";
 import {getAllServices, getAllStops} from "../external/StorageManager";
-import {Card, SearchBar} from "react-native-elements";
+import {SearchBar} from "react-native-elements";
 import {View} from "../components/common/Themed";
 import SearchTabSearchbarDescriptionCard from "../components/search-tab/SearchTabSearchbarDescription";
 import SearchTabTabsDescription from "../components/search-tab/SearchTabTabsDescription";
@@ -15,14 +15,12 @@ interface Props {
 }
 
 interface State {
-    stopsData: any | null,
-    servicesData: any | null,
+    stopsData: StopListProp[],
+    servicesData: StopListProp[],
     stopsErrorMessage: string | null,
     servicesErrorMessage: string | null,
     searchText: string,
     selectedIndex: number,
-    stopListElements: StopListProp[],
-    serviceListElements: ServiceListProp[]
 }
 
 let prevSearch: string = ""
@@ -36,31 +34,29 @@ class SearchScreen extends Component<Props, State> {
         super(props);
 
         this.state = {
-            stopsData: undefined,
-            servicesData: undefined,
+            stopsData: [],
+            servicesData: [],
             stopsErrorMessage: null,
             servicesErrorMessage: null,
             searchText: "",
             selectedIndex: 0,
-            stopListElements: [],
-            serviceListElements: []
         }
     }
 
     componentDidMount() {
-        if (!this.state.stopsData) {
+        if (this.state.stopsData.length === 0) {
             getAllStops().then((resp) => {
                 this.setState({
-                    stopsData: resp.data,
+                    stopsData: Object.entries(resp.data).map((stop: any) => new StopListProp(stop[1].stop_name, stop[1].stop_id)),
                     stopsErrorMessage: resp.errorMessage,
                 })
             });
         }
 
-        if (!this.state.servicesData) {
+        if (this.state.servicesData.length === 0) {
             getAllServices().then((resp) => {
                 this.setState({
-                    servicesData: resp.data,
+                    servicesData: Object.entries(resp.data).map((route: any) => new ServiceListProp(route[1].route_long_name, route[1].route_id)),
                     servicesErrorMessage: resp.errorMessage
                 })
             });
@@ -71,82 +67,46 @@ class SearchScreen extends Component<Props, State> {
         this.setState({selectedIndex: newValue})
     }
 
-    /**
-     * Creates new ServiceListProps and StopListProps to display as potential results to the user.
-     */
-    async updateSearchResults() {
-        if (!this.state.stopsData || !this.state.servicesData ||
-            (prevSearch === this.state.searchText && prevFilter === this.state.selectedIndex)) {
-            return
+    filterStops() {
+        if (this.state.stopsData.length === 0
+            || this.state.stopsData.length === 0
+            || this.state.selectedIndex === 1) {
+            return []
         }
 
-        prevSearch = this.state.searchText
-        prevFilter = this.state.selectedIndex
+        let filtered = this.state.stopsData
+            .filter((stop: StopListProp) => this.filterListElement(stop.name, stop.code))
 
-        this.updateStopResults()
-        this.updateServiceResults()
+        return filtered.slice(0, Math.min(filtered.length, 51))
     }
 
-    /**
-     * Maps all stops to searchable items, then these searchable items are then filtered based on the users
-     * input. These results are then mapped to StopListProps
-     */
-    updateStopResults() {
-        // Get a set of filtered STOP search items
-        let filterStops: SearchItem[] = Object.entries(this.state.stopsData)
-            .map((i: any) => {
-                let item = i[1]
-                return new SearchItem(item.stop_id + "", item.stop_name + "", true)
-            })
-            .filter((searchItem: SearchItem) => this.filterItem(searchItem))
-
-        let sliceStops: StopListProp[] = filterStops
-            .slice(0, Math.min(filterStops.length, 51))
-            .map((item: SearchItem) => new StopListProp(item.name, item.code))
-
-        this.setState({stopListElements: sliceStops})
-    }
-
-    /**
-     * Maps all services to searchable items, then these searchable items are then filtered based on the users
-     * input. These results are then mapped to ServiceListProps
-     */
-    updateServiceResults() {
-        // Get a set of filtered SERVICE search items
-        let filterServices: SearchItem[] = Object.entries(this.state.servicesData)
-            .map((i: any) => {
-                let item = i[1]
-                return new SearchItem(item.route_id + "", item.route_long_name + "", false)
-            })
-            .filter((searchItem: SearchItem) => this.filterItem(searchItem))
-
-        let sliceServices: ServiceListProp[] = filterServices
-            .slice(0, Math.min(filterServices.length, 51))
-            .map((item: SearchItem) => new ServiceListProp(item.name, item.code))
-
-        // Update the list elements
-        this.setState({serviceListElements: sliceServices})
-    }
-
-    filterItem(item: SearchItem) {
-        const filter: number = this.state.selectedIndex
-        const searchText: string = this.state.searchText.toLowerCase();
-
-        if ((filter === 1 && !item.isStop) || (filter === 2 && item.isStop)) {
-            return false;
+    filterServices() {
+        if (this.state.servicesData.length === 0
+            || this.state.servicesData.length === 0
+            || this.state.selectedIndex === 2) {
+            return []
         }
 
-        if (searchText.length) {
-            for (const key of item.searchText) {
-                if ((filter !== 4) ? key.includes(searchText) : key.startsWith(searchText))
-                    return true;
-            }
-        }
-        return false;
+        let filtered = this.state.servicesData
+            .filter((service: ServiceListProp) => this.filterListElement(service.name, service.code))
+
+        return filtered.slice(0, Math.min(filtered.length, 51))
+    }
+
+
+    filterListElement(name: string, code: string) {
+        if (name === undefined || code === undefined) return false
+
+        return this.state.selectedIndex !== 4 ?
+            (name.includes(this.state.searchText) || code.includes(this.state.searchText)) :
+            (name.startsWith(this.state.searchText) || code.startsWith(this.state.searchText))
     }
 
     render() {
-        this.updateSearchResults().then();
+        let services: ServiceListProp[] = (this.state.servicesData.length > 0 && this.state.searchText.length > 0)
+            ? this.filterServices() : []
+        let stops: StopListProp[] = (this.state.stopsData.length > 0 && this.state.searchText.length > 0)
+            ? this.filterStops() : []
 
         return (
             <View style={styles.container}>
@@ -154,7 +114,6 @@ class SearchScreen extends Component<Props, State> {
                     placeholder={"Search Here..."}
                     onChangeText={(e) => {
                         this.setState({searchText: e});
-                        this.updateSearchResults().then();
                     }}
                     value={this.state.searchText}
                 />
@@ -166,42 +125,21 @@ class SearchScreen extends Component<Props, State> {
                             <SearchTabTabsDescription/>
                         </View>
                     )}
-                    {this.state.serviceListElements.length && (
-                        <Card>
-                            <Card.Title>Services</Card.Title>
-                            <Card.Divider/>
-                            <ServiceListContainer
-                                navigation={this.props.navigation}
-                                services={this.state.serviceListElements}/>
-                        </Card>
+                    {(services && services.length > 0) && (
+                        <ServiceListContainer
+                            navigation={this.props.navigation}
+                            services={services}
+                        />
                     )}
-                    {this.state.stopListElements.length && (
-                        <Card>
-                            <Card.Title>Stops</Card.Title>
-                            <Card.Divider/>
-                            <StopListContainer
-                                navigation={this.props.navigation}
-                                stops={this.state.stopListElements}/>
-                        </Card>
+                    {(stops && stops.length > 0) && (
+                        <StopListContainer
+                            navigation={this.props.navigation}
+                            stops={stops}
+                        />
                     )}
                 </ScrollView>
             </View>
         );
-    }
-}
-
-
-class SearchItem {
-    searchText: string[];
-    code: string;
-    name: string;
-    isStop: boolean;
-
-    constructor(code: string, name: string, isStop: boolean) {
-        this.searchText = [code.toLowerCase(), name.toLowerCase()];
-        this.isStop = isStop;
-        this.name = name;
-        this.code = code;
     }
 }
 
