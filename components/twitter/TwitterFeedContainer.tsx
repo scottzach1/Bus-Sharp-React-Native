@@ -1,6 +1,5 @@
 import React, {useEffect} from "react";
-import {Card} from "react-native-elements";
-import {ScrollView} from "react-native";
+import {View} from "react-native";
 
 const TwitterFeedContainer = () => {
     useEffect(() => {
@@ -9,10 +8,10 @@ const TwitterFeedContainer = () => {
         getTwitterContainer().appendChild(script);
     }, []);
 
+    // Gets the parent container of the Twitter timeline 'a' tag.
     function getTwitterContainer() {
         return document.getElementsByClassName("twitter-timeline")[0].parentNode!
     }
-
 
     // Keep listening until the element is rendered, before manipulating overflow and max-width property.
     async function styleFrame(maxAttempts: number, counter?: number) {
@@ -39,18 +38,16 @@ const TwitterFeedContainer = () => {
     const prefersDark: boolean = window.matchMedia('(prefers-color-scheme: dark)').matches;
 
     return (
-        <ScrollView>
-            <Card key="twitter-embed">
-                <a
-                    className="twitter-timeline"
-                    data-theme={(prefersDark) ? "dark" : "light"}
-                    data-chrome="noheader nofooter noborders transparent"
-                    href="https://twitter.com/metlinkwgtn"
-                >
-                    Tweets by metlinkwgtn
-                </a>
-            </Card>
-        </ScrollView>
+        <View>
+            <a
+                className="twitter-timeline"
+                data-theme={(prefersDark) ? "dark" : "light"}
+                data-chrome="noheader nofooter noborders transparent"
+                href="https://twitter.com/metlinkwgtn"
+            >
+                Tweets by metlinkwgtn
+            </a>
+        </View>
     );
 };
 
