@@ -34,6 +34,10 @@ export const signInWithGoogle = () => {
     auth.signInWithPopup(googleAuthProvider).catch(e => console.error("Failed to sign in with pop up", e));
 }
 
+export const signOut = async () => {
+    await auth.signOut();
+}
+
 /**
  * Gets the user document from Firestore, creating a new entry if one isn't present.
  *

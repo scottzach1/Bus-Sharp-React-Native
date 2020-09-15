@@ -1,15 +1,22 @@
 import React, {Component} from "react";
-import {View} from "react-native";
+import {ActivityIndicator, Route} from "react-native";
 import {Card} from "react-native-elements";
 import {UserContext} from "../providers/UserProvider";
-import {getUserDocument} from "../external/Firebase";
+import {getUserDocument, signOut} from "../external/Firebase";
 import {Text} from "../components/common/Themed";
+import AccountActionButton from "../components/account/AccountActionButton";
+import ErrorCard from "../components/account/ErrorCard";
+import AccountRedirectWrapper from "../navigation/AccountRedirectWrapper";
+import {StackNavigationProp} from "@react-navigation/stack";
 
 interface Props {
+    route: Route,
+    navigation: StackNavigationProp<any>,
 }
 
 interface State {
     doc: any | null,
+    errorMessage: string | null,
 }
 
 class AccountInfoScreen extends Component<Props, State> {
@@ -20,6 +27,7 @@ class AccountInfoScreen extends Component<Props, State> {
 
         this.state = {
             doc: null,
+            errorMessage: null,
         }
     }
 
@@ -39,9 +47,13 @@ class AccountInfoScreen extends Component<Props, State> {
         return (this.state.doc) ? this.state.doc.displayName : undefined;
     }
 
+    signOut() {
+        signOut().catch((e: { message: any }) => this.setState({errorMessage: e.message}));
+    }
+
     generateTable() {
         const doc = this.state.doc;
-        if (!doc) return undefined;
+        if (!doc) return <ActivityIndicator/>;
 
         let listItems: any[] = [];
 
@@ -60,16 +72,17 @@ class AccountInfoScreen extends Component<Props, State> {
     render() {
         this.getUserDocument();
 
-        console.log('doc', this.state.doc);
-
         return (
-            <View>
+            <AccountRedirectWrapper navigation={this.props.navigation} route={this.props.route}>
                 <Card>
                     <Card.Title>User Profile {this.getName()}</Card.Title>
                     <Card.Divider/>
                     {this.generateTable()}
+                    <Card.Divider/>
+                    <AccountActionButton type={"logout"} submit={() => this.signOut()}/>
                 </Card>
-            </View>
+                <ErrorCard errorMessage={this.state.errorMessage}/>
+            </AccountRedirectWrapper>
         );
     }
 }

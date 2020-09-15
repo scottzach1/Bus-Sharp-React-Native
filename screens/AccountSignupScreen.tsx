@@ -4,12 +4,13 @@ import EmailInput from "../components/account/EmailInput";
 import PasswordInput from "../components/account/PasswordInput";
 import AccountActionButton from "../components/account/AccountActionButton";
 import LoginWithGoogleButton from "../components/account/LoginWithGoogleButton";
-import {Text, View} from "../components/common/Themed";
+import {Text} from "../components/common/Themed";
 import {Route} from "react-native";
 import {StackNavigationProp} from "@react-navigation/stack";
 import DisplayNameInput from "../components/account/DisplayNameInput";
 import ErrorCard from "../components/account/ErrorCard";
 import AuthenticationResponse, {createUserWithCredentials} from "../external/Firebase";
+import AccountRedirectWrapper from "../navigation/AccountRedirectWrapper";
 
 interface Props {
     route: Route,
@@ -68,7 +69,7 @@ class AccountSignupScreen extends Component<Props, State> {
         console.log('email', this.state.email);
 
         return (
-            <View>
+            <AccountRedirectWrapper navigation={this.props.navigation} route={this.props.route}>
                 <Card>
                     <Card.Title>Sign In</Card.Title>
                     <Card.Divider/>
@@ -92,7 +93,7 @@ class AccountSignupScreen extends Component<Props, State> {
                     <LoginWithGoogleButton type={"signup"}/>
                 </Card>
                 <ErrorCard errorMessage={this.state.errorMessage}/>
-            </View>
+            </AccountRedirectWrapper>
         );
     }
 }
