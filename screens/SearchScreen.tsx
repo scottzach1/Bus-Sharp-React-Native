@@ -27,8 +27,8 @@ interface State {
 
 let prevSearch: string = ""
 let prevFilter: number = 0
-let remainingStops: number = 0
-let remainingServices: number = 0
+// let remainingStops: number = 0
+// let remainingServices: number = 0
 
 class SearchScreen extends Component<Props, State> {
 
@@ -146,22 +146,25 @@ class SearchScreen extends Component<Props, State> {
     }
 
     render() {
-        this.updateSearchResults().then()
+        this.updateSearchResults().then();
 
         return (
             <View style={styles.container}>
                 <SearchBar
                     placeholder={"Search Here..."}
-                    onChangeText={(e) => this.setState({searchText: e})}
-                    value={this.state.searchText ? this.state.searchText : ""}
+                    onChangeText={(e) => {
+                        this.setState({searchText: e});
+                        this.updateSearchResults().then();
+                    }}
+                    value={this.state.searchText}
                 />
                 <SearchTabFilter updateIndex={this.updateIndex.bind(this)}/>
                 <ScrollView>
                     {!this.state.searchText && (
-                        <SearchTabSearchbarDescriptionCard/>
-                    )}
-                    {!this.state.searchText && (
-                        <SearchTabTabsDescription/>
+                        <View>
+                            <SearchTabSearchbarDescriptionCard/>
+                            <SearchTabTabsDescription/>
+                        </View>
                     )}
                     {this.state.serviceListElements.length && (
                         <Card>
