@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import {ScrollView, StyleSheet} from "react-native";
 import {StackNavigationProp} from "@react-navigation/stack";
 import {getAllServices, getAllStops} from "../external/StorageManager";
-import {SearchBar} from "react-native-elements";
+import {Button, Card, SearchBar} from "react-native-elements";
 import {View} from "../components/common/Themed";
 import SearchTabSearchbarDescriptionCard from "../components/search-tab/SearchTabSearchbarDescription";
 import SearchTabTabsDescription from "../components/search-tab/SearchTabTabsDescription";
@@ -25,8 +25,8 @@ interface State {
 
 let prevSearch: string = ""
 let prevFilter: number = 0
-// let remainingStops: number = 0
-// let remainingServices: number = 0
+let remainingStops: number = 0
+let remainingServices: number = 0
 
 class SearchScreen extends Component<Props, State> {
 
@@ -77,7 +77,9 @@ class SearchScreen extends Component<Props, State> {
         let filtered = this.state.stopsData
             .filter((stop: StopListProp) => this.filterListElement(stop.name, stop.code))
 
-        return filtered.slice(0, Math.min(filtered.length, 51))
+        remainingStops = filtered.length - 5
+
+        return filtered.slice(0, Math.min(filtered.length, 5))
     }
 
     filterServices() {
@@ -90,7 +92,9 @@ class SearchScreen extends Component<Props, State> {
         let filtered = this.state.servicesData
             .filter((service: ServiceListProp) => this.filterListElement(service.name, service.code))
 
-        return filtered.slice(0, Math.min(filtered.length, 51))
+        remainingServices = filtered.length - 5
+
+        return filtered.slice(0, Math.min(filtered.length, 5))
     }
 
 
@@ -126,16 +130,28 @@ class SearchScreen extends Component<Props, State> {
                         </View>
                     )}
                     {(services && services.length > 0) && (
-                        <ServiceListContainer
-                            navigation={this.props.navigation}
-                            services={services}
-                        />
+                        <Card>
+                            <Card.Title>Services</Card.Title>
+                            <Card.Divider/>
+                            <ServiceListContainer
+                                navigation={this.props.navigation}
+                                services={services}
+                            />
+                            {remainingServices > 0 && (
+                                <Button title={"more..."} type={"outline"}/>)}
+                        </Card>
                     )}
                     {(stops && stops.length > 0) && (
-                        <StopListContainer
-                            navigation={this.props.navigation}
-                            stops={stops}
-                        />
+                        <Card>
+                            <Card.Title>Stops</Card.Title>
+                            <Card.Divider/>
+                            <StopListContainer
+                                navigation={this.props.navigation}
+                                stops={stops}
+                            />
+                            {remainingStops > 0 && (
+                                <Button title={"more..."} type={"outline"}/>)}
+                        </Card>
                     )}
                 </ScrollView>
             </View>
