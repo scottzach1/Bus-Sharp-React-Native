@@ -1,10 +1,15 @@
 {
   "scripts": {
     "start": "react-native start",
-    "android": "react-native run-android",
-    "ios": "react-native run-ios",
-    "web": "expo start --web",
-    "test": "jest --watchAll"
+    "test": "jest --watchAll",
+    "ios": "expo start --ios -c",
+    "android": "expo start --android -c",
+    "web": "expo start --web -c",
+    "ios-native": "REACT_NATIVE_EJECTED='true' node scripts/switchPlatform.js && npm run ios",
+    "android-native": "REACT_NATIVE_EJECTED='true' node scripts/switchPlatform.js && npm run android",
+    "ios-expo": "REACT_NATIVE_EJECTED='false' node scripts/switchPlatform.js && npm run ios",
+    "android-expo": "REACT_NATIVE_EJECTED='false' node scripts/switchPlatform.js && npm run android",
+    "web-expo": "REACT_NATIVE_EJECTED='false' node scripts/switchPlatform.js && npm run web"
   },
   "jest": {
     "preset": "jest-expo"
