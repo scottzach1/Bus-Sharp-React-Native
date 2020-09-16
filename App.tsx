@@ -18,7 +18,6 @@ export default function App() {
     initSavedServices().then();
     initSavedStops().then();
 
-
     if (!isLoadingComplete) {
         return null;
     } else {
