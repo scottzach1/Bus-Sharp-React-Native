@@ -10,6 +10,8 @@ interface Props {
 }
 
 interface State {
+    doc: any | null,
+    errorMessage: string | null,
 }
 
 class AccountInfoScreen extends Component<Props, State> {
@@ -17,6 +19,8 @@ class AccountInfoScreen extends Component<Props, State> {
         super(props);
 
         this.state = {
+            doc: null,
+            errorMessage: null,
         }
     }
 

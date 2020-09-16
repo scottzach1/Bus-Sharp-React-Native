@@ -1840,6 +1840,11 @@
     sudo-prompt "^9.0.0"
     wcwidth "^1.0.1"
 
+"@react-native-community/google-signin@^4.0.3":
+  version "4.0.3"
+  resolved "https://registry.yarnpkg.com/@react-native-community/google-signin/-/google-signin-4.0.3.tgz#66fbdd469e5895ec787224334d480c1c867240e8"
+  integrity sha512-0RyMHAPTOejxXuHkcrVLJ9Co1hxG/b1shmtn29QSjZ9W8oLj23gyLhJI4jjca389jToVjr2HsXsDXfNU4CA2Uw==
+
 "@react-native-community/masked-view@0.1.10":
   version "0.1.10"
   resolved "https://registry.yarnpkg.com/@react-native-community/masked-view/-/masked-view-0.1.10.tgz#5dda643e19e587793bc2034dd9bf7398ad43d401"
@@ -1852,6 +1857,16 @@
   dependencies:
     opencollective-postinstall "^2.0.1"
     superstruct "^0.6.2"
+
+"@react-native-firebase/auth@^9.2.2":
+  version "9.2.2"
+  resolved "https://registry.yarnpkg.com/@react-native-firebase/auth/-/auth-9.2.2.tgz#ce8630fa2a60c694be3179d20a6ff57e1509d346"
+  integrity sha512-pp1UW/TK6mwqpI0tZx3Y6UymLj8qktR4FuB85fzqElum6OwZ4QGq9P7fBY2PXGrTMagRNHyWtDMRBidv1GaXfA==
+
+"@react-native-firebase/firestore@^7.8.1":
+  version "7.8.1"
+  resolved "https://registry.yarnpkg.com/@react-native-firebase/firestore/-/firestore-7.8.1.tgz#031212259b5a0832733520342ebfd71c6bab8433"
+  integrity sha512-BVSYyd5coR/b/fWZMD7+npEStSuI3jBEQS1CcHF9FnKjWy4HcKXyNrZI0JVXsNm2boeKy5yl6Guy7d6Ijv89HA==
 
 "@react-navigation/bottom-tabs@^5.6.1":
   version "5.8.0"

@@ -1,8 +1,13 @@
-import EditScreenInfo from "../components/styles/EditScreenInfo";
-import {View, Text} from "../components/styles/Themed";
-import {Route, StyleSheet} from "react-native";
+import {Route, ScrollView} from "react-native";
 import {StackNavigationProp} from "@react-navigation/stack";
 import React, {Component} from "react";
+import {Card} from "react-native-elements";
+import SettingsFeedbackEntry from "../components/settings/SettingsFeedbackEntry";
+import SettingsSourceCodeEntry from "../components/settings/SettingsSourceCodeEntry";
+import SettingsAccountEntry from "../components/settings/SettingsAccountEntry";
+import SettingsTwitterFeedEntry from "../components/settings/SettingsTwitterFeedEntry";
+import SettingsAboutDevsEntry from "../components/settings/SettingsAboutDevsEntry";
+import SettingsVersionEntry from "../components/settings/SettingsVersionEntry";
 
 interface Props {
     route: Route,
@@ -15,31 +20,25 @@ interface State {
 class SettingsScreen extends Component<Props, State> {
     render() {
         return (
-            <View style={styles.container}>
-                <Text style={styles.title}>TODO Settings</Text>
-                <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
-                <EditScreenInfo path="/screens/TabOneScreen.tsx" />
-            </View>
+            <ScrollView>
+                <Card>
+                    <Card.Title>General</Card.Title>
+                    <Card.Divider/>
+                    <SettingsFeedbackEntry/>
+                    <SettingsSourceCodeEntry/>
+                    <SettingsAccountEntry navigation={this.props.navigation}/>
+                    <SettingsTwitterFeedEntry navigation={this.props.navigation}/>
+                    {/*<SettingsShareEntry/>*/}
+                </Card>
+                <Card>
+                    <Card.Title>About</Card.Title>
+                    <Card.Divider/>
+                    <SettingsVersionEntry/>
+                    <SettingsAboutDevsEntry/>
+                </Card>
+            </ScrollView>
         );
     }
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    title: {
-        fontSize: 20,
-        fontWeight: 'bold',
-    },
-    separator: {
-        marginVertical: 30,
-        height: 1,
-        width: '80%',
-    },
-});
-
 
 export default SettingsScreen;
