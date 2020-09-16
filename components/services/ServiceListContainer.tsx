@@ -49,8 +49,14 @@ class ServiceListContainer extends Component<Props, State> {
         const arrivalDate: Date = new Date(arrivalTime);
         const currentDate: Date = new Date();
 
-        let timeRemaining: number | string = Math.round((arrivalDate.getTime() - currentDate.getTime()) / 60000);
-        return (timeRemaining < 0) ? 'due' : timeRemaining + ' mins';
+        let totalMinutes: number | string = Math.round((arrivalDate.getTime() - currentDate.getTime()) / 60000);
+
+        if (totalMinutes < 0) return 'due';
+
+        let hoursRemaining = Math.trunc(totalMinutes / 60); // remove decimal places.
+        let minutesRemaining = totalMinutes % 60;
+
+        return ((hoursRemaining > 0) ? `${hoursRemaining}h ` : '') + `${minutesRemaining}m`;
     }
 
     getTime(arrivalTime: string) {

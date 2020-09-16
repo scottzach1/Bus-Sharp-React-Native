@@ -29,7 +29,7 @@ class MetlinkListItem extends Component<Props, State> {
 
     render() {
         let badgeSpacing = "";
-        for (let i = this.props.name.length; i < 4; ++i) badgeSpacing += " ";
+        for (let i = this.props.name.length; i < 4; ++i) badgeSpacing += "  ";
 
         return (
             <ListItem

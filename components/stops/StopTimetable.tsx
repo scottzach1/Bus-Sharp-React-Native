@@ -1,8 +1,8 @@
 import React, {Component} from "react";
-import {Card} from "react-native-elements";
+import {Card, ListItem} from "react-native-elements";
 import {StackNavigationProp} from "@react-navigation/stack";
 import {View} from "../common/Themed";
-import {ActivityIndicator} from "react-native";
+import {ActivityIndicator, Switch} from "react-native";
 import ServiceListContainer, {ServiceListProp} from "../services/ServiceListContainer";
 
 interface Props {
@@ -44,17 +44,29 @@ class StopTimetable extends Component<Props, State> {
         return containerProps;
     }
 
+    toggleMinutesHours() {
+        this.setState({showHours: !this.state.showHours});
+    }
+
     render() {
         return (
             <View style={{height: '100%'}}>
                 <Card>
                     <Card.Title>Upcoming Services</Card.Title>
+                    <ListItem onPress={() => this.toggleMinutesHours()}>
+                        <ListItem.Content>
+                            <ListItem.Title>
+                                Toggle Minutes / Time
+                            </ListItem.Title>
+                        </ListItem.Content>
+                        <Switch value={this.state.showHours}/>
+                    </ListItem>
                     <Card.Divider/>
                     {this.props.stopData ?
                         <ServiceListContainer
                             navigation={this.props.navigation}
                             services={this.generateListContainerProps()}
-                            showHours={true}
+                            showHours={this.state.showHours}
                         /> :
                         <ActivityIndicator/>}
                 </Card>
