@@ -1,8 +1,8 @@
 import React, {Component} from "react";
 import {Route, ScrollView} from "react-native";
-import SavedStopList from "../components/stops/SavedStopList";
+import SavedStopList from "../components/saved/SavedStopList";
 import {StackNavigationProp} from "@react-navigation/stack";
-import SavedServiceList from "../components/services/SavedServiceList";
+import SavedServiceList from "../components/saved/SavedServiceList";
 
 interface Props {
     route: Route,

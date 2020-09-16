@@ -1,10 +1,11 @@
 import {ActivityIndicator, Route} from "react-native";
 import {StackNavigationProp} from "@react-navigation/stack";
 import React, {Component} from "react";
-import {getAllServices, getSavedServices} from "../../external/StorageManager";
-import ServiceListContainer, {ServiceListProp} from "./ServiceListContainer";
+import {getAllServices, getSavedServices, setSavedServices} from "../../external/StorageManager";
+import ServiceListContainer, {ServiceListProp} from "../services/ServiceListContainer";
 import {View} from "../common/Themed";
 import {Card} from "react-native-elements";
+import SavedClearButton from "./SavedClearButton";
 
 interface Props {
     route: Route,
@@ -46,6 +47,11 @@ class SavedServiceList extends Component<Props, State> {
         this.setState({savedServices: savedServices});
     }
 
+    async clearSavedServices() {
+        await setSavedServices([], this.context);
+        this.setState({savedServices: []});
+    }
+
     generateServices() {
         if (!this.state.allServices || !this.state.savedServices) return []
 
@@ -67,6 +73,10 @@ class SavedServiceList extends Component<Props, State> {
             <View>
                 <Card>
                     <Card.Title>Saved Services</Card.Title>
+                    <SavedClearButton
+                        doClear={() => this.clearSavedServices()}
+                        type={"services"}
+                    />
                     <Card.Divider/>
                     {(this.state.savedServices && this.state.allServices) ?
                         <ServiceListContainer
