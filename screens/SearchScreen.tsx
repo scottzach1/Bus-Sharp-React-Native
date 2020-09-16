@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 import EditScreenInfo from "../components/styles/EditScreenInfo";
-import {View, Text} from "../components/styles/Themed";
+import {Text, View} from "../components/styles/Themed";
 import {Route, StyleSheet} from "react-native";
 import {StackNavigationProp} from "@react-navigation/stack";
 
