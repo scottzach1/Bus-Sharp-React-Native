@@ -1,6 +1,6 @@
 import React, {FC} from "react";
-import {View} from "../common/Themed";
 import {Card} from "react-native-elements";
+import {View} from "react-native";
 
 interface Props {
     errorMessage: string | null,

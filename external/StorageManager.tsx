@@ -71,7 +71,7 @@ export const initSavedServices = async () => {
         });
 }
 
-const proxy = "https://cors-anywhere.herokuapp.com/";
+// const proxy = "https://cors-anywhere.herokuapp.com/";
 
 /**
  * Initialises the stop data within local storage. If there is no array, then this function
@@ -82,7 +82,7 @@ export const initStops = async () => {
     const url = "http://transitfeeds.com/p/metlink/22/latest/download/stops.txt";
 
     const setToDefault = async () => {
-        await fetch(proxy + url)
+        await fetch(url)
             .then((resp) => resp.text())
             .then((text) => {
                 csv().fromString(text)
@@ -114,7 +114,7 @@ export const initServices = async () => {
     const url = "http://transitfeeds.com/p/metlink/22/latest/download/routes.txt";
 
     const setToDefault = async () => {
-        await fetch(proxy + url)
+        await fetch(url)
             .then((resp) => resp.text())
             .then((text) => {
                 csv().fromString(text)
@@ -156,7 +156,7 @@ export const fetchStopData = async (stopCode: string): Promise<StorageResponse> 
         const url = 'https://www.metlink.org.nz/api/v1/StopDepartures/';
 
         return new StorageResponse(true, null,
-            await fetch(proxy + url + stopCode)
+            await fetch(url + stopCode)
                 .then((resp) => {
                     if (resp.ok) return Promise.resolve(resp.json());
                     else throw TypeError('Request returned bad response: ' + resp.statusText);
@@ -192,7 +192,7 @@ export const fetchServiceData = async (serviceCode: string): Promise<StorageResp
         const url = "https://www.metlink.org.nz/api/v1/ServiceMap/";
 
         return new StorageResponse(true, null,
-            await fetch(proxy + url + serviceCode)
+            await fetch(url + serviceCode)
                 .then((resp) => {
                     if (resp.ok) return Promise.resolve(resp.json());
                     else throw TypeError('Request returned bad response!');

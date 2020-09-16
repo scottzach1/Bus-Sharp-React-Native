@@ -2,8 +2,7 @@ import {StackNavigationProp} from "@react-navigation/stack";
 import React, {Component} from "react";
 import MetlinkListItem from "../common/MetlinkListItem";
 import {getSavedServices, toggleSavedService} from "../../external/StorageManager";
-import {View} from "../common/Themed";
-import {Route} from "react-native";
+import {Route, View} from "react-native";
 
 interface Props {
     navigation: StackNavigationProp<any>,

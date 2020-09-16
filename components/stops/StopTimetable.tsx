@@ -1,12 +1,12 @@
 import React, {Component} from "react";
 import {Card} from "react-native-elements";
 import {StackNavigationProp} from "@react-navigation/stack";
-import {View} from "../common/Themed";
-import {ActivityIndicator} from "react-native";
+import {ActivityIndicator, Route, View} from "react-native";
 import ServiceListContainer, {ServiceListProp} from "../services/ServiceListContainer";
 
 interface Props {
     navigation: StackNavigationProp<any>,
+    route: Route,
     stopData: any | null | undefined,
     errorMessage: string | null,
 }
@@ -52,9 +52,10 @@ class StopTimetable extends Component<Props, State> {
                     <Card.Divider/>
                     {this.props.stopData ?
                         <ServiceListContainer
-                            navigation={this.props.navigation}
                             services={this.generateListContainerProps()}
                             showHours={true}
+                            navigation={this.props.navigation}
+                            route={this.props.route}
                         /> :
                         <ActivityIndicator/>}
                 </Card>

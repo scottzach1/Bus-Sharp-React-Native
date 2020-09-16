@@ -3,7 +3,7 @@ import {StackNavigationProp} from "@react-navigation/stack";
 import React, {Component} from "react";
 import {getAllServices, getSavedServices} from "../../external/StorageManager";
 import ServiceListContainer, {ServiceListProp} from "./ServiceListContainer";
-import {View} from "../common/Themed";
+import {View} from "react-native";
 import {Card} from "react-native-elements";
 
 interface Props {

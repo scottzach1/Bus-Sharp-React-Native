@@ -1,8 +1,7 @@
 import React, {Component} from "react";
-import {ActivityIndicator, Route} from "react-native";
+import {ActivityIndicator, Route, View} from "react-native";
 import {StackNavigationProp} from "@react-navigation/stack";
 import {getAllStops, getSavedStops} from "../../external/StorageManager";
-import {View} from "../common/Themed";
 import {Card} from "react-native-elements";
 import StopListContainer, {StopListProp} from "./StopListContainer";
 

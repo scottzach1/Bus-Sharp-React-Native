@@ -93,8 +93,6 @@ export const navigateToMetlink = (code: string, isStop: boolean, navigation: Sta
     // Trim path as implemented within underlying library ('@react-navigation/native').
     const targScreen: string = (isStop) ? 'Stop' : 'Service';
 
-    console.log('route', route)
-
     if (route.name.startsWith('Search'))
         navigation.navigate(`Search${targScreen}Screen`, {code: code});
     else if (route.name.startsWith('Map'))

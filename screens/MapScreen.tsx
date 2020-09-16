@@ -54,14 +54,14 @@ class MapScreen extends Component<Props, State> {
 
         prevSearch = this.state.searchText
 
-        let proxy = "https://cors-anywhere.herokuapp.com/";
+        // let proxy = "https://cors-anywhere.herokuapp.com/";
         let urlBuilder = new URL("https://maps.googleapis.com/maps/api/place/autocomplete/json")
         urlBuilder.searchParams.append("input", this.state.searchText)
         urlBuilder.searchParams.append("location", "-41.28646,174.77623")
         urlBuilder.searchParams.append("radius", "200000")
         urlBuilder.searchParams.append("key", Constants.manifest.extra.REACT_APP_GOOGLE_MAPS_API_KEY)
 
-        fetch(proxy + urlBuilder.href + "&strictbounds")
+        fetch(urlBuilder.href + "&strictbounds")
             .then(results => results.json())
             .then(data => {
                 if (data.predictions.length > 0) this.setState({searchResults: this.getPredictions(data.predictions)})

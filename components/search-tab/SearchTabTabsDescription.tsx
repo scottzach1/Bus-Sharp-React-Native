@@ -1,6 +1,6 @@
 import React from "react";
 import {Card} from "react-native-elements";
-import {Text} from "../common/Themed";
+import {Text} from "react-native";
 
 function SearchTabTabsDescription() {
     return (
