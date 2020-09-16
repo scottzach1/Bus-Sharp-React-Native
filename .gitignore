@@ -78,3 +78,6 @@ buck-out/
 # Expo
 .expo/*
 web-build/
+
+# Google Maps Android
+google-services.json
