@@ -1,31 +1,77 @@
 import React, {Component} from "react";
-import EditScreenInfo from "../components/styles/EditScreenInfo";
-import {View, Text} from "../components/styles/Themed";
-import {Route, StyleSheet} from "react-native";
+import {View} from "../components/styles/Themed";
+import {Route, ScrollView, StyleSheet} from "react-native";
 import {StackNavigationProp} from "@react-navigation/stack";
+import {SearchBar} from "react-native-elements";
+import SearchTabFilter from "../components/search-tab/SearchTabFilter";
+import SearchTabSearchbarDescriptionCard from "../components/search-tab/SearchTabSearchbarDescription";
+import SearchTabTabsDescription from "../components/search-tab/SearchTabTabsDescription";
 
 interface Props {
     navigation: StackNavigationProp<any>,
     route: Route,
 }
 
+
 interface State {
+    // stopsData: StopListProp[],
+    // servicesData: StopListProp[],
+    stopsErrorMessage: string | null,
+    servicesErrorMessage: string | null,
+    searchText: string,
+    selectedIndex: number,
+    flipper: boolean
 }
+
+const viewCount = 7
+let stopDisplayMultiplier = 1;
+let serviceDisplayMultiplier = 1;
 
 class SearchScreen extends Component<Props, State> {
 
     constructor(props: Readonly<any>) {
         super(props);
+        this.state = {
+            // stopsData: [],
+            // servicesData: [],
+            stopsErrorMessage: null,
+            servicesErrorMessage: null,
+            searchText: "",
+            selectedIndex: 0,
+            flipper: false
+        }
+    }
 
-        this.state = {}
+    updateIndex(newValue: number) {
+        this.setState({selectedIndex: newValue})
+        this.resetMultipliers()
+    }
+
+    resetMultipliers() {
+        stopDisplayMultiplier = 1;
+        serviceDisplayMultiplier = 1;
     }
 
     render() {
         return (
             <View style={styles.container}>
-                <Text style={styles.title}>TODO Search</Text>
-                <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)"/>
-                <EditScreenInfo path="/screens/TabOneScreen.tsx"/>
+                <SearchBar
+                    placeholder={"Search Here..."}
+                    onChangeText={(e) => {
+                        this.setState({searchText: e})
+                    }}
+                    value={this.state.searchText}
+                />
+                <SearchTabFilter updateIndex={this.updateIndex.bind(this)}/>
+                <ScrollView>
+                    {!this.state.searchText && (
+                        <View>
+                            <SearchTabSearchbarDescriptionCard/>
+                            <SearchTabTabsDescription/>
+                        </View>
+                    )}
+
+                </ScrollView>
             </View>
         );
     }
@@ -34,17 +80,7 @@ class SearchScreen extends Component<Props, State> {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    title: {
-        fontSize: 20,
-        fontWeight: 'bold',
-    },
-    separator: {
-        marginVertical: 30,
-        height: 1,
-        width: '80%',
+        width: "100%",
     },
 });
 

@@ -23,7 +23,7 @@ class AccountSignupScreen extends Component<Props, State> {
     render() {
         return (
             <View style={styles.container}>
-                <Text style={styles.title}>TODO Account Signup</Text>
+                <Text style={styles.subtitle}>TODO Account Signup</Text>
                 <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
                 <EditScreenInfo path="/screens/TabOneScreen.tsx" />
             </View>
@@ -38,7 +38,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
     },
-    title: {
+    subtitle: {
         fontSize: 20,
         fontWeight: 'bold',
     },
