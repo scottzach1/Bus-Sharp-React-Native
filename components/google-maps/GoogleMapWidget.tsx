@@ -1,5 +1,5 @@
 import {StackNavigationProp} from "@react-navigation/stack";
-import React, {FC} from "react";
+import React, {FC, useState} from "react";
 import {getLatLng} from "react-places-autocomplete";
 import {Route, StyleSheet, Text, View} from "react-native";
 import MapView, {Callout, Marker, Polyline} from 'react-native-maps';
@@ -33,6 +33,8 @@ let region = {
 }
 
 const GoogleMapWidget: FC<Props> = (props) => {
+    const [selectedItem, setSelectedItem] = useState<StopMarker | null>(null)
+
     // -------------------------------------------------------------------------------------------------------------
     // CHECKS RUN EVERY RENDER
     // -------------------------------------------------------------------------------------------------------------
@@ -98,6 +100,7 @@ const GoogleMapWidget: FC<Props> = (props) => {
             latitudeDelta: 0.015,
             longitudeDelta: 0.0121,
         }
+        setSelectedItem(marker)
     }
 
     // -------------------------------------------------------------------------------------------------------------
@@ -145,6 +148,21 @@ const GoogleMapWidget: FC<Props> = (props) => {
                         }))}
                     />
                 ))}
+
+                {(selectedItem && selectedId === "Search") && (
+                    <Marker
+                        coordinate={{
+                            latitude: selectedItem.location.latitude,
+                            longitude: selectedItem.location.longitude
+                        }}
+                    >
+                        <Callout>
+                            <Text>
+                                {selectedItem.name}
+                            </Text>
+                        </Callout>
+                    </Marker>
+                )}
             </MapView>
         </View>
     )
