@@ -1,2 +1,0 @@
-# Bus Sharp React Native
-

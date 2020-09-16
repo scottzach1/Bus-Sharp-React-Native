@@ -1,128 +1,24 @@
 import * as Linking from 'expo-linking';
-import {getStateFromPath, LinkingOptions} from '@react-navigation/native';
-import {StackNavigationProp} from "@react-navigation/stack";
-import firebase from "firebase";
 
-const linkingOptions: LinkingOptions = {
-    prefixes: [Linking.makeUrl('/')],
-    config: {
+export default {
+  prefixes: [Linking.makeUrl('/')],
+  config: {
+    screens: {
+      Root: {
         screens: {
-            Root: {
-                screens: {
-                    SearchTab: {
-                        path: 'search',
-                        screens: {
-                            SearchHomeScreen: '',
-                            SearchServiceScreen: 'service/:code',
-                            SearchStopScreen: 'stop/:code'
-                        }
-                    },
-                    MapTab: {
-                        path: 'map',
-                        screens: {
-                            MapHomeScreen: '',
-                            MapServiceScreen: 'service/:code',
-                            MapStopScreen: 'stop/:code'
-                        }
-                    },
-                    SavedTab: {
-                        path: 'saved',
-                        screens: {
-                            SavedHomeScreen: '',
-                            SavedServiceScreen: 'service/:code',
-                            SavedStopScreen: 'stop/:code'
-                        }
-                    },
-                    SettingsTab: {
-                        path: 'settings',
-                        screens: {
-                            SettingsHomeScreen: '',
-                            SettingsTwitterScreen: 'twitter',
-                            SettingsAccountLoginScreen: 'account/login',
-                            SettingsAccountSignupScreen: 'account/signup',
-                            SettingsAccountInfoScreen: 'account/info',
-                        }
-                    }
-                },
+          TabOne: {
+            screens: {
+              TabOneScreen: 'one',
             },
-            NotFound: '*',
+          },
+          TabTwo: {
+            screens: {
+              TabTwoScreen: 'two',
+            },
+          },
         },
+      },
+      NotFound: '*',
     },
-    getStateFromPath(path, config) {
-        let state: any = getStateFromPath(path, config);
-
-        // State could not be found.
-        if (state?.routes[0].name === "NotFound") return state;
-
-        // Trim path as implemented within underlying library ('@react-navigation/native').
-        let cleanPath = path
-            .replace(/\/+/g, '/') // Replace multiple slash (//) with single ones
-            .replace(/^\//, '') // Remove extra leading slash
-            .replace(/\?.*$/, ''); // Remove query params which we will handle later
-
-        // Valid sub-paths to inject previous tab.
-        const subNames = ['stop', 'service', 'twitter', 'account'];
-
-        // Apply changes.
-        if (subNames.find((name) => cleanPath.includes(name))) {
-            // Extract current stack (hard coded, but schema defined above ^).
-            let routes: any[] = state!.routes[0].state!.routes[0].state!.routes;
-
-            // Capitalise first letter.
-            const tabName = capitalizeFirstLetter(cleanPath.split('/')[0]);
-
-            // Insert to the first index of list (how elegant JS!).
-            routes = [{
-                name: tabName + "HomeScreen",
-                params: null
-            }].concat(routes);
-
-            // Update the state
-            state!.routes[0].state!.routes[0].state!.routes = routes;
-        }
-
-        // Bob's ya aunty!
-        return state;
-    }
+  },
 };
-
-export default linkingOptions;
-
-export const navigateToMetlink = (code: string, isStop: boolean, navigation: StackNavigationProp<any>) => {
-    // Trim path as implemented within underlying library ('@react-navigation/native').
-    let cleanPath: string = window.location.pathname
-        .replace(/\/+/g, '/') // Replace multiple slash (//) with single ones
-        .replace(/^\//, '') // Remove extra leading slash
-        .replace(/\?.*$/, ''); // Remove query params which we will handle later
-
-    const tabName: string = capitalizeFirstLetter(cleanPath.split('/')[0]);
-    const screenType: string = (isStop) ? 'Stop' : 'Service';
-
-    navigation.navigate(tabName + screenType + 'Screen', {code: code});
-}
-
-export const checkAccountPath = (context: firebase.User | null | undefined, navigation: StackNavigationProp<any>) => {
-    // Context has not mounted, defer to loading screen.
-    if (typeof context === 'undefined') return;
-
-    // Trim path as implemented within underlying library ('@react-navigation/native').
-    let cleanPath: string = window.location.pathname
-        .replace(/\/+/g, '/') // Replace multiple slash (//) with single ones
-        .replace(/^\//, '') // Remove extra leading slash
-        .replace(/\?.*$/, ''); // Remove query params which we will handle later
-
-    // Example path: 'settings/account/info'.
-    const accountPage: string = cleanPath.split('/')[2];
-
-    if (context && context.uid) {
-        if (['login', 'signup'].includes(accountPage))
-            navigation.navigate('SettingsAccountInfoScreen');
-    } else {
-        if (['info'].includes(accountPage))
-            navigation.navigate('SettingsAccountLoginScreen');
-    }
-}
-
-const capitalizeFirstLetter = (text: string) => {
-    return text.charAt(0).toUpperCase() + text.slice(1);
-}
