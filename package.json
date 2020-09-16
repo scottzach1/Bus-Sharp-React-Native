@@ -46,6 +46,6 @@
     "typescript": "~3.9.5"
   },
   "private": true,
-  "name": "bus-sharp-react-native-reborn",
+  "name": "bus-sharp-react-native",
   "version": "1.0.0"
 }
