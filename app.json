@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "BusSharpReactNative",
-    "slug": "BusSharpReactNative",
+    "name": "bus-sharp-react-native-reborn",
+    "slug": "bus-sharp-react-native-reborn",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -19,10 +19,20 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.lateforthebus.bussharpreactnative"
     },
     "web": {
       "favicon": "./assets/images/favicon.png"
+    },
+    "sdkVersion": "38.0.0",
+    "platforms": [
+      "ios",
+      "android",
+      "web"
+    ],
+    "android": {
+      "package": "com.lateforthebus.bussharpreactnative"
     },
     "extra": {
       "REACT_APP_GOOGLE_MAPS_API_KEY": "AIzaSyAI5mcBlQsxr2RjeOr2UxeKyjl_z2oh6UI",
