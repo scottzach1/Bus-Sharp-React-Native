@@ -19,7 +19,8 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.lateforthebus.BusSharpReactNative"
     },
     "web": {
       "favicon": "./assets/images/favicon.png"
@@ -34,6 +35,15 @@
       "REACT_APP_FIREBASE_MESSAGE_SENDER_ID": "483376447021",
       "REACT_APP_FIREBASE_ID": "1:483376447021:web:5820efb82ad44df85e42a4",
       "REACT_APP_FIREBASE_MEASUREMENT_ID": "G-Z7NRDEESN2"
+    },
+    "sdkVersion": "38.0.0",
+    "platforms": [
+      "ios",
+      "android",
+      "web"
+    ],
+    "android": {
+      "package": "com.lateforthebus.BusSharpReactNative"
     }
   }
 }
