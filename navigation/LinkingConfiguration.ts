@@ -2,6 +2,7 @@ import * as Linking from 'expo-linking';
 import {getStateFromPath, LinkingOptions} from '@react-navigation/native';
 import {StackNavigationProp} from "@react-navigation/stack";
 import firebase from "firebase";
+import {Route} from "react-native";
 
 const linkingOptions: LinkingOptions = {
     prefixes: [Linking.makeUrl('/')],
@@ -101,24 +102,15 @@ export const navigateToMetlink = (code: string, isStop: boolean, navigation: Sta
     navigation.navigate(tabName + screenType + 'Screen', {code: code});
 }
 
-export const checkAccountPath = (context: firebase.User | null | undefined, navigation: StackNavigationProp<any>) => {
+export const checkAccountPath = (context: firebase.User | null | undefined, navigation: StackNavigationProp<any>, route: Route) => {
     // Context has not mounted, defer to loading screen.
     if (typeof context === 'undefined') return;
 
-    // Trim path as implemented within underlying library ('@react-navigation/native').
-    let cleanPath: string = window.location.pathname
-        .replace(/\/+/g, '/') // Replace multiple slash (//) with single ones
-        .replace(/^\//, '') // Remove extra leading slash
-        .replace(/\?.*$/, ''); // Remove query params which we will handle later
-
-    // Example path: 'settings/account/info'.
-    const accountPage: string = cleanPath.split('/')[2];
-
     if (context && context.uid) {
-        if (['login', 'signup'].includes(accountPage))
+        if (['SettingsAccountLoginScreen', 'SettingsAcountSignupScreen'].includes(route.name))
             navigation.navigate('SettingsAccountInfoScreen');
     } else {
-        if (['info'].includes(accountPage))
+        if (['SettingsAccountInfoScreen'].includes(route.name))
             navigation.navigate('SettingsAccountLoginScreen');
     }
 }

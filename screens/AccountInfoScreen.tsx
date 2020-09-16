@@ -1,9 +1,8 @@
 import React, {Component} from "react";
-import {ActivityIndicator, Route, ScrollView} from "react-native";
+import {ActivityIndicator, Route, ScrollView, Text} from "react-native";
 import {Card} from "react-native-elements";
 import {UserContext} from "../providers/UserProvider";
 import {getUserDocument, signOut} from "../external/Firebase";
-import {Text} from "../components/common/Themed";
 import AccountActionButton from "../components/account/AccountActionButton";
 import ErrorCard from "../components/account/ErrorCard";
 import AccountRedirectWrapper from "../navigation/AccountRedirectWrapper";
@@ -61,9 +60,10 @@ class AccountInfoScreen extends Component<Props, State> {
             if (!doc.hasOwnProperty(property)) continue;
             listItems.push(
                 <Text>
-                    <b>{property}:</b> {doc[property]}
+                    <Text style={{fontWeight: "bold"}}>{property}: </Text>
+                    {doc[property]}
                 </Text>
-            )
+            );
         }
 
         return listItems;

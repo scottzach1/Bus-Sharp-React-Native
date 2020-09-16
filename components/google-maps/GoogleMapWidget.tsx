@@ -1,6 +1,6 @@
 import React, {FC, useState} from "react";
 import {GoogleMap, InfoWindow, Marker, Polyline, useLoadScript} from "@react-google-maps/api";
-import "./GoogleMapWidget.css";
+// import "./GoogleMapWidget.css";
 import {mapStyles} from "./GoogleMapWidgetStyles";
 import {Text} from 'react-native';
 import {View} from "../common/Themed";

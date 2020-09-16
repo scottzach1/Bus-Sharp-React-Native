@@ -14,7 +14,11 @@ class AccountRedirectWrapper extends Component<Props, {}> {
     static contextType = UserContext;
 
     componentDidMount() {
-        checkAccountPath(this.context, this.props.navigation);
+        this.checkValidScreen();
+    }
+
+    checkValidScreen() {
+        checkAccountPath(this.context, this.props.navigation, this.props.route);
     }
 
     generateWaitingCard() {
@@ -26,7 +30,7 @@ class AccountRedirectWrapper extends Component<Props, {}> {
     }
 
     render() {
-        checkAccountPath(this.context, this.props.navigation);
+        this.checkValidScreen();
 
         return (typeof this.context === 'undefined') ?
             this.generateWaitingCard() : this.props.children;
