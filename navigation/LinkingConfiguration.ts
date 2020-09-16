@@ -89,17 +89,18 @@ const linkingOptions: LinkingOptions = {
 
 export default linkingOptions;
 
-export const navigateToMetlink = (code: string, isStop: boolean, navigation: StackNavigationProp<any>) => {
+export const navigateToMetlink = (code: string, isStop: boolean, navigation: StackNavigationProp<any>, route: Route) => {
     // Trim path as implemented within underlying library ('@react-navigation/native').
-    let cleanPath: string = window.location.pathname
-        .replace(/\/+/g, '/') // Replace multiple slash (//) with single ones
-        .replace(/^\//, '') // Remove extra leading slash
-        .replace(/\?.*$/, ''); // Remove query params which we will handle later
+    const targScreen: string = (isStop) ? 'Stop' : 'Service';
 
-    const tabName: string = capitalizeFirstLetter(cleanPath.split('/')[0]);
-    const screenType: string = (isStop) ? 'Stop' : 'Service';
+    console.log('route', route)
 
-    navigation.navigate(tabName + screenType + 'Screen', {code: code});
+    if (route.name.startsWith('Search'))
+        navigation.navigate(`Search${targScreen}Screen`, {code: code});
+    else if (route.name.startsWith('Map'))
+        navigation.navigate(`Map${targScreen}Screen`, {code: code});
+    else if (route.name.startsWith('Saved'))
+        navigation.navigate(`Saved${targScreen}Screen`, {code: code});
 }
 
 export const checkAccountPath = (context: firebase.User | null | undefined, navigation: StackNavigationProp<any>, route: Route) => {

@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import {ScrollView, StyleSheet} from "react-native";
+import {Route, ScrollView, StyleSheet} from "react-native";
 import {StackNavigationProp} from "@react-navigation/stack";
 import {getAllServices, getAllStops} from "../external/StorageManager";
 import {Button, Card, SearchBar} from "react-native-elements";
@@ -12,6 +12,7 @@ import StopListContainer, {StopListProp} from "../components/stops/StopListConta
 
 interface Props {
     navigation: StackNavigationProp<any>,
+    route: Route,
 }
 
 interface State {
@@ -152,8 +153,9 @@ class SearchScreen extends Component<Props, State> {
                             <Card.Title>Services</Card.Title>
                             <Card.Divider/>
                             <ServiceListContainer
-                                navigation={this.props.navigation}
                                 services={services}
+                                navigation={this.props.navigation}
+                                route={this.props.route}
                             />
                             {remainingServices > 0 && (
                                 <Button
@@ -171,8 +173,9 @@ class SearchScreen extends Component<Props, State> {
                             <Card.Title>Stops</Card.Title>
                             <Card.Divider/>
                             <StopListContainer
-                                navigation={this.props.navigation}
                                 stops={stops}
+                                navigation={this.props.navigation}
+                                route={this.props.route}
                             />
                             {remainingStops > 0 && (
                                 <Button

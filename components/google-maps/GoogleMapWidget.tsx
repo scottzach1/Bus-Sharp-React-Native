@@ -2,7 +2,7 @@ import React, {FC, useState} from "react";
 import {GoogleMap, InfoWindow, Marker, Polyline, useLoadScript} from "@react-google-maps/api";
 // import "./GoogleMapWidget.css";
 import {mapStyles} from "./GoogleMapWidgetStyles";
-import {Text} from 'react-native';
+import {Route, Text} from 'react-native';
 import {View} from "../common/Themed";
 import Constants from 'expo-constants';
 import {getLatLng} from "react-places-autocomplete";
@@ -14,6 +14,7 @@ import {navigateToMetlink} from "../../navigation/LinkingConfiguration";
 interface Props {
     stopMarkers: StopMarker[] | null,
     navigation: StackNavigationProp<any>,
+    route: Route,
     routePaths: any | null,
     geoCoderResult?: google.maps.GeocoderResult,
 }
@@ -262,7 +263,7 @@ const GoogleMapWidget: FC<Props> = (props) => {
                         >
                             <div
                                 id="selected-stop-popup"
-                                onClick={() => navigateToMetlink(selectedItem.code, true, props.navigation)}
+                                onClick={() => navigateToMetlink(selectedItem.code, true, props.navigation, props.route)}
                             >
                                 <Text>
                                     <MaterialCommunityIcons name="map-marker" size={16} color="black"/>

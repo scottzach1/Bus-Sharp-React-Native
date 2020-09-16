@@ -3,9 +3,11 @@ import React, {Component} from "react";
 import MetlinkListItem from "../common/MetlinkListItem";
 import {getSavedServices, toggleSavedService} from "../../external/StorageManager";
 import {View} from "../common/Themed";
+import {Route} from "react-native";
 
 interface Props {
     navigation: StackNavigationProp<any>,
+    route: Route,
     services: ServiceListProp[],
     showHours?: boolean,
     // Optional callback if the parent wants to be notified of any updates to saved services.
@@ -75,7 +77,6 @@ class ServiceListContainer extends Component<Props, State> {
 
             return (
                 <MetlinkListItem
-                    navigation={this.props.navigation}
                     code={service.code}
                     name={service.name}
                     isLive={service.live}
@@ -83,6 +84,8 @@ class ServiceListContainer extends Component<Props, State> {
                     isFavourite={this.checkFavourite(service.code)}
                     toggleFavourite={() => this.toggleFavourite(service.code)}
                     timeRemaining={timeRemaining}
+                    navigation={this.props.navigation}
+                    route={this.props.route}
                 />
             );
         });

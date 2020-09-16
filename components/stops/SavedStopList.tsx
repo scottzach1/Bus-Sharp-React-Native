@@ -70,9 +70,10 @@ class SavedStopList extends Component<Props, State> {
                     <Card.Divider/>
                     {(this.state.savedStops && this.state.allStops) ?
                         <StopListContainer
-                            navigation={this.props.navigation}
                             stops={this.generateStops()}
                             setSavedStops={(savedStops) => this.updateSavedStops(savedStops)}
+                            navigation={this.props.navigation}
+                            route={this.props.route}
                         />
                         :
                         <ActivityIndicator/>}

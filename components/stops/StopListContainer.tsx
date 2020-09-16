@@ -2,10 +2,11 @@ import {StackNavigationProp} from "@react-navigation/stack";
 import React, {Component} from "react";
 import {getSavedStops, toggleSavedStop} from "../../external/StorageManager";
 import MetlinkListItem from "../common/MetlinkListItem";
-import {View} from "react-native";
+import {Route, View} from "react-native";
 
 interface Props {
     navigation: StackNavigationProp<any>,
+    route: Route,
     stops: StopListProp[],
     // Optional callback if the parent wants to be notified of any updates to saved stops.
     setSavedStops?: (stops: string[]) => void,
@@ -48,12 +49,13 @@ class StopListContainer extends Component<Props, State> {
 
         return stops.map((stop) => (
             <MetlinkListItem
-                navigation={this.props.navigation}
                 code={stop.code}
                 name={stop.name}
                 isStop={true}
                 isFavourite={this.checkFavourite(stop.code)}
                 toggleFavourite={() => this.toggleFavourite(stop.code)}
+                navigation={this.props.navigation}
+                route={this.props.route}
             />
         ));
     }

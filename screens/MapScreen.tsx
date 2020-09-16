@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import {ScrollView, StyleSheet, View} from "react-native";
+import {Route, ScrollView, StyleSheet, View} from "react-native";
 import GoogleMapWidget, {Position, StopMarker} from "../components/google-maps/GoogleMapWidget";
 import {getAllStops} from "../external/StorageManager";
 import {StackNavigationProp} from "@react-navigation/stack";
@@ -8,6 +8,7 @@ import Constants from "expo-constants";
 import {geocodeByAddress} from "react-places-autocomplete";
 
 interface Props {
+    route: Route,
     navigation: StackNavigationProp<any>,
 }
 
@@ -129,6 +130,7 @@ class MapScreen extends Component<Props, State> {
                     stopMarkers={this.state.stopMarkers}
                     geoCoderResult={this.state.searchLocation}
                     navigation={this.props.navigation}
+                    route={this.props.route}
                 />
                 <SearchBar
                     placeholder="Type Here..."

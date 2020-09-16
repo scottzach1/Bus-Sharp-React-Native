@@ -70,9 +70,10 @@ class SavedServiceList extends Component<Props, State> {
                     <Card.Divider/>
                     {(this.state.savedServices && this.state.allServices) ?
                         <ServiceListContainer
-                            navigation={this.props.navigation}
                             services={this.generateServices()}
                             setSavedServices={(savedServices) => this.updateSavedServices(savedServices)}
+                            navigation={this.props.navigation}
+                            route={this.props.route}
                         /> :
                         <ActivityIndicator/>}
                 </Card>
