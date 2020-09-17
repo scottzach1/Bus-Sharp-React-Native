@@ -1,5 +1,7 @@
 import React, {createContext, FC, useEffect, useState} from "react";
 import auth, {FirebaseAuthTypes} from '@react-native-firebase/auth';
+import {syncSavedData} from "../external/StorageManager";
+import {generateUserDocument} from "../external/Firebase";
 
 interface Props {
 }
@@ -16,6 +18,7 @@ const UserProvider: FC<Props> = (props) => {
     async function onAuthStateChanged(user: FirebaseAuthTypes.User | null) {
         setUser(user);
         if (initializing) setInitializing(false);
+        await generateUserDocument(user).then(() => syncSavedData(user));
     }
 
     useEffect(() => {
