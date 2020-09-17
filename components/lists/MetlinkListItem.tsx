@@ -3,6 +3,7 @@ import {Badge, Icon, ListItem} from "react-native-elements";
 import {StackNavigationProp} from "@react-navigation/stack";
 import {navigateToMetlink} from "../../navigation/LinkingConfiguration";
 import {Route} from "react-native";
+import {Text} from "../styles/Themed";
 
 interface Props {
     navigation: StackNavigationProp<any>,
@@ -14,7 +15,6 @@ interface Props {
     isFavourite: boolean,
     toggleFavourite: () => void,
     timeRemaining?: string,
-    key: string
 }
 
 interface State {
@@ -37,14 +37,13 @@ class MetlinkListItem extends Component<Props, State> {
         return (
             <ListItem
                 onPress={() => navigateToMetlink(this.props.code, this.props.isStop, this.props.navigation, this.props.route)}
-                key={this.props.key}
                 bottomDivider
             >
                 <Badge status={(this.props.isStop) ? "primary" : "warning"} value={this.props.code}/>
                 <ListItem.Content>
                     <ListItem.Title>{badgeSpacing}{this.props.name}</ListItem.Title>
                     {this.props.timeRemaining &&
-                    <ListItem.Subtitle>{badgeSpacing}{this.props.timeRemaining}</ListItem.Subtitle>}
+                    <Text>{badgeSpacing}{this.props.timeRemaining}</Text>}
                 </ListItem.Content>
                 {this.props.isLive && <Badge status={"success"} value={"live"}/>}
                 <Icon

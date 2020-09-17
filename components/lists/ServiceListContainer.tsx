@@ -3,6 +3,7 @@ import React, {Component} from "react";
 import {getSavedServices, toggleSavedService} from "../../external/StorageManager";
 import {Route, View} from "react-native";
 import MetlinkListItem from "./MetlinkListItem";
+import {format, formatDistanceToNowStrict} from "date-fns";
 
 interface Props {
     navigation: StackNavigationProp<any>,
@@ -47,28 +48,20 @@ class ServiceListContainer extends Component<Props, State> {
     }
 
     getHoursRemaining(arrivalTime: string) {
-        const arrivalDate: Date = new Date(arrivalTime);
-        const currentDate: Date = new Date();
-
-        let timeRemaining: number | string = Math.round((arrivalDate.getTime() - currentDate.getTime()) / 60000);
-        return (timeRemaining < 0) ? 'due' : timeRemaining + ' mins';
+        return formatDistanceToNowStrict(new Date(arrivalTime), {
+            unit: 'minute',
+        });
     }
 
     getTime(arrivalTime: string) {
-        const arrivalDate: Date = new Date(arrivalTime);
-        const dateTimeFormat = new Intl.DateTimeFormat('en', {
-            month: 'short',
-            day: '2-digit',
-            hour: 'numeric',
-            minute: 'numeric'
-        });
-        return dateTimeFormat.format(arrivalDate);
+        return format(new Date(arrivalTime), 'ccc cc MMM, p');
     }
 
     generateServices() {
         if (!this.props.services) return undefined;
 
         let services: ServiceListProp[] = this.props.services;
+        let counter = 0;
 
         return services.map((service) => {
             const timeRemaining: string = (service.arrival) ? ((this.props.showHours) ?
@@ -85,7 +78,7 @@ class ServiceListContainer extends Component<Props, State> {
                     timeRemaining={timeRemaining}
                     navigation={this.props.navigation}
                     route={this.props.route}
-                    key={`list-item-${service.code}-${service.name}`}
+                    key={`list-item-${service.code}-${service.name}-${timeRemaining ? timeRemaining : ''}-${counter++}`}
                 />
             );
         });

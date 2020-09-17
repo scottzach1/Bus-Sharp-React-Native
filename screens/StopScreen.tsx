@@ -1,8 +1,9 @@
-import EditScreenInfo from "../components/styles/EditScreenInfo";
-import {View, Text} from "../components/styles/Themed";
 import React, {Component} from "react";
-import {Route, StyleSheet} from "react-native";
+import {Route, ScrollView} from "react-native";
 import {StackNavigationProp} from "@react-navigation/stack";
+import {fetchStopData} from "../external/StorageManager";
+import StopInfo from "../components/stop/StopInfo";
+import StopTimetable from "../components/stop/StopTimetable";
 
 interface Props {
     route: Route,
@@ -10,6 +11,8 @@ interface Props {
 }
 
 interface State {
+    stopData: any | null,
+    errorMessage: string | null,
 }
 
 class StopScreen extends Component<Props, State> {
@@ -18,36 +21,44 @@ class StopScreen extends Component<Props, State> {
         super(props);
 
         this.state = {
+            stopData: undefined,
+            errorMessage: null,
         }
     }
+
+    getCode() {
+        return this.props.route.params.code;
+    }
+
+    componentDidMount() {
+        if (!this.state.stopData || this.state.errorMessage)
+            fetchStopData(this.getCode()).then((resp) => {
+                this.setState({
+                    stopData: resp.data,
+                    errorMessage: resp.errorMessage,
+                });
+            });
+    }
+
     render() {
 
         return (
-            <View style={styles.container}>
-                <Text style={styles.title}>TODO Stop</Text>
-                <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
-                <EditScreenInfo path="/screens/TabOneScreen.tsx" />
-            </View>
+            <ScrollView>
+                <StopInfo
+                    stopData={this.state.stopData}
+                    code={this.getCode()}
+                    errorMessage={this.state.errorMessage}
+                    navigation={this.props.navigation}
+                />
+                <StopTimetable
+                    stopData={this.state.stopData}
+                    errorMessage={this.state.errorMessage}
+                    navigation={this.props.navigation}
+                    route={this.props.route}
+                />
+            </ScrollView>
         );
     }
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    title: {
-        fontSize: 20,
-        fontWeight: 'bold',
-    },
-    separator: {
-        marginVertical: 30,
-        height: 1,
-        width: '80%',
-    },
-});
-
 
 export default StopScreen;
