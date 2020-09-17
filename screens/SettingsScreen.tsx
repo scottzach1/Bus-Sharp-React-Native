@@ -8,6 +8,7 @@ import SettingsAccountEntry from "../components/settings/SettingsAccountEntry";
 import SettingsTwitterFeedEntry from "../components/settings/SettingsTwitterFeedEntry";
 import SettingsAboutDevsEntry from "../components/settings/SettingsAboutDevsEntry";
 import SettingsVersionEntry from "../components/settings/SettingsVersionEntry";
+import SettingsShareEntry from "../components/settings/SettingsShareEntry";
 
 interface Props {
     route: Route,
@@ -28,7 +29,7 @@ class SettingsScreen extends Component<Props, State> {
                     <SettingsSourceCodeEntry/>
                     <SettingsAccountEntry navigation={this.props.navigation}/>
                     <SettingsTwitterFeedEntry navigation={this.props.navigation}/>
-                    {/*<SettingsShareEntry/>*/}
+                    <SettingsShareEntry/>
                 </Card>
                 <Card>
                     <Card.Title>About</Card.Title>

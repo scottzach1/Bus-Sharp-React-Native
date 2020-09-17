@@ -2,6 +2,7 @@ import * as Linking from 'expo-linking';
 import {getStateFromPath, LinkingOptions} from '@react-navigation/native';
 import {StackNavigationProp} from "@react-navigation/stack";
 import {Route} from "react-native";
+import {FirebaseAuthTypes} from "@react-native-firebase/auth";
 
 const linkingOptions: LinkingOptions = {
   prefixes: [Linking.makeUrl('/')],
@@ -99,6 +100,21 @@ export const navigateToMetlink = (code: string, isStop: boolean, navigation: Sta
   else if (route.name.startsWith('Saved'))
     navigation.navigate(`Saved${targScreen}Screen`, {code: code});
 }
+
+
+export const checkAccountPath = (context: FirebaseAuthTypes.User | null | undefined, navigation: StackNavigationProp<any>, route: Route) => {
+  // Context has not mounted, defer to loading screen.
+  if (typeof context === 'undefined') return;
+
+  if (context && context.uid) {
+    if (['SettingsAccountLoginScreen', 'SettingsAcountSignupScreen'].includes(route.name))
+      navigation.navigate('SettingsAccountInfoScreen');
+  } else {
+    if (['SettingsAccountInfoScreen'].includes(route.name))
+      navigation.navigate('SettingsAccountLoginScreen');
+  }
+}
+
 
 const capitalizeFirstLetter = (text: string) => {
   return text.charAt(0).toUpperCase() + text.slice(1);

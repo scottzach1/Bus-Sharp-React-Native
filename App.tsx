@@ -7,6 +7,7 @@ import useColorScheme from './hooks/useColorScheme';
 import Navigation from './navigation';
 import CustomThemeProvider from "./providers/CustomThemeProvider";
 import {initSavedServices, initSavedStops, initServices, initStops, initTheme} from "./external/StorageManager";
+import UserProvider from "./providers/UserProvider";
 
 export default function App() {
     const isLoadingComplete = useCachedResources();
@@ -23,10 +24,12 @@ export default function App() {
     } else {
         return (
             <SafeAreaProvider>
-                <CustomThemeProvider>
-                    <Navigation colorScheme={colorScheme}/>
-                    <StatusBar/>
-                </CustomThemeProvider>
+                <UserProvider>
+                    <CustomThemeProvider>
+                        <Navigation colorScheme={colorScheme}/>
+                        <StatusBar/>
+                    </CustomThemeProvider>
+                </UserProvider>
             </SafeAreaProvider>
         );
     }

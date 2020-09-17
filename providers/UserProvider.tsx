@@ -2,8 +2,8 @@ import React, {createContext, FC, useEffect, useState} from "react";
 import auth, {FirebaseAuthTypes} from '@react-native-firebase/auth';
 
 interface Props {
-
 }
+
 
 export const UserContext = createContext<FirebaseAuthTypes.User | null | undefined>(undefined);
 
@@ -13,7 +13,7 @@ const UserProvider: FC<Props> = (props) => {
     const [user, setUser] = useState<FirebaseAuthTypes.User | null | undefined>(undefined);
 
     // Handle user state changes
-    function onAuthStateChanged(user: FirebaseAuthTypes.User | null) {
+    async function onAuthStateChanged(user: FirebaseAuthTypes.User | null) {
         setUser(user);
         if (initializing) setInitializing(false);
     }

@@ -5,6 +5,7 @@
 import auth, {FirebaseAuthTypes} from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 import {GoogleSignin} from '@react-native-community/google-signin';
+import {getSavedServices, getSavedStops} from "./StorageManager";
 
 
 // const firebaseConfig = {
@@ -30,7 +31,15 @@ export const createUserWithCredentials = async (email: string, password: string,
 
     return await auth()
         .createUserWithEmailAndPassword(email, password)
-        .then(() => new AuthenticationResponse(true))
+        .then(async (user) => {
+            return generateUserDocument(user.user, {
+                displayName: displayName,
+                savedStops: JSON.stringify((await getSavedStops()).data),
+                savedServices: JSON.stringify((await getSavedServices()).data),
+            })
+                .then(() => new AuthenticationResponse(true))
+                .catch(() => new AuthenticationResponse(false, "Auth successful, failed to generate user doc!"))
+        })
         .catch((e) => {
             let message: string;
 
@@ -71,7 +80,7 @@ export const updateUserDocument = async (user: FirebaseAuthTypes.User | null, ad
     firestore().doc(`users/${user.uid}`).update(additionalData);
 }
 
-export const generateUserDocument = async (user: any | null, additionalData?: any | undefined) => {
+export const generateUserDocument = async (user: FirebaseAuthTypes.User | null, additionalData?: any | undefined) => {
     if (!user || !user.uid) return;
 
     firestore().doc(`users/${user.uid}`).get().then((snapShot) => {
@@ -80,7 +89,7 @@ export const generateUserDocument = async (user: any | null, additionalData?: an
 }
 
 export const getUserDocument = async (user: FirebaseAuthTypes.User) => {
-    return await firestore().doc(`users/${user.uid}`).get();
+    return await firestore().collection('users').doc(user.uid).get().then((snap) => snap.data());
 }
 
 

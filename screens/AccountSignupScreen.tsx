@@ -10,6 +10,7 @@ import AccountActionButton from "../components/account/AccountActionButton";
 import LoginWithGoogleButton from "../components/account/LoginWithGoogleButton";
 import DisplayNameInput from "../components/account/DisplayNameInput";
 import ErrorCard from "../components/account/ErrorCard";
+import AccountRedirectWrapper from "../navigation/AccountRedirectWrapper";
 
 interface Props {
     route: Route,
@@ -37,7 +38,7 @@ class AccountSignupScreen extends Component<Props, State> {
         };
     }
 
-    async signup() {
+    async signupWithUserCredentials() {
         this.setState({
             errorMessage: null,
         });
@@ -65,35 +66,37 @@ class AccountSignupScreen extends Component<Props, State> {
 
     render() {
         return (
-            <ScrollView>
-                <Card>
-                    <Card.Title>Sign In</Card.Title>
-                    <Card.Divider/>
-                    <DisplayNameInput setEmail={(name) => this.setState({displayName: name})}/>
-                    <EmailInput setEmail={(email) => this.setState({email: email})}/>
-                    <PasswordInput
-                        setPassword={(password) => this.setState({password: password})}
-                    />
-                    <PasswordInput
-                        setPassword={(password) => this.setState({passwordConfirmation: password})}
-                        confirmation={true}
-                    />
-                    <AccountActionButton type={"signup"} submit={() => this.signup()}/>
-                </Card>
-                <Card>
-                    <Card.Title>
-                        <Text>Already have an account? </Text>
-                    </Card.Title>
-                    <Card.Title onPress={() => this.props.navigation.navigate('SettingsAccountLoginScreen')}>
-                        <Text style={{textDecorationLine: "underline"}}>Click here</Text>.
-                    </Card.Title>
-                    <Card.Divider/>
-                    <Text style={{alignSelf: "center"}}>Alternatively, you may</Text>
-                    <Text> </Text>
-                    <LoginWithGoogleButton type={"signup"} onPress={signInWithGoogle}/>
-                </Card>
-                <ErrorCard errorMessage={this.state.errorMessage}/>
-            </ScrollView>
+            <AccountRedirectWrapper route={this.props.route} navigation={this.props.navigation}>
+                <ScrollView>
+                    <Card>
+                        <Card.Title>Sign In</Card.Title>
+                        <Card.Divider/>
+                        <DisplayNameInput setEmail={(name) => this.setState({displayName: name})}/>
+                        <EmailInput setEmail={(email) => this.setState({email: email})}/>
+                        <PasswordInput
+                            setPassword={(password) => this.setState({password: password})}
+                        />
+                        <PasswordInput
+                            setPassword={(password) => this.setState({passwordConfirmation: password})}
+                            confirmation={true}
+                        />
+                        <AccountActionButton type={"signup"} submit={() => this.signupWithUserCredentials()}/>
+                    </Card>
+                    <Card>
+                        <Card.Title>
+                            <Text>Already have an account? </Text>
+                        </Card.Title>
+                        <Card.Title onPress={() => this.props.navigation.navigate('SettingsAccountLoginScreen')}>
+                            <Text style={{textDecorationLine: "underline"}}>Click here</Text>.
+                        </Card.Title>
+                        <Card.Divider/>
+                        <Text style={{alignSelf: "center"}}>Alternatively, you may</Text>
+                        <Text> </Text>
+                        <LoginWithGoogleButton type={"signup"} onPress={signInWithGoogle}/>
+                    </Card>
+                    <ErrorCard errorMessage={this.state.errorMessage}/>
+                </ScrollView>
+            </AccountRedirectWrapper>
         );
     }
 }
