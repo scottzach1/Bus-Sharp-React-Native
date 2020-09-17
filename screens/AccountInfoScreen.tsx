@@ -78,7 +78,7 @@ class AccountInfoScreen extends Component<Props, State> {
             <AccountRedirectWrapper route={this.props.route} navigation={this.props.navigation}>
                 <ScrollView>
                     <Card>
-                        <Card.Title>User Profile {this.getName()}</Card.Title>
+                        <Card.Title>User Profile: {this.getName()}</Card.Title>
                         <Card.Divider/>
                         {this.generateTable()}
                         <Card.Divider/>

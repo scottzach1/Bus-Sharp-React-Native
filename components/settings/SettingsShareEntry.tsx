@@ -2,7 +2,7 @@ import React, {FC} from "react";
 import {Icon, ListItem} from "react-native-elements";
 import {Share} from "react-native";
 // @ts-ignore Unfortunately it doesn't seem to find the import. Works totally fine however.
-// import Toast from "react-native-toast-message";
+import Toast from "react-native-toast-message";
 
 const SettingsShareEntry: FC = () => {
     const onShare = async () => {
@@ -26,25 +26,25 @@ const SettingsShareEntry: FC = () => {
             }
         } catch (e) {
             // Failed to open share API, resort to clipboard share.
-            // navigator.clipboard.writeText('https://welly.live')
-            //     .then(() => {
-            //         Toast.show({
-            //             position: 'bottom',
-            //             type: 'info',
-            //             text1: 'Copied to clipboard',
-            //             visibilityTime: 4000,
-            //             autoHide: true
-            //         })
-            //     })
-            //     .catch(() => {
-            //         Toast.show({
-            //             position: 'bottom',
-            //             type: 'error',
-            //             text1: 'Failed to share or copy to clipboard',
-            //             visibilityTime: 4000,
-            //             autoHide: true
-            //         })
-            //     })
+            navigator.clipboard.writeText('https://welly.live')
+                .then(() => {
+                    Toast.show({
+                        position: 'bottom',
+                        type: 'info',
+                        text1: 'Copied to clipboard',
+                        visibilityTime: 4000,
+                        autoHide: true
+                    })
+                })
+                .catch(() => {
+                    Toast.show({
+                        position: 'bottom',
+                        type: 'error',
+                        text1: 'Failed to share or copy to clipboard',
+                        visibilityTime: 4000,
+                        autoHide: true
+                    })
+                })
         }
     }
 
