@@ -61,7 +61,7 @@ class AccountInfoScreen extends Component<Props, State> {
         for (let property in doc) {
             if (!doc.hasOwnProperty(property)) continue;
             listItems.push(
-                <Text>
+                <Text key={`user-info-table-${property}`}>
                     <Text style={{fontWeight: "bold"}}>{property}: </Text>
                     {doc[property]}
                 </Text>
