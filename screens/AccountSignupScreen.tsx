@@ -11,6 +11,7 @@ import LoginWithGoogleButton from "../components/account/LoginWithGoogleButton";
 import DisplayNameInput from "../components/account/DisplayNameInput";
 import ErrorCard from "../components/account/ErrorCard";
 import AccountRedirectWrapper from "../navigation/AccountRedirectWrapper";
+import {GoogleSignin} from "@react-native-community/google-signin";
 
 interface Props {
     route: Route,
@@ -36,6 +37,12 @@ class AccountSignupScreen extends Component<Props, State> {
             passwordConfirmation: '',
             errorMessage: null
         };
+    }
+
+    componentDidMount() {
+        GoogleSignin.configure({
+            // webClientId: "483376447021-ev7ocmauqblulvsfppk05pokj638uamg.apps.googleusercontent.com",
+        });
     }
 
     async signupWithUserCredentials() {
@@ -92,7 +99,7 @@ class AccountSignupScreen extends Component<Props, State> {
                         <Card.Divider/>
                         <Text style={{alignSelf: "center"}}>Alternatively, you may</Text>
                         <Text> </Text>
-                        <LoginWithGoogleButton type={"signup"} onPress={signInWithGoogle}/>
+                        <LoginWithGoogleButton type={"signup"} onPress={() => signInWithGoogle()}/>
                     </Card>
                     <ErrorCard errorMessage={this.state.errorMessage}/>
                 </ScrollView>

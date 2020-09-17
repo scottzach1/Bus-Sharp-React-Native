@@ -9,6 +9,7 @@ import AccountActionButton from "../components/account/AccountActionButton";
 import LoginWithGoogleButton from "../components/account/LoginWithGoogleButton";
 import ErrorCard from "../components/account/ErrorCard";
 import AccountRedirectWrapper from "../navigation/AccountRedirectWrapper";
+import {GoogleSignin} from "@react-native-community/google-signin";
 
 
 interface Props {
@@ -33,6 +34,12 @@ class AccountLoginScreen extends Component<Props, State> {
         };
     }
 
+    componentDidMount() {
+        GoogleSignin.configure({
+            // webClientId: "483376447021-ev7ocmauqblulvsfppk05pokj638uamg.apps.googleusercontent.com",
+        });
+    }
+
     async loginWithUserCredentials() {
         this.setState({errorMessage: null});
 
@@ -42,6 +49,14 @@ class AccountLoginScreen extends Component<Props, State> {
             this.setState({email: '', password: ''});
         else
             this.setState({errorMessage: resp.errorMessage});
+    }
+
+    async loginWithGoogle() {
+        const resp = await signInWithGoogle();
+
+        this.setState({
+            errorMessage: resp.errorMessage
+        });
     }
 
     render() {
