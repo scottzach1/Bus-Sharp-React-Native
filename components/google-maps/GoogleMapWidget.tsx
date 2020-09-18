@@ -1,7 +1,7 @@
 import {StackNavigationProp} from "@react-navigation/stack";
 import React, {FC, useState} from "react";
 import {getLatLng} from "react-places-autocomplete";
-import {Route, StyleSheet, Text, View} from "react-native";
+import {ActivityIndicator, Route, StyleSheet, Text, View} from "react-native";
 import MapView, {Callout, Marker, Polyline} from 'react-native-maps';
 import {navigateToMetlink} from "../../navigation/LinkingConfiguration";
 import {mapStyles} from "./GoogleMapWidgetStyles";
@@ -34,6 +34,7 @@ let region = {
 
 const GoogleMapWidget: FC<Props> = (props) => {
     const [selectedItem, setSelectedItem] = useState<StopMarker | null>(null)
+    const [isLoaded, setIsLoaded] = useState<boolean>(false)
 
     // -------------------------------------------------------------------------------------------------------------
     // CHECKS RUN EVERY RENDER
@@ -113,6 +114,7 @@ const GoogleMapWidget: FC<Props> = (props) => {
                 region={region}
                 showsUserLocation={true}
                 customMapStyle={mapStyles}
+                onMapReady={() => setIsLoaded(true)}
             >
 
                 {props.stopMarkers?.map((marker) => (
@@ -164,6 +166,10 @@ const GoogleMapWidget: FC<Props> = (props) => {
                     </Marker>
                 )}
             </MapView>
+
+            {!isLoaded && (
+                <ActivityIndicator size={"large"}/>
+            )}
         </View>
     )
 }
