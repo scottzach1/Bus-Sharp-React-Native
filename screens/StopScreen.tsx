@@ -12,6 +12,7 @@ interface Props {
 
 interface State {
     stopData: any | null,
+    stopCode: string,
     errorMessage: string | null,
 }
 
@@ -22,17 +23,14 @@ class StopScreen extends Component<Props, State> {
 
         this.state = {
             stopData: undefined,
+            stopCode: this.props.route.params.code,
             errorMessage: null,
         }
     }
 
-    getCode() {
-        return this.props.route.params.code;
-    }
-
     componentDidMount() {
         if (!this.state.stopData || this.state.errorMessage)
-            fetchStopData(this.getCode()).then((resp) => {
+            fetchStopData(this.state.stopCode).then((resp) => {
                 this.setState({
                     stopData: resp.data,
                     errorMessage: resp.errorMessage,
@@ -46,12 +44,13 @@ class StopScreen extends Component<Props, State> {
             <ScrollView>
                 <StopInfo
                     stopData={this.state.stopData}
-                    code={this.getCode()}
+                    code={this.state.stopCode}
                     errorMessage={this.state.errorMessage}
                     navigation={this.props.navigation}
                 />
                 <StopTimetable
                     stopData={this.state.stopData}
+                    stopCode={this.state.stopCode}
                     errorMessage={this.state.errorMessage}
                     navigation={this.props.navigation}
                     route={this.props.route}

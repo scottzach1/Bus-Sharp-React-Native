@@ -9,6 +9,7 @@ interface Props {
     navigation: StackNavigationProp<any>,
     route: Route,
     stopData: any | null | undefined,
+    stopCode: string,
     errorMessage: string | null,
 }
 
@@ -66,6 +67,7 @@ class StopTimetable extends Component<Props, State> {
                             showHours={this.state.showHours}
                             navigation={this.props.navigation}
                             route={this.props.route}
+                            originStopCode={this.props.stopCode}
                         /> :
                         <ActivityIndicator/>}
                 </Card>

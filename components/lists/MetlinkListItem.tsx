@@ -15,6 +15,7 @@ interface Props {
     isFavourite: boolean,
     toggleFavourite: () => void,
     timeRemaining?: string,
+    originStopCode?: string,
     arrivalTime?: Date | null,
 }
 
@@ -32,10 +33,12 @@ class MetlinkListItem extends Component<Props, State> {
     }
 
     doSchedule() {
-        if (!this.props.arrivalTime) return;
+        if (!this.props.arrivalTime || !this.props.originStopCode) return;
 
         this.props.navigation.navigate("SavedScheduleScreen", {
             date: this.props.arrivalTime.toJSON(),
+            serviceCode: this.props.code,
+            stopCode: this.props.originStopCode,
         });
     }
 

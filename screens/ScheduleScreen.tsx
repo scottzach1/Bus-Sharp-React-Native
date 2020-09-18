@@ -5,6 +5,7 @@ import {Card} from "react-native-elements";
 import ScheduleJourney from "../components/schedule/ScheduleJourney";
 import ScheduleButton from "../components/schedule/ScheduleButton";
 import ErrorCard from "../components/common/ErrorCard";
+import ScheduleInfo from "../components/schedule/ScheduleInfo";
 
 interface Props {
     route: Route,
@@ -15,6 +16,8 @@ interface State {
     walkTime: number,
     arrivalTime: Date | null,
     errorMessage: string | null,
+    stopCode: string | null,
+    serviceCode: string | null,
 }
 
 class ScheduleScreen extends Component<Props, State> {
@@ -22,19 +25,23 @@ class ScheduleScreen extends Component<Props, State> {
     constructor(props: Readonly<Props>) {
         super(props);
 
-        let date, error;
+        let date, stopCode, serviceCode, error;
         try {
             date = new Date(this.props.route.params.date);
+            stopCode = this.props.route.params.stopCode;
+            serviceCode = this.props.route.params.serviceCode;
             error = null;
         } catch (e) {
             date = null;
-            error = 'Invalid date parameter';
+            error = `Invalid URL parameter: ${e.message}`;
         }
 
         this.state = {
             walkTime: 5,
             arrivalTime: date,
             errorMessage: error,
+            stopCode: stopCode,
+            serviceCode: serviceCode,
         }
     }
 
@@ -46,9 +53,12 @@ class ScheduleScreen extends Component<Props, State> {
         return (
             <ScrollView>
                 <Card>
-                    <Card.Title>
-                        Schedule a Reminder
-                    </Card.Title>
+                    <ScheduleInfo
+                        stopCode={this.state.stopCode}
+                        serviceCode={this.state.serviceCode}
+                        setError={(e) => this.setState({errorMessage: e})}
+                    />
+                    <Card.Divider/>
                     {this.state.arrivalTime &&
                     <ScheduleJourney
                         arrivalTime={this.state.arrivalTime}

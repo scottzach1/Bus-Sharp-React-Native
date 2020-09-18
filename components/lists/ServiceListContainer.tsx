@@ -10,6 +10,7 @@ interface Props {
     route: Route,
     services: ServiceListProp[],
     showHours?: boolean,
+    originStopCode?: string,
     // Optional callback if the parent wants to be notified of any updates to saved services.
     setSavedServices?: (services: string[]) => void,
 }
@@ -78,6 +79,7 @@ class ServiceListContainer extends Component<Props, State> {
                     toggleFavourite={() => this.toggleFavourite(service.code)}
                     timeRemaining={timeRemaining}
                     arrivalTime={arrivalTime}
+                    originStopCode={this.props.originStopCode}
                     navigation={this.props.navigation}
                     route={this.props.route}
                     key={`list-item-${service.code}-${service.name}-${timeRemaining ? timeRemaining : ''}-${counter++}`}
