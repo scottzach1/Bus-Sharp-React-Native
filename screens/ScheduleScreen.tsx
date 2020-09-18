@@ -6,6 +6,7 @@ import ScheduleJourney from "../components/schedule/ScheduleJourney";
 import ScheduleButton from "../components/schedule/ScheduleButton";
 import ErrorCard from "../components/common/ErrorCard";
 import ScheduleInfo from "../components/schedule/ScheduleInfo";
+import {NotificationContext} from "../providers/NotificationProvider";
 
 interface Props {
     route: Route,
@@ -21,6 +22,7 @@ interface State {
 }
 
 class ScheduleScreen extends Component<Props, State> {
+    static contextType = NotificationContext;
 
     constructor(props: Readonly<Props>) {
         super(props);
@@ -49,6 +51,13 @@ class ScheduleScreen extends Component<Props, State> {
         this.setState({walkTime: mins});
     }
 
+    doSchedule() {
+        if (this.context)
+            this.context.scheduleNotif();
+        else
+            this.setState({errorMessage: 'WHELP'});
+    }
+
     render() {
         return (
             <ScrollView>
@@ -66,8 +75,7 @@ class ScheduleScreen extends Component<Props, State> {
                         setWalkTime={(v) => this.setWalkTime(v)}
                     />}
                     <Card.Divider/>
-                    <ScheduleButton onPress={() => {
-                    }}/>
+                    <ScheduleButton onPress={() => this.doSchedule()}/>
                 </Card>
                 <ErrorCard
                     errorMessage={this.state.errorMessage}

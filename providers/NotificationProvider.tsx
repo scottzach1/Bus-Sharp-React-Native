@@ -1,5 +1,5 @@
-import React, {Component} from "react";
-import NotifService from "../services/NotifService";
+import React, {Component, createContext} from "react";
+import NotificationService from "../services/NotificationService";
 import {Alert} from "react-native";
 
 interface Props {
@@ -7,6 +7,8 @@ interface Props {
 
 interface State {
 }
+
+export const NotificationContext = createContext<NotificationService | undefined>(undefined);
 
 class NotificationProvider extends Component<Props, State> {
     public notify: any;
@@ -16,12 +18,10 @@ class NotificationProvider extends Component<Props, State> {
 
         this.state = {}
 
-        this.notify = new NotifService(
+        this.notify = new NotificationService(
             this.onRegister.bind(this),
             this.onNotify.bind(this),
         );
-
-        this.notify.scheduleNotif();
     }
 
     onRegister(token: { token: any; }) {
@@ -38,9 +38,9 @@ class NotificationProvider extends Component<Props, State> {
 
     render() {
         return (
-            <>
+            <NotificationContext.Provider value={this.notify}>
                 {this.props.children}
-            </>
+            </NotificationContext.Provider>
         );
     }
 
