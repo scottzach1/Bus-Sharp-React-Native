@@ -8,6 +8,7 @@ import Navigation from './navigation';
 import CustomThemeProvider from "./providers/CustomThemeProvider";
 import {initSavedServices, initSavedStops, initServices, initStops, initTheme} from "./external/StorageManager";
 import UserProvider from "./providers/UserProvider";
+import NotificationProvider from "./providers/NotificationProvider";
 
 export default function App() {
     const isLoadingComplete = useCachedResources();
@@ -24,12 +25,14 @@ export default function App() {
     } else {
         return (
             <SafeAreaProvider>
-                <UserProvider>
-                    <CustomThemeProvider>
-                        <Navigation colorScheme={colorScheme}/>
-                        <StatusBar/>
-                    </CustomThemeProvider>
-                </UserProvider>
+                <NotificationProvider>
+                    <UserProvider>
+                        <CustomThemeProvider>
+                            <Navigation colorScheme={colorScheme}/>
+                            <StatusBar/>
+                        </CustomThemeProvider>
+                    </UserProvider>
+                </NotificationProvider>
             </SafeAreaProvider>
         );
     }
