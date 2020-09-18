@@ -11,6 +11,9 @@ import {getSavedServices, getSavedStops} from "./StorageManager";
  * @return AuthenticationResponse: Containing success / failure and error message.
  */
 export const signInWithCredentials = async (email: string, password: string) => {
+    if (!email) return new AuthenticationResponse(false, 'Email is empty!');
+    if (!password) return new AuthenticationResponse(false, 'Password is empty!')
+
     return await auth().signInWithEmailAndPassword(email, password)
         .then(() => new AuthenticationResponse(true))
         .catch((e) => new AuthenticationResponse(false, e.message));
@@ -26,6 +29,10 @@ export const signInWithCredentials = async (email: string, password: string) => 
  * @return AuthenticationResponse: Containing success / failure and error message.
  */
 export const createUserWithCredentials = async (email: string, password: string, passwordConfirmation: string, displayName: string) => {
+    if (!displayName) return new AuthenticationResponse(false, "Display name is empty!");
+    if (!email) return new AuthenticationResponse(false, "Email is empty!");
+    if (!password) return new AuthenticationResponse(false, "Password is empty!");
+
     if (password !== passwordConfirmation)
         return new AuthenticationResponse(false, "Passwords don't match!");
 

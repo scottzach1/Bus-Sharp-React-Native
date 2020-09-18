@@ -82,7 +82,10 @@ class AccountLoginScreen extends Component<Props, State> {
                         <Text> </Text>
                         <LoginWithGoogleButton type={"login"} onPress={signInWithGoogle}/>
                     </Card>
-                    <ErrorCard errorMessage={this.state.errorMessage}/>
+                    <ErrorCard
+                        errorMessage={this.state.errorMessage}
+                        clearMessage={() => this.setState({errorMessage: null})}
+                    />
                 </ScrollView>
             </AccountRedirectWrapper>
         );

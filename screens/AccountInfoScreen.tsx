@@ -84,7 +84,10 @@ class AccountInfoScreen extends Component<Props, State> {
                         <Card.Divider/>
                         <AccountActionButton type={"logout"} submit={() => this.signOut()}/>
                     </Card>
-                    <ErrorCard errorMessage={this.state.errorMessage}/>
+                    <ErrorCard
+                        errorMessage={this.state.errorMessage}
+                        clearMessage={() => this.setState(() => this.setState({errorMessage: null}))}
+                    />
                 </ScrollView>
             </AccountRedirectWrapper>
         );
