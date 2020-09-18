@@ -7,7 +7,7 @@ interface Props {
     setWalkTime: (v: number) => void,
 }
 
-const WalkItem: FC<Props> = (props) => {
+const ScheduleWalkItem: FC<Props> = (props) => {
 
     const handleTimeInput = (s: string) => {
         const time = parseInt(s);
@@ -33,4 +33,4 @@ const WalkItem: FC<Props> = (props) => {
     );
 }
 
-export default WalkItem;
+export default ScheduleWalkItem;

@@ -5,7 +5,7 @@ interface Props {
     leaveTime: string;
 }
 
-const LeaveItem: FC<Props> = (props) => {
+const ScheduleLeaveItem: FC<Props> = (props) => {
     return (
         <ListItem>
             <Icon name={'home'} type={'material-community'}/>
@@ -19,4 +19,4 @@ const LeaveItem: FC<Props> = (props) => {
     );
 }
 
-export default LeaveItem;
+export default ScheduleLeaveItem;

@@ -1,8 +1,8 @@
 import React, {FC} from "react";
 import {View} from "../styles/Themed";
 import {format, sub} from "date-fns";
-import LeaveItem from "./LeaveItem";
-import WalkItem from "./WalkItem";
+import ScheduleLeaveItem from "./ScheduleLeaveItem";
+import ScheduleWalkItem from "./ScheduleWalkItem";
 import ScheduleCatchItem from "./ScheduleCatchItem";
 
 interface Props {
@@ -26,8 +26,8 @@ const ScheduleJourney: FC<Props> = (props) => {
 
     return (
         <View>
-            <LeaveItem leaveTime={getLeaveTime()}/>
-            <WalkItem walkTime={props.walkTime} setWalkTime={(n) => props.setWalkTime(n)}/>
+            <ScheduleLeaveItem leaveTime={getLeaveTime()}/>
+            <ScheduleWalkItem walkTime={props.walkTime} setWalkTime={(n) => props.setWalkTime(n)}/>
             <ScheduleCatchItem arrivalTime={formatDate(props.arrivalTime)}/>
         </View>
     );
