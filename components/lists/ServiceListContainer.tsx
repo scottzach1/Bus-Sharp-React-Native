@@ -47,14 +47,14 @@ class ServiceListContainer extends Component<Props, State> {
         if (this.props.setSavedServices) await this.props.setSavedServices(savedServices);
     }
 
-    getHoursRemaining(arrivalTime: string) {
-        return formatDistanceToNowStrict(new Date(arrivalTime), {
+    getHoursRemaining(arrivalTime: Date) {
+        return formatDistanceToNowStrict(arrivalTime, {
             unit: 'minute',
         });
     }
 
-    getTime(arrivalTime: string) {
-        return format(new Date(arrivalTime), 'ccc cc MMM, p');
+    getTime(arrivalTime: Date) {
+        return format(arrivalTime, 'ccc cc MMM, p');
     }
 
     generateServices() {
@@ -64,8 +64,9 @@ class ServiceListContainer extends Component<Props, State> {
         let counter = 0;
 
         return services.map((service) => {
-            const timeRemaining: string = (service.arrival) ? ((this.props.showHours) ?
-                this.getHoursRemaining(service.arrival) : this.getTime(service.arrival)) : ' ';
+            const arrivalTime = (service.arrival) ? new Date(service.arrival) : null;
+            const timeRemaining: string = (arrivalTime) ? ((this.props.showHours) ?
+                this.getHoursRemaining(arrivalTime) : this.getTime(arrivalTime)) : ' ';
 
             return (
                 <MetlinkListItem
@@ -76,6 +77,7 @@ class ServiceListContainer extends Component<Props, State> {
                     isFavourite={this.checkFavourite(service.code)}
                     toggleFavourite={() => this.toggleFavourite(service.code)}
                     timeRemaining={timeRemaining}
+                    arrivalTime={arrivalTime}
                     navigation={this.props.navigation}
                     route={this.props.route}
                     key={`list-item-${service.code}-${service.name}-${timeRemaining ? timeRemaining : ''}-${counter++}`}

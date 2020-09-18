@@ -15,6 +15,7 @@ interface Props {
     isFavourite: boolean,
     toggleFavourite: () => void,
     timeRemaining?: string,
+    arrivalTime?: Date | null,
 }
 
 interface State {
@@ -28,6 +29,14 @@ class MetlinkListItem extends Component<Props, State> {
         this.state = {
             saved: false,
         }
+    }
+
+    doSchedule() {
+        if (!this.props.arrivalTime) return;
+
+        this.props.navigation.navigate("SavedScheduleScreen", {
+            date: this.props.arrivalTime.toJSON(),
+        });
     }
 
     render() {
@@ -51,6 +60,12 @@ class MetlinkListItem extends Component<Props, State> {
                     type={"material-community"}
                     onPress={() => this.props.toggleFavourite()}
                 />
+                {this.props.arrivalTime &&
+                <Icon
+                    onPress={() => this.doSchedule()}
+                    name={'timer'}
+                    type={'material-community'}
+                />}
             </ListItem>
         );
     }
