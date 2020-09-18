@@ -1,5 +1,8 @@
 import PushNotification from 'react-native-push-notification';
 
+/**
+ * Copied from https://github.com/zo0r/react-native-push-notification.
+ */
 class NotificationHandler {
   onNotification(notification) {
     console.log('NotificationHandler:', notification);

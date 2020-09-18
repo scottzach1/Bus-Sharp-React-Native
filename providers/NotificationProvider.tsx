@@ -32,10 +32,6 @@ class NotificationProvider extends Component<Props, State> {
         Alert.alert(notify.title, notify.message);
     }
 
-    handlePerm(perms: any) {
-        Alert.alert('Permissions', JSON.stringify(perms));
-    }
-
     render() {
         return (
             <NotificationContext.Provider value={this.notify}>
