@@ -70,6 +70,15 @@ export const createUserWithCredentials = async (email: string, password: string,
 }
 
 
+export const resetAccountPassword = async (email: string) => {
+    if (!email) return new AuthenticationResponse(false, "Email is empty!");
+
+    return await auth().sendPasswordResetEmail(email)
+        .then(() => new AuthenticationResponse(true))
+        .catch((e) => new AuthenticationResponse(false, e.message));
+}
+
+
 /**
  * Signs into Google with a new popup window. Note: For this to work the component
  * must be mounted with a GoogleSignin configuration.

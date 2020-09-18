@@ -23,6 +23,7 @@ import {Icon} from "react-native-elements";
 import AccountLoginScreen from "../screens/AccountLoginScreen";
 import AccountSignupScreen from "../screens/AccountSignupScreen";
 import AccountInfoScreen from "../screens/AccountInfoScreen";
+import AccountPasswordResetScreen from "../screens/AccountPasswordResetScreen";
 
 const BottomTab = createBottomTabNavigator<BottomTabParamList>();
 
@@ -181,6 +182,11 @@ function SettingsTabNavigator() {
             <SettingsTabStack.Screen
                 name={"SettingsAccountInfoScreen"}
                 component={AccountInfoScreen}
+                options={{headerTitle: 'Account Profile'}}
+            />
+            <SettingsTabStack.Screen
+                name={"SettingsAccountPasswordResetScreen"}
+                component={AccountPasswordResetScreen}
                 options={{headerTitle: 'Account Profile'}}
             />
         </SettingsTabStack.Navigator>

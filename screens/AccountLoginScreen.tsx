@@ -7,9 +7,10 @@ import EmailInput from "../components/account/EmailInput";
 import PasswordInput from "../components/account/PasswordInput";
 import AccountActionButton from "../components/account/AccountActionButton";
 import LoginWithGoogleButton from "../components/account/LoginWithGoogleButton";
-import ErrorCard from "../components/account/ErrorCard";
+import ErrorCard from "../components/common/ErrorCard";
 import AccountRedirectWrapper from "../navigation/AccountRedirectWrapper";
 import {GoogleSignin} from "@react-native-community/google-signin";
+import AccountBlurb from "../components/account/AccountBlurb";
 
 
 interface Props {
@@ -63,6 +64,7 @@ class AccountLoginScreen extends Component<Props, State> {
         return (
             <AccountRedirectWrapper route={this.props.route} navigation={this.props.navigation}>
                 <ScrollView>
+                    {/* LOGIN CARD */}
                     <Card>
                         <Card.Title>Sign In</Card.Title>
                         <Card.Divider/>
@@ -71,15 +73,13 @@ class AccountLoginScreen extends Component<Props, State> {
                         <AccountActionButton type={"login"} submit={() => this.loginWithUserCredentials()}/>
                     </Card>
                     <Card>
-                        <Card.Title>
-                            <Text>Don't have an account? </Text>
-                        </Card.Title>
-                        <Card.Title onPress={() => this.props.navigation.navigate('SettingsAccountSignupScreen')}>
-                            <Text style={{textDecorationLine: "underline"}}>Click here</Text>.
-                        </Card.Title>
+                        {/* ACCOUNT ACTION LINKS */}
+                        <AccountBlurb type={"signup"} navigation={this.props.navigation}/>
+                        <AccountBlurb type={"reset"} navigation={this.props.navigation}/>
                         <Card.Divider/>
                         <Text style={{alignSelf: "center"}}>Alternatively, you may</Text>
-                        <Text> </Text>
+                        <Text/>
+                        {/* LOGIN WITH GOOGLE */}
                         <LoginWithGoogleButton type={"login"} onPress={signInWithGoogle}/>
                     </Card>
                     <ErrorCard

@@ -2,7 +2,7 @@ import {ActivityIndicator, Route, ScrollView} from "react-native";
 import {StackNavigationProp} from "@react-navigation/stack";
 import React, {Component} from "react";
 import {Text} from "../components/styles/Themed";
-import ErrorCard from "../components/account/ErrorCard";
+import ErrorCard from "../components/common/ErrorCard";
 import AccountActionButton from "../components/account/AccountActionButton";
 import {Card} from "react-native-elements";
 import {getUserDocument} from "../external/Firebase";

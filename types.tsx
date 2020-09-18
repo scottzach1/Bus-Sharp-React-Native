@@ -34,4 +34,5 @@ export type SettingsTabParamList = {
   SettingsAccountLoginScreen: undefined;
   SettingsAccountSignupScreen: undefined;
   SettingsAccountInfoScreen: undefined;
+  SettingsAccountPasswordResetScreen: undefined;
 }

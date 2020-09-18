@@ -9,9 +9,10 @@ import PasswordInput from "../components/account/PasswordInput";
 import AccountActionButton from "../components/account/AccountActionButton";
 import LoginWithGoogleButton from "../components/account/LoginWithGoogleButton";
 import DisplayNameInput from "../components/account/DisplayNameInput";
-import ErrorCard from "../components/account/ErrorCard";
+import ErrorCard from "../components/common/ErrorCard";
 import AccountRedirectWrapper from "../navigation/AccountRedirectWrapper";
 import {GoogleSignin} from "@react-native-community/google-signin";
+import AccountBlurb from "../components/account/AccountBlurb";
 
 interface Props {
     route: Route,
@@ -90,12 +91,7 @@ class AccountSignupScreen extends Component<Props, State> {
                         <AccountActionButton type={"signup"} submit={() => this.signupWithUserCredentials()}/>
                     </Card>
                     <Card>
-                        <Card.Title>
-                            <Text>Already have an account? </Text>
-                        </Card.Title>
-                        <Card.Title onPress={() => this.props.navigation.navigate('SettingsAccountLoginScreen')}>
-                            <Text style={{textDecorationLine: "underline"}}>Click here</Text>.
-                        </Card.Title>
+                        <AccountBlurb type={"login"} navigation={this.props.navigation}/>
                         <Card.Divider/>
                         <Text style={{alignSelf: "center"}}>Alternatively, you may</Text>
                         <Text> </Text>

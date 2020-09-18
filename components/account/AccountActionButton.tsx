@@ -2,7 +2,7 @@ import React, {FC} from "react";
 import {Button, Icon} from "react-native-elements";
 
 interface Props {
-    type: "login" | "signup" | "logout",
+    type: "login" | "signup" | "logout" | "reset",
     submit: () => void,
 }
 
@@ -12,12 +12,33 @@ const capitalizeFirstLetter = (text: string) => {
 
 const AccountActionButton: FC<Props> = (props) => {
 
+    let iconName: string;
+
+    switch (props.type) {
+        case "logout":
+            iconName = "logout";
+            break;
+        case "login":
+            iconName = "login";
+            break;
+        case "reset":
+            iconName = "lock-reset";
+            break
+        case "signup":
+            iconName = "login";
+            break;
+        default:
+            iconName = "unknown";
+    }
+
+    const text = (props.type !== "reset") ? capitalizeFirstLetter(props.type) : "Reset Password";
+
     return (
         <Button
-            title={" " + capitalizeFirstLetter(props.type)}
+            title={` ${text}`}
             icon={
                 <Icon
-                    name={(props.type === "logout") ? "logout" : "login"}
+                    name={iconName}
                     type={"material-community"}
                     color={"white"}
                     size={18}
