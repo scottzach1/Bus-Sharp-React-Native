@@ -3,6 +3,7 @@ import {Route, ScrollView} from "react-native";
 import {StackNavigationProp} from "@react-navigation/stack";
 import SavedStopList from "../components/saved/SavedStopList";
 import SavedServiceList from "../components/saved/SavedServiceList";
+import {Button} from "react-native-elements";
 
 interface Props {
     route: Route,
@@ -19,6 +20,7 @@ class SavedScreen extends Component<Props, State> {
                 <ScrollView>
                     <SavedStopList route={this.props.route} navigation={this.props.navigation}/>
                     <SavedServiceList route={this.props.route} navigation={this.props.navigation}/>
+                    <Button onPress={() => this.props.navigation.navigate("SavedScheduleScreen")} title={"navigate"}/>
                 </ScrollView>
             </ScrollView>
         );

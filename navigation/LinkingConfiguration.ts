@@ -14,7 +14,8 @@ const linkingOptions: LinkingOptions = {
                         screens: {
                             SearchHomeScreen: '',
                             SearchServiceScreen: 'service/:code',
-                            SearchStopScreen: 'stop/:code'
+                            SearchStopScreen: 'stop/:code',
+                            SearchScheduleScreen: 'schedule,'
                         }
                     },
                     MapTab: {
@@ -22,7 +23,8 @@ const linkingOptions: LinkingOptions = {
                         screens: {
                             MapHomeScreen: '',
                             MapServiceScreen: 'service/:code',
-                            MapStopScreen: 'stop/:code'
+                            MapStopScreen: 'stop/:code',
+                            MapScheduleScreen: 'schedule',
                         }
                     },
                     SavedTab: {
@@ -30,7 +32,8 @@ const linkingOptions: LinkingOptions = {
                         screens: {
                             SavedHomeScreen: '',
                             SavedServiceScreen: 'service/:code',
-                            SavedStopScreen: 'stop/:code'
+                            SavedStopScreen: 'stop/:code',
+                            SavedScheduleScreen: 'schedule',
                         }
                     },
                     SettingsTab: {
@@ -62,7 +65,7 @@ const linkingOptions: LinkingOptions = {
             .replace(/\?.*$/, ''); // Remove query params which we will handle later
 
         // Valid sub-paths to inject previous tab.
-        const subNames = ['stop', 'service', 'twitter', 'account'];
+        const subNames = ['stop', 'service', 'twitter', 'account', 'schedule'];
 
         // Apply changes.
         if (subNames.find((name) => cleanPath.includes(name))) {
@@ -90,7 +93,6 @@ const linkingOptions: LinkingOptions = {
 export default linkingOptions;
 
 export const navigateToMetlink = (code: string, isStop: boolean, navigation: StackNavigationProp<any>, route: Route) => {
-    // Trim path as implemented within underlying library ('@react-navigation/native').
     const targScreen: string = (isStop) ? 'Stop' : 'Service';
 
     if (route.name.startsWith('Search'))

@@ -24,6 +24,7 @@ import AccountLoginScreen from "../screens/AccountLoginScreen";
 import AccountSignupScreen from "../screens/AccountSignupScreen";
 import AccountInfoScreen from "../screens/AccountInfoScreen";
 import AccountPasswordResetScreen from "../screens/AccountPasswordResetScreen";
+import ScheduleScreen from "../screens/ScheduleScreen";
 
 const BottomTab = createBottomTabNavigator<BottomTabParamList>();
 
@@ -102,6 +103,11 @@ function SearchTabNavigator() {
                 component={StopScreen}
                 options={{headerTitle: 'Stop Perspective'}}
             />
+            <SearchTabStack.Screen
+                name={"SearchScheduleScreen"}
+                component={ScheduleScreen}
+                options={{headerTitle: "Schedule Reminder"}}
+            />
         </SearchTabStack.Navigator>
     )
 }
@@ -126,6 +132,11 @@ function MapTabNavigator() {
                 component={StopScreen}
                 options={{headerTitle: 'Stop Perspective'}}
             />
+            <MapTabStack.Screen
+                name={"MapScheduleScreen"}
+                component={ScheduleScreen}
+                options={{headerTitle: "Schedule Reminder"}}
+            />
         </MapTabStack.Navigator>
     )
 }
@@ -149,6 +160,11 @@ function SavedTabNavigator() {
                 name={"SavedStopScreen"}
                 component={StopScreen}
                 options={{headerTitle: 'Stop Perspective'}}
+            />
+            <SavedTabStack.Screen
+                name={"SavedScheduleScreen"}
+                component={ScheduleScreen}
+                options={{headerTitle: "Schedule Reminder"}}
             />
         </SavedTabStack.Navigator>
     )
