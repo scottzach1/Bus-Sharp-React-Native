@@ -7,8 +7,9 @@ import ScheduleButton from "../components/schedule/ScheduleButton";
 import ErrorCard from "../components/common/ErrorCard";
 import ScheduleInfo from "../components/schedule/ScheduleInfo";
 import {NotificationContext} from "../providers/NotificationProvider";
-import {sub} from "date-fns";
+import {formatDistanceToNow, sub} from "date-fns";
 import {getAllServices, getAllStops} from "../external/StorageManager";
+import SuccessCard from "../components/common/SuccessCard";
 
 interface Props {
     route: Route,
@@ -18,11 +19,12 @@ interface Props {
 interface State {
     walkTime: number,
     arrivalTime: Date | null,
-    errorMessage: string | null,
     stopCode: string | null,
     stopInfo: any | null,
     serviceCode: string | null,
     serviceInfo: any | null,
+    errorMessage: string | null,
+    successMessage: string | null,
 }
 
 class ScheduleScreen extends Component<Props, State> {
@@ -45,11 +47,12 @@ class ScheduleScreen extends Component<Props, State> {
         this.state = {
             walkTime: 5,
             arrivalTime: date,
-            errorMessage: error,
             stopCode: stopCode,
             stopInfo: null,
             serviceCode: serviceCode,
             serviceInfo: null,
+            errorMessage: error,
+            successMessage: null,
         }
     }
 
@@ -99,10 +102,11 @@ class ScheduleScreen extends Component<Props, State> {
                 serviceCode: this.state.serviceCode,
                 serviceName: this.getServiceName(),
             });
+            this.setState({successMessage: `Success! You will be reminded in ${formatDistanceToNow(leaveDate)}`})
         } else if (this.context) {
-
+            this.setState({errorMessage: `Failed, data hasn't fully loaded yet`});
         } else
-            this.setState({errorMessage: 'WHELP'});
+            this.setState({errorMessage: `Not enough information to schedule event`})
     }
 
     getServiceName() {
@@ -151,6 +155,10 @@ class ScheduleScreen extends Component<Props, State> {
                 <ErrorCard
                     errorMessage={this.state.errorMessage}
                     clearMessage={() => this.setState({errorMessage: null})}
+                />
+                <SuccessCard
+                    successMessage={this.state.successMessage}
+                    clearMessage={() => this.setState({successMessage: null})}
                 />
             </ScrollView>
         );
