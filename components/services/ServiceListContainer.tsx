@@ -85,6 +85,7 @@ class ServiceListContainer extends Component<Props, State> {
                     isFavourite={this.checkFavourite(service.code)}
                     toggleFavourite={() => this.toggleFavourite(service.code)}
                     timeRemaining={timeRemaining}
+                    key={`list-item-${service.code}-${service.name}`}
                 />
             );
         });

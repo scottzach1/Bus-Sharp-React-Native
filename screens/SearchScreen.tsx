@@ -154,6 +154,7 @@ class SearchScreen extends Component<Props, State> {
                             <Card.Title>Services</Card.Title>
                             <Card.Divider/>
                             <ServiceListContainer
+                                key={"search-list-results"}
                                 route={this.props.route}
                                 navigation={this.props.navigation}
                                 services={services}
@@ -174,6 +175,7 @@ class SearchScreen extends Component<Props, State> {
                             <Card.Title>Stops</Card.Title>
                             <Card.Divider/>
                             <StopListContainer
+                                key={"stop-list-esults"}
                                 route={this.props.route}
                                 navigation={this.props.navigation}
                                 stops={stops}
