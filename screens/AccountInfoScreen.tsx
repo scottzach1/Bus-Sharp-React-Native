@@ -1,13 +1,14 @@
-import React, {Component} from "react";
 import {ActivityIndicator, Route, ScrollView} from "react-native";
-import {Card} from "react-native-elements";
-import {UserContext} from "../providers/UserProvider";
-import {getUserDocument, signOut} from "../external/Firebase";
-import {Text} from "../components/common/Themed";
-import AccountActionButton from "../components/account/AccountActionButton";
-import ErrorCard from "../components/account/ErrorCard";
-import AccountRedirectWrapper from "../navigation/AccountRedirectWrapper";
 import {StackNavigationProp} from "@react-navigation/stack";
+import React, {Component} from "react";
+import {Text} from "../components/styles/Themed";
+import ErrorCard from "../components/common/ErrorCard";
+import AccountActionButton from "../components/account/AccountActionButton";
+import {Card} from "react-native-elements";
+import {getUserDocument} from "../external/Firebase";
+import auth from '@react-native-firebase/auth';
+import AccountRedirectWrapper from "../navigation/AccountRedirectWrapper";
+import {UserContext} from "../providers/UserProvider";
 
 interface Props {
     route: Route,
@@ -31,14 +32,14 @@ class AccountInfoScreen extends Component<Props, State> {
         }
     }
 
-    componentDidMount() {
-        this.getUserDocument();
+    async componentDidMount() {
+        await this.getUserDocument();
     }
 
-    getUserDocument() {
+    async getUserDocument() {
         if (this.context && !this.state.doc) {
-            getUserDocument(this.context).then((doc: any | null) => {
-                this.setState({doc: doc});
+            this.setState({
+                doc: await getUserDocument(this.context)
             });
         }
     }
@@ -48,7 +49,7 @@ class AccountInfoScreen extends Component<Props, State> {
     }
 
     signOut() {
-        signOut().catch((e: { message: any }) => this.setState({errorMessage: e.message}));
+        auth().signOut().catch((e: { message: any }) => this.setState({errorMessage: e.message}));
     }
 
     generateTable() {
@@ -60,33 +61,38 @@ class AccountInfoScreen extends Component<Props, State> {
         for (let property in doc) {
             if (!doc.hasOwnProperty(property)) continue;
             listItems.push(
-                <Text>
-                    <b>{property}:</b> {doc[property]}
+                <Text key={`user-info-table-${property}`}>
+                    <Text style={{fontWeight: "bold"}}>{property}: </Text>
+                    {doc[property]}
                 </Text>
-            )
+            );
         }
 
         return listItems;
     }
 
     render() {
-        this.getUserDocument();
+        this.getUserDocument().then();
 
         return (
-            <AccountRedirectWrapper navigation={this.props.navigation} route={this.props.route}>
+            <AccountRedirectWrapper route={this.props.route} navigation={this.props.navigation}>
                 <ScrollView>
                     <Card>
-                        <Card.Title>User Profile {this.getName()}</Card.Title>
+                        <Card.Title>User Profile: {this.getName()}</Card.Title>
                         <Card.Divider/>
                         {this.generateTable()}
                         <Card.Divider/>
                         <AccountActionButton type={"logout"} submit={() => this.signOut()}/>
                     </Card>
-                    <ErrorCard errorMessage={this.state.errorMessage}/>
+                    <ErrorCard
+                        errorMessage={this.state.errorMessage}
+                        clearMessage={() => this.setState(() => this.setState({errorMessage: null}))}
+                    />
                 </ScrollView>
             </AccountRedirectWrapper>
         );
     }
+
 }
 
 export default AccountInfoScreen;

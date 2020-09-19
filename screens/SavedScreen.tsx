@@ -1,8 +1,8 @@
 import React, {Component} from "react";
 import {Route, ScrollView} from "react-native";
-import SavedStopList from "../components/stops/SavedStopList";
 import {StackNavigationProp} from "@react-navigation/stack";
-import SavedServiceList from "../components/services/SavedServiceList";
+import SavedStopList from "../components/saved/SavedStopList";
+import SavedServiceList from "../components/saved/SavedServiceList";
 
 interface Props {
     route: Route,
@@ -16,8 +16,10 @@ class SavedScreen extends Component<Props, State> {
     render() {
         return (
             <ScrollView>
-                <SavedStopList route={this.props.route} navigation={this.props.navigation}/>
-                <SavedServiceList route={this.props.route} navigation={this.props.navigation}/>
+                <ScrollView>
+                    <SavedStopList route={this.props.route} navigation={this.props.navigation}/>
+                    <SavedServiceList route={this.props.route} navigation={this.props.navigation}/>
+                </ScrollView>
             </ScrollView>
         );
     }

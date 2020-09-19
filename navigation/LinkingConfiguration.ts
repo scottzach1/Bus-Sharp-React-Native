@@ -1,10 +1,10 @@
-import * as Linking from 'expo-linking';
 import {getStateFromPath, LinkingOptions} from '@react-navigation/native';
 import {StackNavigationProp} from "@react-navigation/stack";
-import firebase from "firebase";
+import {Route} from "react-native";
+import {FirebaseAuthTypes} from "@react-native-firebase/auth";
 
 const linkingOptions: LinkingOptions = {
-    prefixes: [Linking.makeUrl('/')],
+    prefixes: ['/'],
     config: {
         screens: {
             Root: {
@@ -14,7 +14,8 @@ const linkingOptions: LinkingOptions = {
                         screens: {
                             SearchHomeScreen: '',
                             SearchServiceScreen: 'service/:code',
-                            SearchStopScreen: 'stop/:code'
+                            SearchStopScreen: 'stop/:code',
+                            SearchScheduleScreen: 'schedule,'
                         }
                     },
                     MapTab: {
@@ -22,7 +23,8 @@ const linkingOptions: LinkingOptions = {
                         screens: {
                             MapHomeScreen: '',
                             MapServiceScreen: 'service/:code',
-                            MapStopScreen: 'stop/:code'
+                            MapStopScreen: 'stop/:code',
+                            MapScheduleScreen: 'schedule',
                         }
                     },
                     SavedTab: {
@@ -30,7 +32,8 @@ const linkingOptions: LinkingOptions = {
                         screens: {
                             SavedHomeScreen: '',
                             SavedServiceScreen: 'service/:code',
-                            SavedStopScreen: 'stop/:code'
+                            SavedStopScreen: 'stop/:code',
+                            SavedScheduleScreen: 'schedule',
                         }
                     },
                     SettingsTab: {
@@ -41,6 +44,7 @@ const linkingOptions: LinkingOptions = {
                             SettingsAccountLoginScreen: 'account/login',
                             SettingsAccountSignupScreen: 'account/signup',
                             SettingsAccountInfoScreen: 'account/info',
+                            SettingsAccountPasswordResetScreen: 'account/reset',
                         }
                     }
                 },
@@ -61,7 +65,7 @@ const linkingOptions: LinkingOptions = {
             .replace(/\?.*$/, ''); // Remove query params which we will handle later
 
         // Valid sub-paths to inject previous tab.
-        const subNames = ['stop', 'service', 'twitter', 'account'];
+        const subNames = ['stop', 'service', 'twitter', 'account', 'schedule'];
 
         // Apply changes.
         if (subNames.find((name) => cleanPath.includes(name))) {
@@ -88,40 +92,32 @@ const linkingOptions: LinkingOptions = {
 
 export default linkingOptions;
 
-export const navigateToMetlink = (code: string, isStop: boolean, navigation: StackNavigationProp<any>) => {
-    // Trim path as implemented within underlying library ('@react-navigation/native').
-    let cleanPath: string = window.location.pathname
-        .replace(/\/+/g, '/') // Replace multiple slash (//) with single ones
-        .replace(/^\//, '') // Remove extra leading slash
-        .replace(/\?.*$/, ''); // Remove query params which we will handle later
+export const navigateToMetlink = (code: string, isStop: boolean, navigation: StackNavigationProp<any>, route: Route) => {
+    const targScreen: string = (isStop) ? 'Stop' : 'Service';
 
-    const tabName: string = capitalizeFirstLetter(cleanPath.split('/')[0]);
-    const screenType: string = (isStop) ? 'Stop' : 'Service';
-
-    navigation.navigate(tabName + screenType + 'Screen', {code: code});
+    if (route.name.startsWith('Search'))
+        navigation.navigate(`Search${targScreen}Screen`, {code: code});
+    else if (route.name.startsWith('Map'))
+        navigation.navigate(`Map${targScreen}Screen`, {code: code});
+    else if (route.name.startsWith('Saved'))
+        navigation.navigate(`Saved${targScreen}Screen`, {code: code});
 }
 
-export const checkAccountPath = (context: firebase.User | null | undefined, navigation: StackNavigationProp<any>) => {
+
+export const checkAccountPath = (context: FirebaseAuthTypes.User | null | undefined, navigation: StackNavigationProp<any>, route: Route) => {
     // Context has not mounted, defer to loading screen.
     if (typeof context === 'undefined') return;
 
-    // Trim path as implemented within underlying library ('@react-navigation/native').
-    let cleanPath: string = window.location.pathname
-        .replace(/\/+/g, '/') // Replace multiple slash (//) with single ones
-        .replace(/^\//, '') // Remove extra leading slash
-        .replace(/\?.*$/, ''); // Remove query params which we will handle later
-
-    // Example path: 'settings/account/info'.
-    const accountPage: string = cleanPath.split('/')[2];
-
     if (context && context.uid) {
-        if (['login', 'signup'].includes(accountPage))
+        if (['SettingsAccountLoginScreen', 'SettingsAcountSignupScreen', 'SettingsAccountPasswordResetScreen']
+            .includes(route.name))
             navigation.navigate('SettingsAccountInfoScreen');
     } else {
-        if (['info'].includes(accountPage))
+        if (['SettingsAccountInfoScreen'].includes(route.name))
             navigation.navigate('SettingsAccountLoginScreen');
     }
 }
+
 
 const capitalizeFirstLetter = (text: string) => {
     return text.charAt(0).toUpperCase() + text.slice(1);

@@ -1,26 +1,22 @@
+import {View} from "../components/styles/Themed";
 import React, {Component} from "react";
-import {ScrollView, StyleSheet, View} from "react-native";
-import GoogleMapWidget, {Position, StopMarker} from "../components/google-maps/GoogleMapWidget";
-import {getAllStops} from "../external/StorageManager";
 import {StackNavigationProp} from "@react-navigation/stack";
-import {Card, ListItem, SearchBar} from "react-native-elements";
-import Constants from "expo-constants";
-import {geocodeByAddress} from "react-places-autocomplete";
+import {Route, StyleSheet} from "react-native";
+import GoogleMapWidget, {Position, StopMarker} from "../components/maps/GoogleMapWidget";
+import {getAllStops} from "../external/StorageManager";
+import {GooglePlaceDetail, GooglePlacesAutocomplete} from "react-native-google-places-autocomplete";
 
 interface Props {
+    route: Route,
     navigation: StackNavigationProp<any>,
 }
 
 interface State {
     stopsData: any | null,
     stopsErrorMessage: string | null,
-    searchText: string,
-    searchResults: any | null,
-    searchLocation: any | null,
+    searchLocation: { address: string, latitude: number, longitude: number } | null,
     stopMarkers: StopMarker[],
 }
-
-let prevSearch: string = "";
 
 class MapScreen extends Component<Props, State> {
 
@@ -30,10 +26,8 @@ class MapScreen extends Component<Props, State> {
         this.state = {
             stopsData: undefined,
             stopsErrorMessage: null,
-            searchText: "",
-            searchResults: null,
             searchLocation: null,
-            stopMarkers: []
+            stopMarkers: [],
         }
     }
 
@@ -46,54 +40,6 @@ class MapScreen extends Component<Props, State> {
                 })
             });
         }
-    }
-
-    updateSearchResults() {
-        if (this.state.searchText.length === 0 || prevSearch === this.state.searchText) return
-
-        prevSearch = this.state.searchText
-
-        let proxy = "https://cors-anywhere.herokuapp.com/";
-        let urlBuilder = new URL("https://maps.googleapis.com/maps/api/place/autocomplete/json")
-        urlBuilder.searchParams.append("input", this.state.searchText)
-        urlBuilder.searchParams.append("location", "-41.28646,174.77623")
-        urlBuilder.searchParams.append("radius", "200000")
-        urlBuilder.searchParams.append("key", Constants.manifest.extra.REACT_APP_GOOGLE_MAPS_API_KEY)
-
-        fetch(proxy + urlBuilder.href + "&strictbounds")
-            .then(results => results.json())
-            .then(data => {
-                if (data.predictions.length > 0) this.setState({searchResults: this.getPredictions(data.predictions)})
-            })
-    }
-
-    getPredictions(data: any) {
-        return (
-            <ScrollView>
-                <Card>
-                    {data.map((result: any) =>
-                        <ListItem
-                            style={styles.listItem}
-                            onPress={() => this.loadLocation(result)}
-                            bottomDivider
-                        >
-                            <ListItem.Content>
-                                <ListItem.Title>
-                                    {result.description}
-                                </ListItem.Title>
-                            </ListItem.Content>
-                        </ListItem>
-                    )}
-                </Card>
-            </ScrollView>
-        )
-    }
-
-    loadLocation(location: any) {
-        geocodeByAddress(location.description).then(location => {
-            this.setState({searchLocation: location[0]})
-            this.setState({searchText: ""})
-        })
     }
 
     generateStopMarkers() {
@@ -114,35 +60,67 @@ class MapScreen extends Component<Props, State> {
         })
     }
 
-
     render() {
-        this.updateSearchResults()
-
         if (this.state.stopMarkers.length === 0) {
             this.generateStopMarkers()
         }
 
         return (
             <View style={styles.container}>
-                <GoogleMapWidget
-                    routePaths={[]}
-                    stopMarkers={this.state.stopMarkers}
-                    geoCoderResult={this.state.searchLocation}
-                    navigation={this.props.navigation}
+                {this.state.stopMarkers && (
+                    <GoogleMapWidget
+                        navigation={this.props.navigation}
+                        route={this.props.route}
+                        routePaths={[]}
+                        stopMarkers={this.state.stopMarkers}
+                        searchResult={this.state.searchLocation}/>
+                )}
+                <GooglePlacesAutocomplete
+                    // style={{
+                    //     // color: 'red',
+                    //     // backgroundColor: 'blue',
+                    // }}
+                    // textInputProps={{
+                    //     style: {
+                    //         flex: 1,
+                    //         // color: 'red',
+                    //         // backgroundColor: 'blue',
+                    //     }
+                    // }}
+                    enablePoweredByContainer={false}
+                    placeholder='Search'
+                    onPress={(data: any, details: GooglePlaceDetail | null) => {
+                        if (details) {
+                            this.setState({
+                                searchLocation: {
+                                    address: details.formatted_address,
+                                    latitude: details.geometry.location.lat,
+                                    longitude: details.geometry.location.lng
+                                }
+                            })
+                        }
+                    }}
+                    query={{
+                        key: "AIzaSyAI5mcBlQsxr2RjeOr2UxeKyjl_z2oh6UI",
+                        language: 'en',
+                        radius: 200000,
+                        location: "-41.286461,174.776230",
+
+                    }}
+                    fetchDetails={true}
+                    styles={{
+                        listView: {backgroundColor: "#fff"}
+                    }}
                 />
-                <SearchBar
-                    placeholder="Type Here..."
-                    onChangeText={(e) => this.setState({searchText: e})}
-                    value={this.state.searchText}
-                />
-                {(this.state.searchText.length > 0 && this.state.searchResults) && (this.state.searchResults)}
             </View>
         );
     }
 }
 
+
 const styles = StyleSheet.create({
     container: {
+        display: "flex",
         flex: 1,
     },
     listItem: {
@@ -152,5 +130,6 @@ const styles = StyleSheet.create({
         marginBottom: 0
     }
 })
+
 
 export default MapScreen;

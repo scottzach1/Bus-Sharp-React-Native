@@ -1,9 +1,8 @@
-import {ActivityIndicator, Route} from "react-native";
+import {ActivityIndicator, Route, View} from "react-native";
 import {StackNavigationProp} from "@react-navigation/stack";
 import React, {Component} from "react";
 import {getAllServices, getSavedServices} from "../../external/StorageManager";
 import ServiceListContainer, {ServiceListProp} from "./ServiceListContainer";
-import {View} from "../common/Themed";
 import {Card} from "react-native-elements";
 
 interface Props {
@@ -70,6 +69,7 @@ class SavedServiceList extends Component<Props, State> {
                     <Card.Divider/>
                     {(this.state.savedServices && this.state.allServices) ?
                         <ServiceListContainer
+                            route={this.props.route}
                             navigation={this.props.navigation}
                             services={this.generateServices()}
                             setSavedServices={(savedServices) => this.updateSavedServices(savedServices)}

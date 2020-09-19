@@ -1,10 +1,11 @@
 import {StackNavigationProp} from "@react-navigation/stack";
 import React, {Component} from "react";
-import MetlinkListItem from "../common/MetlinkListItem";
 import {getSavedServices, toggleSavedService} from "../../external/StorageManager";
-import {View} from "../common/Themed";
+import MetlinkListItem from "../styles/MetlinkListItem";
+import {Route, View} from "react-native";
 
 interface Props {
+    route: Route,
     navigation: StackNavigationProp<any>,
     services: ServiceListProp[],
     showHours?: boolean,
@@ -75,6 +76,7 @@ class ServiceListContainer extends Component<Props, State> {
 
             return (
                 <MetlinkListItem
+                    route={this.props.route}
                     navigation={this.props.navigation}
                     code={service.code}
                     name={service.name}
@@ -83,6 +85,7 @@ class ServiceListContainer extends Component<Props, State> {
                     isFavourite={this.checkFavourite(service.code)}
                     toggleFavourite={() => this.toggleFavourite(service.code)}
                     timeRemaining={timeRemaining}
+                    key={`list-item-${service.code}-${service.name}`}
                 />
             );
         });

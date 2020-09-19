@@ -1,16 +1,18 @@
+import {StackNavigationProp} from "@react-navigation/stack";
+import {Route, ScrollView} from "react-native";
 import React, {Component} from "react";
+import {Text} from "../components/styles/Themed";
+import AuthenticationResponse, {createUserWithCredentials, signInWithGoogle} from "../external/Firebase";
 import {Card} from "react-native-elements";
 import EmailInput from "../components/account/EmailInput";
 import PasswordInput from "../components/account/PasswordInput";
 import AccountActionButton from "../components/account/AccountActionButton";
 import LoginWithGoogleButton from "../components/account/LoginWithGoogleButton";
-import {Text} from "../components/common/Themed";
-import {Route, ScrollView} from "react-native";
-import {StackNavigationProp} from "@react-navigation/stack";
 import DisplayNameInput from "../components/account/DisplayNameInput";
-import ErrorCard from "../components/account/ErrorCard";
-import AuthenticationResponse, {createUserWithCredentials} from "../external/Firebase";
+import ErrorCard from "../components/common/ErrorCard";
 import AccountRedirectWrapper from "../navigation/AccountRedirectWrapper";
+import {GoogleSignin} from "@react-native-community/google-signin";
+import AccountBlurb from "../components/account/AccountBlurb";
 
 interface Props {
     route: Route,
@@ -38,7 +40,13 @@ class AccountSignupScreen extends Component<Props, State> {
         };
     }
 
-    async signup() {
+    componentDidMount() {
+        GoogleSignin.configure({
+            // webClientId: "483376447021-ev7ocmauqblulvsfppk05pokj638uamg.apps.googleusercontent.com",
+        });
+    }
+
+    async signupWithUserCredentials() {
         this.setState({
             errorMessage: null,
         });
@@ -65,9 +73,8 @@ class AccountSignupScreen extends Component<Props, State> {
     }
 
     render() {
-
         return (
-            <AccountRedirectWrapper navigation={this.props.navigation} route={this.props.route}>
+            <AccountRedirectWrapper route={this.props.route} navigation={this.props.navigation}>
                 <ScrollView>
                     <Card>
                         <Card.Title>Sign In</Card.Title>
@@ -81,17 +88,19 @@ class AccountSignupScreen extends Component<Props, State> {
                             setPassword={(password) => this.setState({passwordConfirmation: password})}
                             confirmation={true}
                         />
-                        <AccountActionButton type={"signup"} submit={() => this.signup()}/>
+                        <AccountActionButton type={"signup"} submit={() => this.signupWithUserCredentials()}/>
                     </Card>
                     <Card>
-                        <Card.Title onPress={() => this.props.navigation.navigate('SettingsAccountLoginScreen')}>
-                            Already have an account? <u>Click here</u>.
-                        </Card.Title>
+                        <AccountBlurb type={"login"} navigation={this.props.navigation}/>
                         <Card.Divider/>
-                        <Text style={{alignSelf: "center"}}>Alternatively, you may</Text><br/>
-                        <LoginWithGoogleButton type={"signup"}/>
+                        <Text style={{alignSelf: "center"}}>Alternatively, you may</Text>
+                        <Text> </Text>
+                        <LoginWithGoogleButton type={"signup"} onPress={() => signInWithGoogle()}/>
                     </Card>
-                    <ErrorCard errorMessage={this.state.errorMessage}/>
+                    <ErrorCard
+                        errorMessage={this.state.errorMessage}
+                        clearMessage={() => this.setState({errorMessage: null})}
+                    />
                 </ScrollView>
             </AccountRedirectWrapper>
         );

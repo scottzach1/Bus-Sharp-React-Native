@@ -1,38 +1,36 @@
-import React, {Component, createContext} from "react";
-import firebase from "firebase";
+import React, {createContext, FC, useEffect, useState} from "react";
+import auth, {FirebaseAuthTypes} from '@react-native-firebase/auth';
 import {syncSavedData} from "../external/StorageManager";
-import {auth, generateUserDocument} from "../external/Firebase";
+import {generateUserDocument} from "../external/Firebase";
 
-/**
- * NOTE: This file was heavily inspired from the following blog post (as well as official documentation):
- * - "https://blog.logrocket.com/user-authentication-firebase-react-apps/"
- * The code was listed under MIT, and has been heavily altered to meet this projects requirements.
- */
+interface Props {
+}
 
-export const UserContext = createContext<firebase.User | null | undefined>(undefined);
-export const UserContextConsumer = UserContext.Consumer;
 
-class UserProvider extends Component {
-    state = {
-        user: undefined,
-    };
+export const UserContext = createContext<FirebaseAuthTypes.User | null | undefined>(undefined);
 
-    async componentDidMount() {
-        auth.onAuthStateChanged(async (userAuth) => {
-            generateUserDocument(userAuth)
-                .then((user) => this.setState({user}))
-                .then(() => syncSavedData(this.state.user!))
-                .catch((e) => console.error('Failed to get user document', e));
-        });
-    };
+const UserProvider: FC<Props> = (props) => {
+    // Set an initializing state whilst Firebase connects
+    const [initializing, setInitializing] = useState(true);
+    const [user, setUser] = useState<FirebaseAuthTypes.User | null | undefined>(undefined);
 
-    render() {
-        return (
-            <UserContext.Provider value={this.state.user}>
-                {this.props.children}
-            </UserContext.Provider>
-        );
+    // Handle user state changes
+    async function onAuthStateChanged(user: FirebaseAuthTypes.User | null) {
+        setUser(user);
+        if (initializing) setInitializing(false);
+        await generateUserDocument(user).then(() => syncSavedData(user));
     }
+
+    useEffect(() => {
+        const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
+        return subscriber; // unsubscribe on unmount
+    }, []);
+
+    return (
+        <UserContext.Provider value={user}>
+            {props.children}
+        </UserContext.Provider>
+    );
 }
 
 export default UserProvider;

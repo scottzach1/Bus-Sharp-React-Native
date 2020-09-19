@@ -1,10 +1,11 @@
 import {StackNavigationProp} from "@react-navigation/stack";
 import React, {Component} from "react";
 import {getSavedStops, toggleSavedStop} from "../../external/StorageManager";
-import MetlinkListItem from "../common/MetlinkListItem";
-import {View} from "react-native";
+import {Route, View} from "react-native";
+import MetlinkListItem from "../styles/MetlinkListItem";
 
 interface Props {
+    route: Route,
     navigation: StackNavigationProp<any>,
     stops: StopListProp[],
     // Optional callback if the parent wants to be notified of any updates to saved stops.
@@ -48,6 +49,7 @@ class StopListContainer extends Component<Props, State> {
 
         return stops.map((stop) => (
             <MetlinkListItem
+                route={this.props.route}
                 navigation={this.props.navigation}
                 code={stop.code}
                 name={stop.name}

@@ -4,6 +4,7 @@ import {signInWithGoogle} from "../../external/Firebase";
 
 interface Props {
     type: "login" | "signup",
+    onPress: () => void,
 }
 
 const capitalizeFirstLetter = (text: string) => {
@@ -13,7 +14,7 @@ const capitalizeFirstLetter = (text: string) => {
 const LoginWithGoogleButton: FC<Props> = (props) => {
     return (
         <Button
-            title={" " + capitalizeFirstLetter(props.type) + " with Google"}
+            title={` ${capitalizeFirstLetter(props.type)} with Google`}
             icon={
                 <Icon name={"google"} type={"font-awesome"} color={"white"} size={18}/>
             }
