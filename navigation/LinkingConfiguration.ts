@@ -4,7 +4,7 @@ import {Route} from "react-native";
 import {FirebaseAuthTypes} from "@react-native-firebase/auth";
 
 const linkingOptions: LinkingOptions = {
-    prefixes: ['/'], //[Linking.makeUrl('/')],
+    prefixes: ['/'],
     config: {
         screens: {
             Root: {

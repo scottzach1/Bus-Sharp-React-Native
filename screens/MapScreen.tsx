@@ -2,7 +2,7 @@ import {View} from "../components/styles/Themed";
 import React, {Component} from "react";
 import {StackNavigationProp} from "@react-navigation/stack";
 import {Route, StyleSheet} from "react-native";
-import GoogleMapWidget, {Position, StopMarker} from "../components/google-maps/GoogleMapWidget";
+import GoogleMapWidget, {Position, StopMarker} from "../components/maps/GoogleMapWidget";
 import {getAllStops} from "../external/StorageManager";
 import {GooglePlacesAutocomplete} from "react-native-google-places-autocomplete";
 

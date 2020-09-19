@@ -19,7 +19,7 @@ const AccountBlurb: FC<Props> = (props) => {
             break;
         case "reset":
             screen = "SettingsAccountPasswordResetScreen";
-            message = "Don't have an account?";
+            message = "Forgot your password?";
             break;
         case "login":
             screen = "SettingsAccountLoginScreen";
