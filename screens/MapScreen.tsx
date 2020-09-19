@@ -1,11 +1,10 @@
 import {View} from "../components/styles/Themed";
 import React, {Component} from "react";
 import {StackNavigationProp} from "@react-navigation/stack";
-import {Route, ScrollView, StyleSheet} from "react-native";
+import {Route, StyleSheet} from "react-native";
 import GoogleMapWidget, {Position, StopMarker} from "../components/google-maps/GoogleMapWidget";
 import {getAllStops} from "../external/StorageManager";
-import {Card, ListItem, SearchBar} from "react-native-elements";
-import {geocodeByAddress} from "react-places-autocomplete";
+import {GooglePlacesAutocomplete} from "react-native-google-places-autocomplete";
 
 interface Props {
     route: Route,
@@ -15,9 +14,7 @@ interface Props {
 interface State {
     stopsData: any | null,
     stopsErrorMessage: string | null,
-    searchText: string,
-    searchResults: any | null,
-    searchLocation: any | null,
+    searchLocation: { address: string, latitude: number, longitude: number } | null,
     stopMarkers: StopMarker[],
 }
 
@@ -29,8 +26,6 @@ class MapScreen extends Component<Props, State> {
         this.state = {
             stopsData: undefined,
             stopsErrorMessage: null,
-            searchText: "",
-            searchResults: null,
             searchLocation: null,
             stopMarkers: [],
         }
@@ -45,13 +40,6 @@ class MapScreen extends Component<Props, State> {
                 })
             });
         }
-    }
-
-    loadLocation(location: any) {
-        geocodeByAddress(location.description).then(location => {
-            this.setState({searchLocation: location[0]})
-            this.setState({searchText: ""})
-        })
     }
 
     generateStopMarkers() {
@@ -72,7 +60,6 @@ class MapScreen extends Component<Props, State> {
         })
     }
 
-
     render() {
         if (this.state.stopMarkers.length === 0) {
             this.generateStopMarkers()
@@ -80,13 +67,39 @@ class MapScreen extends Component<Props, State> {
 
         return (
             <View style={styles.container}>
-                <GoogleMapWidget
-                    navigation={this.props.navigation}
-                    route={this.props.route}
-                    routePaths={[]}
-                    stopMarkers={this.state.stopMarkers}
-                    geoCoderResult={this.state.searchLocation}/>
-                {(this.state.searchText.length > 0 && this.state.searchResults) && (this.state.searchResults)}
+                {this.state.stopMarkers && (
+                    <GoogleMapWidget
+                        navigation={this.props.navigation}
+                        route={this.props.route}
+                        routePaths={[]}
+                        stopMarkers={this.state.stopMarkers}
+                        searchResult={this.state.searchLocation}/>
+                )}
+                <GooglePlacesAutocomplete
+                    placeholder='Search'
+                    onPress={(data, details = null) => {
+                        if (details) {
+                            this.setState({
+                                searchLocation: {
+                                    address: details.formatted_address,
+                                    latitude: details.geometry.location.lat,
+                                    longitude: details.geometry.location.lng
+                                }
+                            })
+                        }
+                    }}
+                    query={{
+                        key: "AIzaSyAI5mcBlQsxr2RjeOr2UxeKyjl_z2oh6UI",
+                        language: 'en',
+                        radius: 200000,
+                        location: "-41.286461,174.776230",
+
+                    }}
+                    fetchDetails={true}
+                    styles={{
+                        listView: {backgroundColor: "#fff"}
+                    }}
+                />
             </View>
         );
     }
@@ -95,6 +108,7 @@ class MapScreen extends Component<Props, State> {
 
 const styles = StyleSheet.create({
     container: {
+        display: "flex",
         flex: 1,
     },
     listItem: {

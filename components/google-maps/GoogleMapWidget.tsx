@@ -1,7 +1,6 @@
 import {StackNavigationProp} from "@react-navigation/stack";
 import React, {FC, useState} from "react";
-import {getLatLng} from "react-places-autocomplete";
-import {ActivityIndicator, Route, StyleSheet, Text, View} from "react-native";
+import {Route, StyleSheet, Text, View} from "react-native";
 import MapView, {Callout, Marker, Polyline} from 'react-native-maps';
 import {navigateToMetlink} from "../../navigation/LinkingConfiguration";
 import {mapStyles} from "./GoogleMapWidgetStyles";
@@ -12,7 +11,7 @@ interface Props {
     navigation: StackNavigationProp<any>,
     route: Route,
     routePaths: any | null,
-    geoCoderResult?: google.maps.GeocoderResult,
+    searchResult?: { address: string, latitude: number, longitude: number } | null,
 }
 
 // Global variables that allow for changing state without re-rendering the object
@@ -34,15 +33,17 @@ let region = {
 
 const GoogleMapWidget: FC<Props> = (props) => {
     const [selectedItem, setSelectedItem] = useState<StopMarker | null>(null)
-    const [isLoaded, setIsLoaded] = useState<boolean>(false)
+    const [stopMarkers, setStopMarkers] = useState<any[]>([])
 
     // -------------------------------------------------------------------------------------------------------------
     // CHECKS RUN EVERY RENDER
     // -------------------------------------------------------------------------------------------------------------
 
-    if (props.geoCoderResult) {
+    if (props.searchResult) {
         setSearchLocation()
     }
+
+    generateMarkers().then();
 
     if (props.routePaths && !routeLoaded && googleLoaded) {
         if (props.routePaths.length !== 0) {
@@ -58,7 +59,6 @@ const GoogleMapWidget: FC<Props> = (props) => {
             routeLoaded = true
         }
     }
-
 
     if (props.stopMarkers?.length === 1 && googleLoaded && !stopOneLoaded) {
         stopOneLoaded = true
@@ -76,22 +76,19 @@ const GoogleMapWidget: FC<Props> = (props) => {
      * method.
      */
     function setSearchLocation() {
-        if (props.geoCoderResult === undefined) return
-        getLatLng(props.geoCoderResult)
-            .then(latLng => {
-                if (searchLocation === undefined
-                    || searchLocation.location.latitude !== latLng.lat
-                    || searchLocation.location.longitude !== latLng.lng) {
-                    searchLocation = new StopMarker(
-                        null,
-                        "SearchLocation",
-                        props.geoCoderResult?.formatted_address ? props.geoCoderResult.formatted_address : "",
-                        "",
-                        new Position(latLng.lat, latLng.lng))
-                    selectedId = "Search"
-                    selectItem(searchLocation)
-                }
-            })
+        if (props.searchResult?.address
+            && props.searchResult?.latitude
+            && props.searchResult.longitude
+            && searchLocation === undefined) {
+            searchLocation = new StopMarker(
+                props.searchResult.address,
+                "SearchLocation",
+                props.searchResult.address,
+                "",
+                new Position(props.searchResult.latitude, props.searchResult.longitude))
+            selectedId = "Search"
+            selectItem(searchLocation)
+        }
     }
 
     function selectItem(marker: StopMarker) {
@@ -104,9 +101,37 @@ const GoogleMapWidget: FC<Props> = (props) => {
         setSelectedItem(marker)
     }
 
-    // -------------------------------------------------------------------------------------------------------------
-    // RETURNING MAP
-    // -------------------------------------------------------------------------------------------------------------
+    async function generateMarkers() {
+        if (!props.stopMarkers || stopMarkers.length !== 0) return;
+
+        setStopMarkers(props.stopMarkers?.map((marker) => (
+            <Marker
+                key={marker.key}
+                coordinate={{
+                    latitude: marker.location.latitude,
+                    longitude: marker.location.longitude,
+                }}
+                onPress={() => {
+                    selectedId = "Stop"
+                    selectItem(marker)
+                }}
+            >
+                <Callout
+                    onPress={() => {
+                        navigateToMetlink(marker.code, true, props.navigation, props.route)
+                    }}
+                >
+                    <Text>
+                        {marker.code + ": " + marker.name}
+                    </Text>
+                </Callout>
+            </Marker>
+        )))
+    }
+
+// -------------------------------------------------------------------------------------------------------------
+// RETURNING MAP
+// -------------------------------------------------------------------------------------------------------------
     return (
         <View style={styles.container}>
             <MapView
@@ -114,32 +139,8 @@ const GoogleMapWidget: FC<Props> = (props) => {
                 region={region}
                 showsUserLocation={true}
                 customMapStyle={mapStyles}
-                onMapReady={() => setIsLoaded(true)}
             >
-
-                {props.stopMarkers?.map((marker) => (
-                    <Marker
-                        key={marker.key}
-                        coordinate={{
-                            latitude: marker.location.latitude,
-                            longitude: marker.location.longitude,
-                        }}
-                        onPress={() => {
-                            selectedId = "Stop"
-                            selectItem(marker)
-                        }}
-                    >
-                        <Callout
-                            onPress={() => {
-                                navigateToMetlink(marker.code, true, props.navigation, props.route)
-                            }}
-                        >
-                            <Text>
-                                {marker.code + ": " + marker.name}
-                            </Text>
-                        </Callout>
-                    </Marker>
-                ))}
+                {stopMarkers}
 
                 {props.routePaths?.map((route: { key: string | number | null | undefined; path: any[]; color: any; }) => (
                     <Polyline
@@ -153,11 +154,13 @@ const GoogleMapWidget: FC<Props> = (props) => {
 
                 {(selectedItem && selectedId === "Search") && (
                     <Marker
+                        pinColor={"blue"}
                         coordinate={{
                             latitude: selectedItem.location.latitude,
                             longitude: selectedItem.location.longitude
                         }}
                     >
+
                         <Callout>
                             <Text>
                                 {selectedItem.name}
@@ -166,10 +169,6 @@ const GoogleMapWidget: FC<Props> = (props) => {
                     </Marker>
                 )}
             </MapView>
-
-            {!isLoaded && (
-                <ActivityIndicator size={"large"}/>
-            )}
         </View>
     )
 }
