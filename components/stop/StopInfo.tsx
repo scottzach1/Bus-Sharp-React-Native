@@ -1,7 +1,9 @@
 import React, {Component} from "react";
 import {Card} from "react-native-elements";
 import {StackNavigationProp} from "@react-navigation/stack";
-import {ActivityIndicator, Text, View} from "react-native";
+import {ActivityIndicator} from "react-native";
+import StopActionSheet from "./StopActionSheet";
+import {View, Text} from "../styles/Themed";
 
 interface Props {
     navigation: StackNavigationProp<any>,
@@ -17,7 +19,8 @@ class StopInfo extends Component<Props, State> {
     constructor(props: Readonly<Props>) {
         super(props);
 
-        this.state = {}
+        this.state = {
+        }
     }
 
     getStopName() {
@@ -54,6 +57,7 @@ class StopInfo extends Component<Props, State> {
                             </Text>
                         </View>
                         : <ActivityIndicator/>}
+                        <StopActionSheet stopCode={this.props.code} stopName={this.getStopName()}/>
                 </Card>
             </View>
         );

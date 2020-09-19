@@ -1,5 +1,4 @@
 import AsyncStorage from '@react-native-community/async-storage';
-// import firebase from "firebase";
 import {getUserDocument, updateUserDocument} from "./Firebase";
 import csv from 'csvtojson';
 import {FirebaseAuthTypes} from "@react-native-firebase/auth";
