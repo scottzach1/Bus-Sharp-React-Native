@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import {Card} from "react-native-elements";
 import {StackNavigationProp} from "@react-navigation/stack";
 import {ActivityIndicator, Route} from "react-native";
-import StopActionSheet from "./StopActionSheet";
+import StopActionButton from "./StopActionButton";
 import {Text, View} from "../styles/Themed";
 import {getSavedStops, toggleSavedStop} from "../../external/StorageManager";
 import {UserContext} from "../../providers/UserProvider";
@@ -80,7 +80,7 @@ class StopInfo extends Component<Props, State> {
                             </Text>
                         </View>
                         : <ActivityIndicator/>}
-                    <StopActionSheet
+                    <StopActionButton
                         stopCode={this.props.code}
                         stopName={this.getStopName()}
                         saved={this.state.saved}
