@@ -29,6 +29,12 @@
     <meta-data android:name="expo.modules.updates.ENABLED" android:value="true"/>
     <meta-data android:name="expo.modules.updates.EXPO_UPDATES_CHECK_ON_LAUNCH" android:value="ALWAYS"/>
     <meta-data android:name="expo.modules.updates.EXPO_UPDATES_LAUNCH_WAIT_MS" android:value="0"/>
+    <!-- Google Maps Start -->
+    <meta-data android:name="com.google.android.geo.API_KEY"
+               android:value="AIzaSyAI5mcBlQsxr2RjeOr2UxeKyjl_z2oh6UI"/>
+    <!-- You will also only need to add this uses-library tag -->
+    <uses-library android:name="org.apache.http.legacy" android:required="false"/>
+    <!-- Google Maps End -->
     <!-- React Native Push Notifications https://github.com/zo0r/react-native-push-notification -->
     <meta-data android:name="com.dieam.reactnativepushnotification.notification_channel_name"
                android:value="Bus-Sharp-Channel"/>
