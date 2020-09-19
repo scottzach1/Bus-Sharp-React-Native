@@ -4,7 +4,7 @@ import {
     ButtonGroup as DefaultButtonGroup,
     ButtonGroupProps,
     SearchBar as DefaultSearchBar,
-    SearchBarProps
+    SearchBarProps,
 } from "react-native-elements";
 
 import Colors from '../../constants/Colors';
@@ -12,8 +12,7 @@ import useColorScheme from '../../hooks/useColorScheme';
 
 export function useThemeColor(
     props: { light?: string; dark?: string },
-    colorName: keyof typeof Colors.light & keyof typeof Colors.dark
-) {
+    colorName: keyof typeof Colors.light & keyof typeof Colors.dark) {
     const theme = useColorScheme();
     const colorFromProps = props[theme];
 
@@ -30,8 +29,6 @@ type ThemeProps = {
 };
 
 export type TextProps = ThemeProps & DefaultText['props'];
-export type ViewProps = ThemeProps & DefaultView['props'];
-export type TextInputProps = ThemeProps & DefaultTextInput['props'];
 
 export function Text(props: TextProps) {
     const {style, lightColor, darkColor, ...otherProps} = props;
@@ -39,6 +36,8 @@ export function Text(props: TextProps) {
 
     return <DefaultText style={[{color}, style]} {...otherProps} />;
 }
+
+export type TextInputProps = ThemeProps & DefaultTextInput['props'];
 
 export function TextInput(props: TextInputProps) {
     const {style, lightColor, darkColor, ...otherProps} = props;
@@ -53,6 +52,8 @@ export function TextInput(props: TextInputProps) {
     );
 }
 
+export type ViewProps = ThemeProps & DefaultView['props'];
+
 export function View(props: ViewProps) {
     const {style, lightColor, darkColor, ...otherProps} = props;
     const backgroundColor = useThemeColor({light: lightColor, dark: darkColor}, 'background');
@@ -63,13 +64,17 @@ export function View(props: ViewProps) {
 export function SearchBar(props: SearchBarProps | any) {
     const {style, lightColor, darkColor, ...otherProps} = props;
     const backgroundColor = useThemeColor({light: lightColor, dark: darkColor}, 'background');
+    const searchBg = useThemeColor({light: lightColor, dark: darkColor}, 'searchBg');
     const color = useThemeColor({light: lightColor, dark: darkColor}, 'text');
 
     return (
         <DefaultSearchBar
             containerStyle={{backgroundColor: backgroundColor}}
             inputStyle={{color: color}} // Apparently redundant.
-            inputContainerStyle={{color: color}} // Apparently redundant.
+            inputContainerStyle={{
+                color: color,
+                backgroundColor: searchBg,
+            }} // Apparently redundant.
             {...otherProps}/>
     );
 }

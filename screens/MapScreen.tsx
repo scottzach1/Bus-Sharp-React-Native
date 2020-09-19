@@ -4,7 +4,7 @@ import {StackNavigationProp} from "@react-navigation/stack";
 import {Route, StyleSheet} from "react-native";
 import GoogleMapWidget, {Position, StopMarker} from "../components/maps/GoogleMapWidget";
 import {getAllStops} from "../external/StorageManager";
-import {GooglePlacesAutocomplete} from "react-native-google-places-autocomplete";
+import {GooglePlaceDetail, GooglePlacesAutocomplete} from "react-native-google-places-autocomplete";
 
 interface Props {
     route: Route,
@@ -76,8 +76,20 @@ class MapScreen extends Component<Props, State> {
                         searchResult={this.state.searchLocation}/>
                 )}
                 <GooglePlacesAutocomplete
+                    style={{
+                        color: 'red',
+                        backgroundColor: 'blue',
+                    }}
+                    textInputProps={{
+                        style: {
+                            flex: 1,
+                            // color: 'red',
+                            // backgroundColor: 'blue',
+                        }
+                    }}
+                    enablePoweredByContainer={false}
                     placeholder='Search'
-                    onPress={(data, details = null) => {
+                    onPress={(data: any, details: GooglePlaceDetail | null) => {
                         if (details) {
                             this.setState({
                                 searchLocation: {
