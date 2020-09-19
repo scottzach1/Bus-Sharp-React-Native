@@ -77,16 +77,16 @@ class MapScreen extends Component<Props, State> {
                 )}
                 <GooglePlacesAutocomplete
                     style={{
-                        color: 'red',
-                        backgroundColor: 'blue',
+                        // color: 'red',
+                        // backgroundColor: 'blue',
                     }}
-                    textInputProps={{
-                        style: {
-                            flex: 1,
-                            // color: 'red',
-                            // backgroundColor: 'blue',
-                        }
-                    }}
+                    // textInputProps={{
+                    //     style: {
+                    //         flex: 1,
+                    //         // color: 'red',
+                    //         // backgroundColor: 'blue',
+                    //     }
+                    // }}
                     enablePoweredByContainer={false}
                     placeholder='Search'
                     onPress={(data: any, details: GooglePlaceDetail | null) => {
