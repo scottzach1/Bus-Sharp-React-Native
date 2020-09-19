@@ -76,10 +76,10 @@ class MapScreen extends Component<Props, State> {
                         searchResult={this.state.searchLocation}/>
                 )}
                 <GooglePlacesAutocomplete
-                    style={{
-                        // color: 'red',
-                        // backgroundColor: 'blue',
-                    }}
+                    // style={{
+                    //     // color: 'red',
+                    //     // backgroundColor: 'blue',
+                    // }}
                     // textInputProps={{
                     //     style: {
                     //         flex: 1,
