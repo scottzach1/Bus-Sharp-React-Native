@@ -56,7 +56,6 @@ class StopInfo extends Component<Props, State> {
 
     async toggleSaved() {
         const resp = await toggleSavedStop('stop', this.context);
-        console.log('resp', resp);
         this.setState({
             saved: resp.data.state,
         })

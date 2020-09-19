@@ -43,9 +43,10 @@ const StopActionSheet: FC<Props> = (props) => {
             titleStyle: {
                 color: 'white',
             },
+            iconColor: 'white',
             onPress: () => setShow(false),
         }
-    ]
+    ];
 
     const shareApp = async () => {
         const url = `https://welly.live/stop/${props.stopCode}`;
@@ -67,7 +68,10 @@ const StopActionSheet: FC<Props> = (props) => {
             />
             <BottomSheet
                 isVisible={show}
-                modalProps={{}}>
+                modalProps={{
+                    onRequestClose: () => setShow(false),
+                    onDismiss: () => setShow(false),
+                }}>
                 {actionList.map((l, i) => {
                     interface StyleProp {
                         [key: string]: any
@@ -81,8 +85,9 @@ const StopActionSheet: FC<Props> = (props) => {
                     titleStyle.textAlignVertical = 'center';
                     const containerStyle: StyleProp = (l.containerStyle) ? l.containerStyle : {};
                     const iconName = l.iconName;
+                    const iconColor = l.iconColor;
                     const onPress = (l.onPress) ? l.onPress : () => {
-                    }
+                    };
 
                     return (
                         <ListItem
@@ -95,7 +100,7 @@ const StopActionSheet: FC<Props> = (props) => {
                                     {title}
                                 </ListItem.Title>
                             </ListItem.Content>
-                            {iconName && <Icon name={iconName} type={'material-community'}/>}
+                            {iconName && <Icon name={iconName} type={'material-community'} color={iconColor}/>}
                         </ListItem>
                     )
                 })}
