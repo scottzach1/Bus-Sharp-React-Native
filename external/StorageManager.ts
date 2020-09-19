@@ -1,7 +1,7 @@
 import AsyncStorage from '@react-native-community/async-storage';
-// import firebase from "firebase";
 import {getUserDocument, updateUserDocument} from "./Firebase";
 import csv from 'csvtojson';
+import {FirebaseAuthTypes} from "@react-native-firebase/auth";
 
 const StorageKeys = {
     savedServices: '@savedServices',
@@ -305,7 +305,7 @@ export const getAllServices = async () => {
  * @param savedStops: Stops to save to local storage.
  * @param user?: Optionally user reference to save in Firestore.
  */
-export const setSavedStops = async (savedStops: any, user?: any) => {
+export const setSavedStops = async (savedStops: any, user?: FirebaseAuthTypes.User) => {
     const key = StorageKeys.savedStops;
 
     const stringData = JSON.stringify(savedStops);
@@ -326,7 +326,7 @@ export const setSavedStops = async (savedStops: any, user?: any) => {
  * @param savedServices: Services to save to local storage.
  * @param user?: Optionally user reference to save in Firestore.
  */
-export const setSavedServices = async (savedServices: any, user?: any) => {
+export const setSavedServices = async (savedServices: any, user?: FirebaseAuthTypes.User) => {
     const key = StorageKeys.savedServices;
 
     const stringData = JSON.stringify(savedServices);
@@ -391,7 +391,7 @@ export const cacheServiceData = async (serviceCode: string, data: any) => {
  *
  * @param user?: Optionally a user reference to update Firestore.
  */
-export const clearSavedData = async (user?: any) => {
+export const clearSavedData = async (user?: FirebaseAuthTypes.User) => {
     const savedStops = [StorageKeys.savedStops, JSON.stringify([])];
     const savedServices = [StorageKeys.savedServices, JSON.stringify([])];
 
@@ -420,7 +420,7 @@ export const clearSavedData = async (user?: any) => {
  * @param user?: Optionally a user reference to update Firestore.
  * @return boolean: `true` if added, `false` otherwise.
  */
-export const toggleSavedStop = async (stopCode: string, user?: any) => {
+export const toggleSavedStop = async (stopCode: string, user?: FirebaseAuthTypes.User) => {
     return getSavedStops()
         .then((resp) => {
             let savedStops = (resp.data) ? resp.data : [];
@@ -457,7 +457,7 @@ export const toggleSavedStop = async (stopCode: string, user?: any) => {
  * @param user?: Optionally a user reference to update Firestore.
  * @return boolean: `true` if added, `false` otherwise.
  */
-export const toggleSavedService = async (serviceCode: string, user?: any) => {
+export const toggleSavedService = async (serviceCode: string, user?: FirebaseAuthTypes.User) => {
     return getSavedServices()
         .then((resp) => {
             let savedServices = (resp.data) ? resp.data : [];
@@ -494,7 +494,7 @@ export const toggleSavedService = async (serviceCode: string, user?: any) => {
  *
  * @param user: User reference to sync with Local storage.
  */
-export const syncSavedData = async (user: any | null) => {
+export const syncSavedData = async (user: FirebaseAuthTypes.User | null) => {
     if (user && user.uid) getUserDocument(user).then(async (doc: any) => {
         // Merge Saved Stops
         let savedStopsSet = new Set((await getSavedStops()).data);
