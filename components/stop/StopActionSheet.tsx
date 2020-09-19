@@ -2,10 +2,16 @@ import React, {FC, useState} from "react";
 import {BottomSheet, Button, Icon, ListItem} from "react-native-elements";
 import {View} from "../styles/Themed";
 import {doShare} from "../../external/ShareManager";
+import {StackNavigationProp} from "@react-navigation/stack";
+import {Route} from "react-native";
 
 interface Props {
+    navigation: StackNavigationProp<any>,
+    route: Route,
     stopCode: string,
     stopName: any,
+    saved: boolean,
+    toggleSaved: () => void,
 }
 
 const StopActionSheet: FC<Props> = (props) => {
@@ -13,12 +19,20 @@ const StopActionSheet: FC<Props> = (props) => {
     const actionList = [
         {
             title: 'Save',
-            iconName: 'saved',
+            iconName: (props.saved) ? "star" : "star-outline",
+            onPress: () => props.toggleSaved(),
         },
         {
             title: 'Share',
             iconName: 'share',
             onPress: () => shareApp(),
+        },
+        {
+            title: 'View on Map',
+            iconName: 'map',
+            onPress: () => {
+                console.log('TODO: This needs to be implemented, perhaps an optional URL prop?')
+            },
         },
         {
             title: 'Cancel',
@@ -49,7 +63,6 @@ const StopActionSheet: FC<Props> = (props) => {
                 title={"Actions"}
                 onPress={() => {
                     setShow(true);
-                    console.log('fuck');
                 }}
             />
             <BottomSheet

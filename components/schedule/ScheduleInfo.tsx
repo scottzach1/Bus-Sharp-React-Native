@@ -1,4 +1,4 @@
-import React, {Component} from "react";
+import React, {FC} from "react";
 import {Card} from "react-native-elements";
 import {Text, View} from "../styles/Themed";
 
@@ -10,28 +10,17 @@ interface Props {
     setError: (error: string) => void,
 }
 
-interface State {
-}
-
-class ScheduleInfo extends Component<Props, State> {
-    constructor(props: Readonly<Props>) {
-        super(props);
-
-        this.state = {}
-    }
-
-    render() {
-        return (
-            <View>
-                <Card.Title>
-                    {`${this.props.serviceCode} - ${this.props.serviceName}`}
-                </Card.Title>
-                <Text style={{fontSize: 15}}>
-                    {`From ${this.props.stopName} (${this.props.stopCode})`}
-                </Text>
-            </View>
-        );
-    }
+const ScheduleInfo: FC<Props> = (props) => {
+    return (
+        <View>
+            <Card.Title>
+                {`${props.serviceCode} - ${props.serviceName}`}
+            </Card.Title>
+            <Text style={{fontSize: 15}}>
+                {`From ${props.stopName} (${props.stopCode})`}
+            </Text>
+        </View>
+    );
 }
 
 export default ScheduleInfo;

@@ -45,8 +45,8 @@ class StopScreen extends Component<Props, State> {
                 <StopInfo
                     stopData={this.state.stopData}
                     code={this.state.stopCode}
-                    errorMessage={this.state.errorMessage}
                     navigation={this.props.navigation}
+                    route={this.props.route}
                 />
                 <StopTimetable
                     stopData={this.state.stopData}

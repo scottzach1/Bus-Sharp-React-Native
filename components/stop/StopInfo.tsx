@@ -1,25 +1,41 @@
 import React, {Component} from "react";
 import {Card} from "react-native-elements";
 import {StackNavigationProp} from "@react-navigation/stack";
-import {ActivityIndicator} from "react-native";
+import {ActivityIndicator, Route} from "react-native";
 import StopActionSheet from "./StopActionSheet";
-import {View, Text} from "../styles/Themed";
+import {Text, View} from "../styles/Themed";
+import {getSavedStops, toggleSavedStop} from "../../external/StorageManager";
+import {UserContext} from "../../providers/UserProvider";
 
 interface Props {
     navigation: StackNavigationProp<any>,
+    route: Route,
     stopData: any | null | undefined,
     code: string,
-    errorMessage: string | null,
 }
 
 interface State {
+    saved: boolean,
 }
 
 class StopInfo extends Component<Props, State> {
+    static contextType = UserContext;
+
     constructor(props: Readonly<Props>) {
         super(props);
 
         this.state = {
+            saved: false,
+        }
+    }
+
+    async componentDidMount() {
+        const resp = await getSavedStops();
+        this.setState({
+            saved: resp.data.includes(this.props.code),
+        });
+        if (resp.errorMessage) {
+            // Don't notify the user.
         }
     }
 
@@ -36,6 +52,14 @@ class StopInfo extends Component<Props, State> {
     getNumberNotices() {
         if (!this.props.stopData?.Notices) return 'Unknown';
         else return this.props.stopData.Notices.length;
+    }
+
+    async toggleSaved() {
+        const resp = await toggleSavedStop('stop', this.context);
+        console.log('resp', resp);
+        this.setState({
+            saved: resp.data.state,
+        })
     }
 
     render() {
@@ -57,7 +81,14 @@ class StopInfo extends Component<Props, State> {
                             </Text>
                         </View>
                         : <ActivityIndicator/>}
-                        <StopActionSheet stopCode={this.props.code} stopName={this.getStopName()}/>
+                    <StopActionSheet
+                        stopCode={this.props.code}
+                        stopName={this.getStopName()}
+                        saved={this.state.saved}
+                        toggleSaved={() => this.toggleSaved()}
+                        navigation={this.props.navigation}
+                        route={this.props.route}
+                    />
                 </Card>
             </View>
         );
