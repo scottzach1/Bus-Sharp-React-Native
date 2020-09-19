@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import {ButtonGroup} from "react-native-elements";
+import {ButtonGroup} from "../styles/Themed";
 
 interface Props{
     updateIndex: (e: number) => void
@@ -29,7 +29,7 @@ class SearchTabFilter extends Component<Props, State> {
 
         return (
             <ButtonGroup
-                onPress={(e) => this.updateIndex(e)}
+                onPress={(e: number) => this.updateIndex(e)}
                 selectedIndex={selectedIndex}
                 buttons={buttons}
                 containerStyle={{height: 50}}

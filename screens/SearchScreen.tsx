@@ -1,8 +1,8 @@
 import React, {Component} from "react";
-import {View} from "../components/styles/Themed";
+import {SearchBar, View} from "../components/styles/Themed";
 import {Route, ScrollView, StyleSheet} from "react-native";
 import {StackNavigationProp} from "@react-navigation/stack";
-import {Button, Card, SearchBar} from "react-native-elements";
+import {Button, Card} from "react-native-elements";
 import SearchTabFilter from "../components/search/SearchTabFilter";
 import SearchTabSearchbarDescriptionCard from "../components/search/SearchTabSearchbarDescription";
 import SearchTabTabsDescription from "../components/search/SearchTabTabsDescription";
@@ -57,7 +57,9 @@ class SearchScreen extends Component<Props, State> {
                 this.setState({
                     stopsData: Object.entries(resp.data)
                         .map((stop: any) => new StopListProp(stop[1].stop_name, stop[1].stop_id))
-                        .sort(function (a, b){return a.code.localeCompare(b.code)}),
+                        .sort(function (a, b) {
+                            return a.code.localeCompare(b.code)
+                        }),
                     stopsErrorMessage: resp.errorMessage,
                 })
             });
@@ -68,7 +70,9 @@ class SearchScreen extends Component<Props, State> {
                 this.setState({
                     servicesData: Object.entries(resp.data)
                         .map((route: any) => new ServiceListProp(route[1].route_long_name, route[1].route_id))
-                        .sort(function (a, b){return a.code.localeCompare(b.code)}),
+                        .sort(function (a, b) {
+                            return a.code.localeCompare(b.code)
+                        }),
                     servicesErrorMessage: resp.errorMessage
                 })
             });
@@ -121,7 +125,7 @@ class SearchScreen extends Component<Props, State> {
                 || code.toLowerCase().startsWith(this.state.searchText.toLowerCase()))
     }
 
-    resetMultipliers(){
+    resetMultipliers() {
         stopDisplayMultiplier = 1;
         serviceDisplayMultiplier = 1;
     }
@@ -133,10 +137,12 @@ class SearchScreen extends Component<Props, State> {
             ? this.filterStops() : []
 
         return (
-            <View style={styles.container}>
+            <View
+                style={styles.container}
+            >
                 <SearchBar
                     placeholder={"Search Here..."}
-                    onChangeText={(e) => {
+                    onChangeText={(e: string) => {
                         this.setState({searchText: e})
                     }}
                     value={this.state.searchText}

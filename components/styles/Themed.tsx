@@ -1,5 +1,11 @@
 import * as React from 'react';
 import {Text as DefaultText, TextInput as DefaultTextInput, View as DefaultView} from 'react-native';
+import {
+    ButtonGroup as DefaultButtonGroup,
+    ButtonGroupProps,
+    SearchBar as DefaultSearchBar,
+    SearchBarProps
+} from "react-native-elements";
 
 import Colors from '../../constants/Colors';
 import useColorScheme from '../../hooks/useColorScheme';
@@ -52,4 +58,36 @@ export function View(props: ViewProps) {
     const backgroundColor = useThemeColor({light: lightColor, dark: darkColor}, 'background');
 
     return <DefaultView style={[{backgroundColor}, style]} {...otherProps} />;
+}
+
+export function SearchBar(props: SearchBarProps | any) {
+    const {style, lightColor, darkColor, ...otherProps} = props;
+    const backgroundColor = useThemeColor({light: lightColor, dark: darkColor}, 'background');
+    const color = useThemeColor({light: lightColor, dark: darkColor}, 'text');
+
+    return (
+        <DefaultSearchBar
+            containerStyle={{backgroundColor: backgroundColor}}
+            inputStyle={{color: color}} // Apparently redundant.
+            inputContainerStyle={{color: color}} // Apparently redundant.
+            {...otherProps}/>
+    );
+}
+
+export function ButtonGroup(props: ButtonGroupProps | any) {
+    const {style, lightColor, darkColor, ...otherProps} = props;
+    const backgroundColor = useThemeColor({light: lightColor, dark: darkColor}, 'background');
+    const color = useThemeColor({light: lightColor, dark: darkColor}, 'text');
+
+    return (
+        <DefaultButtonGroup
+            textStyle={{
+                color: color,
+            }}
+            buttonContainerStyle={{
+                backgroundColor: backgroundColor,
+            }}
+            {...otherProps}
+        />
+    );
 }
