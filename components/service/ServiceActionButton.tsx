@@ -5,18 +5,17 @@ import {doShare} from "../../external/ShareManager";
 import {StackNavigationProp} from "@react-navigation/stack";
 import {Route} from "react-native";
 import CustomBottomSheet, {CustomBottomSheetProp} from "../common/CustomBottomSheet";
-import {navigateToStopMap} from "../../navigation/LinkingConfiguration";
 
 interface Props {
     navigation: StackNavigationProp<any>,
     route: Route,
-    stopCode: string,
-    stopName: any,
+    serviceCode: string,
+    serviceName: any,
     saved: boolean,
     toggleSaved: () => void,
 }
 
-const StopActionButton: FC<Props> = (props) => {
+const ServiceActionButton: FC<Props> = (props) => {
     const [showSheet, setShowSheet] = useState<boolean>(false);
     const actionList: CustomBottomSheetProp[] = [
         new CustomBottomSheetProp(
@@ -29,21 +28,16 @@ const StopActionButton: FC<Props> = (props) => {
             () => shareApp(),
             'share',
         ),
-        new CustomBottomSheetProp(
-            'View on Map',
-            () => {
-                navigateToStopMap(props.stopCode, props.navigation, props.route);
-            },
-            'map'
-        ),
     ];
 
     const shareApp = async () => {
-        const url = `https://welly.live/stop/${props.stopCode}`;
+        const url = `https://welly.live/service/${props.serviceCode}`;
+
+        console.log("URL", url)
 
         await doShare(
-            `Bus Sharp | Stop ${props.stopCode}`,
-            `Bus Sharp | ${props.stopName} - (${props.stopCode}),  ${url}!`,
+            `Bus Sharp | Service ${props.serviceCode}`,
+            `Bus Sharp | ${props.serviceName} - (${props.serviceCode}),  ${url}!`,
             url,
         );
     }
@@ -65,4 +59,4 @@ const StopActionButton: FC<Props> = (props) => {
     );
 }
 
-export default StopActionButton;
+export default ServiceActionButton;
