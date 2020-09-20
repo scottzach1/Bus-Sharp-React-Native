@@ -4,6 +4,7 @@ import {StackNavigationProp} from "@react-navigation/stack";
 import {View} from "../components/styles/Themed";
 import GoogleMapWidget, {Position, ServiceRoute, StopMarker} from "../components/maps/GoogleMapWidget";
 import {fetchServiceData} from "../external/StorageManager";
+import ServiceInfo from "../components/service/ServiceInfo";
 
 interface Props {
     route: Route,
@@ -96,6 +97,12 @@ class ServiceScreen extends Component<Props, State> {
                                  navigation={this.props.navigation}
                                  routePaths={this.state.serviceRoutes}
                                  stopMarkers={this.state.stopMarkers}/>
+                <ServiceInfo
+                    navigation={this.props.navigation}
+                    route={this.props.route}
+                    serviceData={this.state.serviceData}
+                    code={this.state.serviceCode}
+                />
             </View>
         );
     }
