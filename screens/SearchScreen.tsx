@@ -6,9 +6,9 @@ import {Button, Card} from "react-native-elements";
 import SearchTabFilter from "../components/search/SearchTabFilter";
 import SearchTabSearchbarDescriptionCard from "../components/search/SearchTabSearchbarDescription";
 import SearchTabTabsDescription from "../components/search/SearchTabTabsDescription";
-import StopListContainer, {StopListProp} from "../components/stops/StopListContainer";
 import {getAllServices, getAllStops} from "../external/StorageManager";
-import ServiceListContainer, {ServiceListProp} from "../components/services/ServiceListContainer";
+import StopListContainer, {StopListProp} from "../components/lists/StopListContainer";
+import ServiceListContainer, {ServiceListProp} from "../components/lists/ServiceListContainer";
 
 interface Props {
     navigation: StackNavigationProp<any>,
@@ -22,7 +22,7 @@ interface State {
     stopsErrorMessage: string | null,
     servicesErrorMessage: string | null,
     searchText: string,
-    selectedIndex: number,
+    selectedIndex: "ALL" | "ROUTES" | "STOPS" | "EXACT",
     flipper: boolean
 }
 
@@ -45,7 +45,7 @@ class SearchScreen extends Component<Props, State> {
             stopsErrorMessage: null,
             servicesErrorMessage: null,
             searchText: "",
-            selectedIndex: 0,
+            selectedIndex: "ALL",
             flipper: false
 
         }
@@ -69,7 +69,7 @@ class SearchScreen extends Component<Props, State> {
             getAllServices().then((resp) => {
                 this.setState({
                     servicesData: Object.entries(resp.data)
-                        .map((route: any) => new ServiceListProp(route[1].route_long_name, route[1].route_id))
+                        .map((route: any) => new ServiceListProp(route[1].route_long_name, route[1].route_short_name))
                         .sort(function (a, b) {
                             return a.code.localeCompare(b.code)
                         }),
@@ -80,14 +80,30 @@ class SearchScreen extends Component<Props, State> {
     }
 
     updateIndex(newValue: number) {
-        this.setState({selectedIndex: newValue})
+        let buttonValue: "ALL" | "ROUTES" | "STOPS" | "EXACT";
+        switch (newValue) {
+            case 0:
+                buttonValue = "ALL";
+                break;
+            case 1:
+                buttonValue = "ROUTES";
+                break;
+            case 2:
+                buttonValue = "STOPS";
+                break;
+            case 3:
+                buttonValue = "EXACT";
+                break;
+            default:
+                buttonValue = "ALL"
+        }
+        this.setState({selectedIndex: buttonValue})
         this.resetMultipliers()
     }
 
     filterStops() {
         if (this.state.stopsData.length === 0
-            || this.state.stopsData.length === 0
-            || this.state.selectedIndex === 1) {
+            || this.state.selectedIndex === "ROUTES") {
             return []
         }
 
@@ -101,8 +117,7 @@ class SearchScreen extends Component<Props, State> {
 
     filterServices() {
         if (this.state.servicesData.length === 0
-            || this.state.servicesData.length === 0
-            || this.state.selectedIndex === 2) {
+            || this.state.selectedIndex === "STOPS") {
             return []
         }
 
@@ -118,9 +133,10 @@ class SearchScreen extends Component<Props, State> {
     filterListElement(name: string, code: string) {
         if (name === undefined || code === undefined) return false
 
-        return this.state.selectedIndex !== 3 ?
+        return this.state.selectedIndex !== "EXACT" ?
             (name.toLowerCase().includes(this.state.searchText.toLowerCase())
-                || code.toLowerCase().includes(this.state.searchText.toLowerCase())) :
+                || code.toLowerCase().includes(this.state.searchText.toLowerCase()))
+            :
             (name.toLowerCase().startsWith(this.state.searchText.toLowerCase())
                 || code.toLowerCase().startsWith(this.state.searchText.toLowerCase()))
     }
@@ -167,7 +183,7 @@ class SearchScreen extends Component<Props, State> {
                             />
                             {remainingServices > 0 && (
                                 <Button
-                                    title={"more..."}
+                                    title={"more... (+" + remainingServices + ")"}
                                     type={"outline"}
                                     onPress={() => {
                                         serviceDisplayMultiplier++;
@@ -181,14 +197,14 @@ class SearchScreen extends Component<Props, State> {
                             <Card.Title>Stops</Card.Title>
                             <Card.Divider/>
                             <StopListContainer
-                                key={"stop-list-esults"}
+                                key={"stop-list-results"}
                                 route={this.props.route}
                                 navigation={this.props.navigation}
                                 stops={stops}
                             />
                             {remainingStops > 0 && (
                                 <Button
-                                    title={"more..."}
+                                    title={"more... (+" + remainingStops + ")"}
                                     type={"outline"}
                                     onPress={() => {
                                         stopDisplayMultiplier++;
