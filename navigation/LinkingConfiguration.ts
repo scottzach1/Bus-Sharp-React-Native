@@ -92,6 +92,23 @@ const linkingOptions: LinkingOptions = {
 
 export default linkingOptions;
 
+export const navigateToSchedule = (stopCode: string, serviceCode: string,
+                                   arrivalTime: Date, navigation: StackNavigationProp<any>, route: Route) => {
+    const params = {
+        date: arrivalTime.toJSON(),
+        serviceCode: serviceCode,
+        stopCode: stopCode,
+    };
+
+    if (route.name.startsWith('Search'))
+        navigation.navigate(`SearchScheduleScreen`, params);
+    else if (route.name.startsWith('Map'))
+        navigation.navigate(`MapScheduleScreen`, params);
+    else if (route.name.startsWith('Saved'))
+        navigation.navigate(`SavedScheduleScreen`, params);
+}
+
+
 export const navigateToMetlink = (code: string, isStop: boolean, navigation: StackNavigationProp<any>, route: Route) => {
     const targScreen: string = (isStop) ? 'Stop' : 'Service';
 

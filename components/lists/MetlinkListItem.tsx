@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import {Badge, Icon, ListItem} from "react-native-elements";
 import {StackNavigationProp} from "@react-navigation/stack";
-import {navigateToMetlink} from "../../navigation/LinkingConfiguration";
+import {navigateToMetlink, navigateToSchedule} from "../../navigation/LinkingConfiguration";
 import {Route} from "react-native";
 import {Text} from "../styles/Themed";
 
@@ -35,11 +35,13 @@ class MetlinkListItem extends Component<Props, State> {
     doSchedule() {
         if (!this.props.arrivalTime || !this.props.originStopCode) return;
 
-        this.props.navigation.navigate("SavedScheduleScreen", {
-            date: this.props.arrivalTime.toJSON(),
-            serviceCode: this.props.code,
-            stopCode: this.props.originStopCode,
-        });
+        navigateToSchedule(this.props.originStopCode, this.props.code,
+            this.props.arrivalTime, this.props.navigation, this.props.route)
+        // this.props.navigation.navigate("ScheduleScreen", {
+        //     date: this.props.arrivalTime.toJSON(),
+        //     serviceCode: this.props.code,
+        //     stopCode: this.props.originStopCode,
+        // });
     }
 
     render() {
