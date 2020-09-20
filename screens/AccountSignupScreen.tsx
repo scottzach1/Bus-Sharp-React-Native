@@ -56,7 +56,7 @@ class AccountSignupScreen extends Component<Props, State> {
      */
     componentDidMount() {
         GoogleSignin.configure({
-            // webClientId: "483376447021-ev7ocmauqblulvsfppk05pokj638uamg.apps.googleusercontent.com",
+            webClientId: "483376447021-ev7ocmauqblulvsfppk05pokj638uamg.apps.googleusercontent.com",
         });
     }
 
