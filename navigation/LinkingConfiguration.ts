@@ -15,7 +15,8 @@ const linkingOptions: LinkingOptions = {
                             SearchHomeScreen: '',
                             SearchServiceScreen: 'service/:code',
                             SearchStopScreen: 'stop/:code',
-                            SearchScheduleScreen: 'schedule,'
+                            SearchScheduleScreen: 'schedule,',
+                            SearchStopMapScreen: 'stop/:code/map',
                         }
                     },
                     MapTab: {
@@ -25,6 +26,7 @@ const linkingOptions: LinkingOptions = {
                             MapServiceScreen: 'service/:code',
                             MapStopScreen: 'stop/:code',
                             MapScheduleScreen: 'schedule',
+                            MapStopMapScreen: 'stop/:code/map',
                         }
                     },
                     SavedTab: {
@@ -34,6 +36,7 @@ const linkingOptions: LinkingOptions = {
                             SavedServiceScreen: 'service/:code',
                             SavedStopScreen: 'stop/:code',
                             SavedScheduleScreen: 'schedule',
+                            SavedStopMapScreen: 'stop/:code/map',
                         }
                     },
                     SettingsTab: {
@@ -107,6 +110,21 @@ export const navigateToSchedule = (stopCode: string, serviceCode: string,
     else if (route.name.startsWith('Saved'))
         navigation.navigate(`SavedScheduleScreen`, params);
 }
+
+export const navigateToStopMap = (stopCode: string, navigation: StackNavigationProp<any>, route: Route) => {
+
+    const params = {
+        code: stopCode
+    }
+
+    if (route.name.startsWith('Search'))
+        navigation.navigate(`SearchStopMapScreen`, params);
+    else if (route.name.startsWith('Map'))
+        navigation.navigate(`MapStopMapScreen`, params);
+    else if (route.name.startsWith('Saved'))
+        navigation.navigate(`SavedStopMapScreen`, params);
+}
+
 
 
 export const navigateToMetlink = (code: string, isStop: boolean, navigation: StackNavigationProp<any>, route: Route) => {
