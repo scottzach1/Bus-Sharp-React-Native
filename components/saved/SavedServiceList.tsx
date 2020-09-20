@@ -63,6 +63,9 @@ class SavedServiceList extends Component<Props, State> {
         this.setState({savedServices: savedServices});
     }
 
+    /**
+     * Clears saved within local storage, updating this components state once the action completes.
+     */
     async clearSavedServices() {
         await setSavedServices([], this.context)
         this.setState({savedServices: []});

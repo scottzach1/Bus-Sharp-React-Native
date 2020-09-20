@@ -2,7 +2,7 @@ import {StackNavigationProp} from "@react-navigation/stack";
 import {Route, ScrollView} from "react-native";
 import React, {Component} from "react";
 import {Text} from "../components/styles/Themed";
-import AuthenticationResponse, {createUserWithCredentials, signInWithGoogle} from "../external/FirebaseManager";
+import {AuthenticationResponse, createUserWithCredentials, signInWithGoogle} from "../external/FirebaseManager";
 import {Card} from "react-native-elements";
 import EmailInput from "../components/account/EmailInput";
 import PasswordInput from "../components/account/PasswordInput";
