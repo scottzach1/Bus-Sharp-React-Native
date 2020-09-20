@@ -44,11 +44,25 @@ class SavedServiceList extends Component<Props, State> {
                 allServices: resp.data
             }));
 
-        getSavedServices().then((resp) =>
+        this.checkSavedServices().then();
+    }
+
+    /**
+     * Checks local storage for any updates, only updating the component and re-rendering if there is an observed
+     * difference.
+     */
+    async checkSavedServices() {
+        getSavedServices().then((resp) => {
+            const savedString = JSON.stringify(this.state.savedServices);
+            const respString = JSON.stringify(resp.data);
+
+            if (savedString === respString) return;
+
             this.setState({
                 errorMessage: resp.errorMessage,
                 savedServices: resp.data
-            }));
+            });
+        });
     }
 
     /**
@@ -93,6 +107,9 @@ class SavedServiceList extends Component<Props, State> {
 
     // Render styled card containing the service list within a view with optional error card.
     render() {
+        // Check for any updates since last render.
+        this.checkSavedServices().then();
+
         return (
             <View>
                 <Card>

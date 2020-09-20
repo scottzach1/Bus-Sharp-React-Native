@@ -46,11 +46,24 @@ class SavedStopList extends Component<Props, State> {
                 allStops: resp.data
             }));
 
-        getSavedStops().then((resp) =>
+        this.checkSavedServices().then();
+    }
+
+    /**
+     * Checks local storage for any updates, only updating the component and re-rendering if there is an observed
+     * difference.
+     */
+    async checkSavedServices() {
+        getSavedStops().then((resp) => {
+            const savedString = JSON.stringify(this.state.savedStops);
+            const respString = JSON.stringify(resp.data);
+
+            if (savedString === respString) return;
+
             this.setState({
                 errorMessage: resp.errorMessage,
                 savedStops: resp.data
-            }));
+            })});
     }
 
     /**
@@ -95,6 +108,9 @@ class SavedStopList extends Component<Props, State> {
 
     // Render styled card containing the stop list within a view with an optional error card.
     render() {
+        // Check for any updates since last render.
+        this.checkSavedServices().then();
+
         return (
             <View>
                 <Card>

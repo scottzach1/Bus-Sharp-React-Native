@@ -77,18 +77,9 @@ class AccountSignupScreen extends Component<Props, State> {
             this.state.displayName,
         );
 
-        if (resp.success) {
-            this.setState({
-                email: '',
-                password: '',
-                passwordConfirmation: '',
-                displayName: '',
-            });
-        } else {
-            this.setState({
-                errorMessage: resp.errorMessage,
-            });
-        }
+        this.setState({
+            errorMessage: resp.errorMessage,
+        });
     }
 
     /**
@@ -98,6 +89,7 @@ class AccountSignupScreen extends Component<Props, State> {
         return (
             <AccountRedirectWrapper route={this.props.route} navigation={this.props.navigation}>
                 <ScrollView>
+                    {/* Sign up with credentials. */}
                     <Card>
                         <Card.Title>Sign In</Card.Title>
                         <Card.Divider/>
@@ -112,6 +104,7 @@ class AccountSignupScreen extends Component<Props, State> {
                         />
                         <AccountActionButton type={"signup"} onPress={() => this.signupWithUserCredentials()}/>
                     </Card>
+                    {/* Other links and sign in with Google. */}
                     <Card>
                         <AccountBlurb type={"login"} navigation={this.props.navigation}/>
                         <Card.Divider/>
