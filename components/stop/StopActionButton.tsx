@@ -32,7 +32,6 @@ const StopActionButton: FC<Props> = (props) => {
         new CustomBottomSheetProp(
             'View on Map',
             () => {
-                console.log(props.route)
                 navigateToStopMap(props.stopCode, props.navigation, props.route);
             },
             'map'

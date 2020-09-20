@@ -86,7 +86,6 @@ class ScheduleScreen extends Component<Props, State> {
     }
 
     setWalkTime(mins: number) {
-        console.log({mins})
         if (mins === this.state.walkTime) return;
         this.setState({walkTime: mins});
     }

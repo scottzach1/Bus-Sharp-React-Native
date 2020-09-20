@@ -37,11 +37,6 @@ class MetlinkListItem extends Component<Props, State> {
 
         navigateToSchedule(this.props.originStopCode, this.props.code,
             this.props.arrivalTime, this.props.navigation, this.props.route)
-        // this.props.navigation.navigate("ScheduleScreen", {
-        //     date: this.props.arrivalTime.toJSON(),
-        //     serviceCode: this.props.code,
-        //     stopCode: this.props.originStopCode,
-        // });
     }
 
     render() {
