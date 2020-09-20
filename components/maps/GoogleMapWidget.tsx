@@ -1,9 +1,11 @@
 import {StackNavigationProp} from "@react-navigation/stack";
 import React, {FC, useState} from "react";
-import {Route, StyleSheet, Text, View} from "react-native";
+import {Platform, Route, StyleSheet, Text, View} from "react-native";
 import MapView, {Callout, Marker, Polyline} from 'react-native-maps';
 import {mapStyles} from "./GoogleMapWidgetStyles";
 import {navigateToMetlink} from "../../navigation/LinkingConfiguration";
+import useColorScheme from "../../hooks/useColorScheme";
+import useColorSchemeWeb from "../../hooks/useColorScheme.web";
 
 
 /**
@@ -49,7 +51,8 @@ let region = {
  * @constructor - None exist. This a purely hook object.
  */
 const GoogleMapWidget: FC<Props> = (props) => {
-    const [stopMarkers, setStopMarkers] = useState<any[]>([])
+    const [stopMarkers, setStopMarkers] = useState<any[]>([]);
+    let colorScheme = (Platform.OS !== 'web') ? useColorScheme() : useColorSchemeWeb();
 
     // -------------------------------------------------------------------------------------------------------------
     // CHECKS RUN EVERY RENDER
@@ -178,7 +181,7 @@ const GoogleMapWidget: FC<Props> = (props) => {
                 style={styles.map}
                 region={region}
                 showsUserLocation={true}
-                customMapStyle={mapStyles}
+                customMapStyle={(colorScheme === 'dark') ? mapStyles : []}
             >
                 {stopMarkers}
 
