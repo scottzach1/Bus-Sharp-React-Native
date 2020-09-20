@@ -46,7 +46,9 @@ const MetlinkListItem: FC<Props> = (props) => {
     // Render styled list item.
     return (
         <ListItem
-            onPress={() => navigateToMetlink(props.code, props.isStop, props.navigation, props.route)}
+            onPress={() => {
+                navigateToMetlink(props.code, props.isStop, props.navigation, props.route)
+            }}
             bottomDivider
         >
             {/* Badge containing stop / service code. */}

@@ -80,7 +80,6 @@ class ServiceInfo extends Component<Props, State> {
      */
     render() {
         this.getServiceName()
-        console.log(this.props.code)
         return (
             <View>
                 <Card key={`stop-info-card`}>

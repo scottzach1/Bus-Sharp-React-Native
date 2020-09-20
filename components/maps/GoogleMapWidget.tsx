@@ -49,7 +49,6 @@ let region = {
  * @constructor - None exist. This a purely hook object.
  */
 const GoogleMapWidget: FC<Props> = (props) => {
-    const [selectedItem, setSelectedItem] = useState<StopMarker | null>(null)
     const [stopMarkers, setStopMarkers] = useState<any[]>([])
 
     // -------------------------------------------------------------------------------------------------------------
@@ -67,6 +66,7 @@ const GoogleMapWidget: FC<Props> = (props) => {
     // If the map has been given some routes, then load these routes into the object such that the user can be presented
     // with them on the map.
     if (props.routePaths) {
+        console.log(props.routePaths);
         if (props.routePaths.length !== 0) {
             let route = props.routePaths[Math.round(props.routePaths.length / 2) - 1]
             let midLoc = route.path[Math.round(route.path.length / 2) - 1]
@@ -135,7 +135,7 @@ const GoogleMapWidget: FC<Props> = (props) => {
             latitudeDelta: 0.015,
             longitudeDelta: 0.0121,
         }
-        setSelectedItem(marker)
+        // setSelectedItem(marker)
     }
 
     /**
@@ -194,18 +194,18 @@ const GoogleMapWidget: FC<Props> = (props) => {
                     />
                 ))}
 
-                {(selectedItem && selectedId === "Search") && (
+                {(searchLocation && selectedId === "Search") && (
                     <Marker
                         pinColor={"blue"}
                         coordinate={{
-                            latitude: selectedItem.location.latitude,
-                            longitude: selectedItem.location.longitude
+                            latitude: searchLocation.location.latitude,
+                            longitude: searchLocation.location.longitude
                         }}
                     >
 
                         <Callout>
                             <Text>
-                                {selectedItem.name}
+                                {searchLocation.name}
                             </Text>
                         </Callout>
                     </Marker>
