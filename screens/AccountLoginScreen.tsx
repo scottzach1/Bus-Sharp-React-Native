@@ -62,10 +62,7 @@ class AccountLoginScreen extends Component<Props, State> {
 
         const resp: AuthenticationResponse = await signInWithCredentials(this.state.email, this.state.password);
 
-        if (resp.success)
-            this.setState({email: '', password: ''});
-        else
-            this.setState({errorMessage: resp.errorMessage});
+        this.setState({errorMessage: resp.errorMessage});
     }
 
     /**
