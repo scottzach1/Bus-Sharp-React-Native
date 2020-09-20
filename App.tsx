@@ -11,6 +11,8 @@ import UserProvider from "./providers/UserProvider";
 import NotificationProvider from "./providers/NotificationProvider";
 
 export default function App() {
+    console.disableYellowBox = true;
+
     const isLoadingComplete = useCachedResources();
     const colorScheme = useColorScheme();
 
