@@ -1,9 +1,10 @@
 import React, {Component} from "react";
-import {ActivityIndicator, Route, View} from "react-native";
+import {ActivityIndicator, Button, Route, View} from "react-native";
 import {StackNavigationProp} from "@react-navigation/stack";
-import {getAllStops, getSavedStops} from "../../external/StorageManager";
+import {getAllStops, getSavedStops, setSavedStops} from "../../external/StorageManager";
 import {Card} from "react-native-elements";
 import StopListContainer, {StopListProp} from "../lists/StopListContainer";
+import {UserContext} from "../../providers/UserProvider";
 
 interface Props {
     route: Route,
@@ -17,6 +18,8 @@ interface State {
 }
 
 class SavedStopList extends Component<Props, State> {
+    static contextType = UserContext;
+
     constructor(props: Readonly<Props>) {
         super(props);
 
@@ -45,6 +48,11 @@ class SavedStopList extends Component<Props, State> {
         this.setState({savedStops: savedStops});
     }
 
+    async clearSavedStops() {
+        await setSavedStops([], this.context)
+        this.setState({savedStops: []});
+    }
+
     generateStops() {
         if (!this.state.allStops || !this.state.savedStops) return [];
 
@@ -66,6 +74,7 @@ class SavedStopList extends Component<Props, State> {
             <View>
                 <Card>
                     <Card.Title>Saved Stops</Card.Title>
+                    <Button title={"Clear"} onPress={() => this.clearSavedStops()}/>
                     <Card.Divider/>
                     {(this.state.savedStops && this.state.allStops) ?
                         <StopListContainer
