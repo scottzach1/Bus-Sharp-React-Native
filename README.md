@@ -1,4 +1,4 @@
-# Bus# (Bus-Sharp)
+# Bus# (Bus-Sharp React-Native Edition)
 
 > A lightweight utility app to manage public transport in the Wellington
 > region. Visit [welly.live](https://welly.live)!
@@ -11,7 +11,7 @@ to easily access public transportation information for the Wellington
 region. The target audience will encompass anyone of all ages that will
 use Wellingtons public transportation system. Existing applications in
 this marketplace lack certain features and usability that Bus# aims to
-address.
+address. Currently Bus# is only available on Android devices.
 
 
 ## Features
