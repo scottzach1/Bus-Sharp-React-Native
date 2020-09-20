@@ -31,7 +31,7 @@ interface State {
 }
 
 /**
- * A screen to present the user with a presentation of the route for some bus.
+ * A screen to present the user with a route for some bus.
  */
 class ServiceScreen extends Component<Props, State> {
 
@@ -47,6 +47,9 @@ class ServiceScreen extends Component<Props, State> {
         }
     }
 
+    /**
+     * After the component has mounted, load the data
+     */
     componentDidMount() {
         if (!this.state.serviceData || this.state.errorMessage)
             fetchServiceData(this.state.serviceCode).then((resp) => {
@@ -57,6 +60,9 @@ class ServiceScreen extends Component<Props, State> {
             });
     }
 
+    /**
+     * Creates StopMarker and ServiceRoute objects based on the collected information from local storage.
+     */
     generateMapRoute() {
         // Buffer for calculated map-tab elements.
         let parsedRoutes: ServiceRoute[] = [];
@@ -102,6 +108,9 @@ class ServiceScreen extends Component<Props, State> {
         }
     }
 
+    /**
+     * Renders the component. Loading the GoogleMapWidget first, else it will block out the Info card.
+     */
     render() {
         this.generateMapRoute();
 
