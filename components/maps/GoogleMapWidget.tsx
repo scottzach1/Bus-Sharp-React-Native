@@ -31,7 +31,6 @@ let region = {
 }
 
 const GoogleMapWidget: FC<Props> = (props) => {
-    const [selectedItem, setSelectedItem] = useState<StopMarker | null>(null)
     const [stopMarkers, setStopMarkers] = useState<any[]>([])
 
     // -------------------------------------------------------------------------------------------------------------
@@ -45,6 +44,7 @@ const GoogleMapWidget: FC<Props> = (props) => {
     generateMarkers().then();
 
     if (props.routePaths) {
+        console.log(props.routePaths);
         if (props.routePaths.length !== 0) {
             let route = props.routePaths[Math.round(props.routePaths.length / 2) - 1]
             let midLoc = route.path[Math.round(route.path.length / 2) - 1]
@@ -108,7 +108,7 @@ const GoogleMapWidget: FC<Props> = (props) => {
             latitudeDelta: 0.015,
             longitudeDelta: 0.0121,
         }
-        setSelectedItem(marker)
+        // setSelectedItem(marker)
     }
 
     async function generateMarkers() {
@@ -164,18 +164,18 @@ const GoogleMapWidget: FC<Props> = (props) => {
                     />
                 ))}
 
-                {(selectedItem && selectedId === "Search") && (
+                {(searchLocation && selectedId === "Search") && (
                     <Marker
                         pinColor={"blue"}
                         coordinate={{
-                            latitude: selectedItem.location.latitude,
-                            longitude: selectedItem.location.longitude
+                            latitude: searchLocation.location.latitude,
+                            longitude: searchLocation.location.longitude
                         }}
                     >
 
                         <Callout>
                             <Text>
-                                {selectedItem.name}
+                                {searchLocation.name}
                             </Text>
                         </Callout>
                     </Marker>

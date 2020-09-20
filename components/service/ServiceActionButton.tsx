@@ -33,8 +33,6 @@ const ServiceActionButton: FC<Props> = (props) => {
     const shareApp = async () => {
         const url = `https://welly.live/service/${props.serviceCode}`;
 
-        console.log("URL", url)
-
         await doShare(
             `Bus Sharp | Service ${props.serviceCode}`,
             `Bus Sharp | ${props.serviceName} - (${props.serviceCode}),  ${url}!`,
