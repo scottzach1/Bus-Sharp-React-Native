@@ -57,7 +57,7 @@ const AccountInfoScreen: FC<Props> = (props) => {
     }
 
     /**
-     * Signs out the user from Firebase Authentication, collecting any erros.
+     * Signs out the user from Firebase Authentication, collecting any errors.
      */
     const signOut = () => {
         auth().signOut().catch((e: { message: any }) => setErrorMessage(e.message));
