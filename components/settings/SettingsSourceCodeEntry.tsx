@@ -1,17 +1,20 @@
 import React, {FC} from "react";
 import {Icon, ListItem} from "react-native-elements";
+import * as WebBrowser from "expo-web-browser";
 
 /**
  * This component represents an entry within the settings screen containing a clickable link to direct the users to the
  * source code.
  */
 const SettingsSourceCodeEntry: FC = () => {
-    // BROKEN on mobile, switch to `<Hyperlink/>`
-    const url = "https://gitlab.ecs.vuw.ac.nz/late-for-the-bus/bus-sharp-react-native";
+    // Opens link using Expo web browser API.
+    const openLink = async () => {
+        await WebBrowser.openBrowserAsync("https://gitlab.ecs.vuw.ac.nz/late-for-the-bus/bus-sharp-react-native");
+    }
 
     // Render styled clickable list item.
     return (
-        <ListItem key={"settings-sourcecode-entry"} onPress={() => window.location.href = url}>
+        <ListItem key={"settings-sourcecode-entry"} onPress={() => openLink()}>
             <Icon name={"gitlab"} type={"material-community"}/>
             <ListItem.Content>
                 <ListItem.Title>
@@ -20,7 +23,7 @@ const SettingsSourceCodeEntry: FC = () => {
             </ListItem.Content>
             <ListItem.Chevron/>
         </ListItem>
-    )
+    );
 }
 
 export default SettingsSourceCodeEntry;
