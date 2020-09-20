@@ -5,6 +5,7 @@ import {Card, Text} from "react-native-elements";
 /**
  * SearchTabTabsDescriptionCard renders a card with information the aids the user with understanding how to
  * use the filter bar across the top of the screen.
+ *
  * @constructor
  */
 function SearchTabTabsDescriptionCard() {

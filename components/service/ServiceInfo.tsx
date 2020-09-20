@@ -24,6 +24,9 @@ interface State {
     saved: boolean,
 }
 
+/**
+ * ServiceInfo component renders a card to represent a Services information on the service perspective.
+ */
 class ServiceInfo extends Component<Props, State> {
     static contextType = UserContext;
 

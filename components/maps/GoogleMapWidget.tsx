@@ -44,6 +44,7 @@ let region = {
 
 /**
  * A widget that can be used in multiple places to show the user a view of a Google Maps, loaded with relevant information.
+ *
  * @param props - As seen in the Props interface above.
  * @constructor - None exist. This a purely hook object.
  */
