@@ -5,20 +5,32 @@ import {StackNavigationProp} from "@react-navigation/stack";
 import {Button, Card} from "react-native-elements";
 import SearchTabFilter from "../components/search/SearchTabFilter";
 import SearchTabSearchbarDescriptionCard from "../components/search/SearchTabSearchbarDescription";
-import SearchTabTabsDescription from "../components/search/SearchTabTabsDescription";
+import SearchTabTabsDescriptionCard from "../components/search/SearchTabTabsDescriptionCard";
 import {getAllServices, getAllStops} from "../external/StorageManager";
 import StopListContainer, {StopListProp} from "../components/lists/StopListContainer";
 import ServiceListContainer, {ServiceListProp} from "../components/lists/ServiceListContainer";
 
+/**
+ * Route: The route currently taken to get to this component.
+ * Navigation: The navigation stack used to get to this component.
+ */
 interface Props {
     navigation: StackNavigationProp<any>,
     route: Route,
 }
 
-
+/**
+ * StopsData: An array of StopListProps to present to the user.
+ * ServiceData: An array of ServiceListProps to present to the user.
+ * StopsErrorMessage: An error message returned from the local storage when attempting to collect the stop data.
+ * ServiceErrorMessage: An error message returned from the local storage when attempting to collect the service data.
+ * SearchText: A string maintaining the user entered text for their search.
+ * SelectedIndex: A String representation of the index where the filter button group is currently at.
+ * Flipper: Used to re-render the page when needed.
+ */
 interface State {
     stopsData: StopListProp[],
-    servicesData: StopListProp[],
+    servicesData: ServiceListProp[],
     stopsErrorMessage: string | null,
     servicesErrorMessage: string | null,
     searchText: string,
@@ -26,14 +38,33 @@ interface State {
     flipper: boolean
 }
 
-
+/**
+ * ViewCount: The amount of viewable Stop/ServiceListProps that are viewable by default. Loading in too many results in
+ * a lag when entering text with multiple results.
+ */
 const viewCount = 7
+/**
+ * StopDisplayMultiplier: A multiplier to increase the number of viewable StopListProps.
+ */
 let stopDisplayMultiplier = 1;
+/**
+ * ServiceDisplayMultiplier: A multiplier to increase the number of viewable ServiceListProps.
+ */
 let serviceDisplayMultiplier = 1;
 
+/**
+ * RemainingStops: The number of remaining stops not currently presented to the user.
+ */
 let remainingStops: number = 0
+/**
+ * RemainingServices: The number of remaining services not currently presented to the user.
+ */
 let remainingServices: number = 0
 
+/**
+ * SearchScreen: A class to render the ability for the user to locate particular service or stops. This is the default
+ * screen loaded by the application, and is rendered when the SearchTab button is clicked.
+ */
 class SearchScreen extends Component<Props, State> {
 
     constructor(props: Readonly<any>) {
@@ -51,6 +82,10 @@ class SearchScreen extends Component<Props, State> {
         }
     }
 
+    /**
+     * After the component has mounted, the Stop and Service data in the local data is loaded into this object for ease
+     * of access.
+     */
     componentDidMount() {
         if (this.state.stopsData.length === 0) {
             getAllStops().then((resp) => {
@@ -79,6 +114,10 @@ class SearchScreen extends Component<Props, State> {
         }
     }
 
+    /**
+     * A function to update the currently selected filter.
+     * @param newValue - An integer value of which button (0-3) is currently pressed.
+     */
     updateIndex(newValue: number) {
         let buttonValue: "ALL" | "ROUTES" | "STOPS" | "EXACT";
         switch (newValue) {
@@ -101,6 +140,10 @@ class SearchScreen extends Component<Props, State> {
         this.resetMultipliers()
     }
 
+    /**
+     * Filters all the stops presented to the user based on the number of stops the user has selected to be presented,
+     * and the filter choices of the user.
+     */
     filterStops() {
         if (this.state.stopsData.length === 0
             || this.state.selectedIndex === "ROUTES") {
@@ -115,6 +158,10 @@ class SearchScreen extends Component<Props, State> {
         return filtered.slice(0, Math.min(filtered.length, (viewCount * stopDisplayMultiplier)))
     }
 
+    /**
+     * Filters all the services presented to the user based on the number of services the user has selected to be
+     * presented, and the filter choices of the user.
+     */
     filterServices() {
         if (this.state.servicesData.length === 0
             || this.state.selectedIndex === "STOPS") {
@@ -130,6 +177,12 @@ class SearchScreen extends Component<Props, State> {
     }
 
 
+    /**
+     * Given a name and code of a ListProp, determine weather or not these parameters meet the filtering selected by
+     * the user. We use the name and code of each service/stop such that both are available to the user.
+     * @param name - The stop/service name.
+     * @param code - The stop/service code (the one that is available to all users publicly).
+     */
     filterListElement(name: string, code: string) {
         if (name === undefined || code === undefined) return false
 
@@ -141,11 +194,21 @@ class SearchScreen extends Component<Props, State> {
                 || code.toLowerCase().startsWith(this.state.searchText.toLowerCase()))
     }
 
+    /**
+     * Reset the number of stops/services presented to the user as the filter changes.
+     */
     resetMultipliers() {
         stopDisplayMultiplier = 1;
         serviceDisplayMultiplier = 1;
     }
 
+    /**
+     * Render the page in the following order:
+     *  - Search bar.
+     *  - Filter buttons.
+     *  - If there is no search text: Explain the search options and filters.
+     *  - If there is some search text: Present all matching items to the user.
+     */
     render() {
         let services: ServiceListProp[] = (this.state.servicesData.length > 0 && this.state.searchText.length > 0)
             ? this.filterServices() : []
@@ -160,6 +223,7 @@ class SearchScreen extends Component<Props, State> {
                     placeholder={"Search Here..."}
                     onChangeText={(e: string) => {
                         this.setState({searchText: e})
+                        this.resetMultipliers()
                     }}
                     value={this.state.searchText}
                 />
@@ -168,7 +232,7 @@ class SearchScreen extends Component<Props, State> {
                     {!this.state.searchText && (
                         <View>
                             <SearchTabSearchbarDescriptionCard/>
-                            <SearchTabTabsDescription/>
+                            <SearchTabTabsDescriptionCard/>
                         </View>
                     )}
                     {(services && services.length > 0) && (

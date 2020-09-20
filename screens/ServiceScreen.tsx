@@ -6,11 +6,22 @@ import GoogleMapWidget, {Position, ServiceRoute, StopMarker} from "../components
 import {fetchServiceData} from "../external/StorageManager";
 import ServiceInfo from "../components/service/ServiceInfo";
 
+/**
+ * Route: The route currently taken to get to this component.
+ * Navigation: The navigation stack used to get to this component.
+ */
 interface Props {
     route: Route,
     navigation: StackNavigationProp<any>,
 }
 
+/**
+ * serviceData: All the service data ripped from the local storage.
+ * serviceCode: The Code for the service. I.e. "21" represents bus number 21.
+ * errorMessage: Any error message received from the local storage component.
+ * serviceRoutes: An array of ServiceRoute objects to create polylines on the GoogleMapsWidget.
+ * stopMarkers: An array of StopMarker objects to create stop markers on the GoogleMapsWidget.
+ */
 interface State {
     serviceData: any | null,
     serviceCode: string,
@@ -19,6 +30,9 @@ interface State {
     stopMarkers: StopMarker[],
 }
 
+/**
+ * A screen to present the user with a route for some bus.
+ */
 class ServiceScreen extends Component<Props, State> {
 
     constructor(props: Readonly<any>) {
@@ -33,6 +47,9 @@ class ServiceScreen extends Component<Props, State> {
         }
     }
 
+    /**
+     * After the component has mounted, load the data
+     */
     componentDidMount() {
         if (!this.state.serviceData || this.state.errorMessage)
             fetchServiceData(this.state.serviceCode).then((resp) => {
@@ -43,6 +60,9 @@ class ServiceScreen extends Component<Props, State> {
             });
     }
 
+    /**
+     * Creates StopMarker and ServiceRoute objects based on the collected information from local storage.
+     */
     generateMapRoute() {
         // Buffer for calculated map-tab elements.
         let parsedRoutes: ServiceRoute[] = [];
@@ -88,6 +108,9 @@ class ServiceScreen extends Component<Props, State> {
         }
     }
 
+    /**
+     * Renders the component. Loading the GoogleMapWidget first, else it will block out the Info card.
+     */
     render() {
         this.generateMapRoute();
 

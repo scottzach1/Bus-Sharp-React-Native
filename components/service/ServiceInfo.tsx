@@ -7,6 +7,12 @@ import {Text, View} from "../styles/Themed";
 import {getSavedServices, toggleSavedService} from "../../external/StorageManager";
 import {UserContext} from "../../providers/UserProvider";
 
+/**
+ * Navigation: The navigation stack used to get to this component.
+ * Route: The route currently taken to get to this component.
+ * ServiceData: Data loaded from the local storage containing information about the current service in the perspective.
+ * Code: The code used to identify this service from every other service.
+ */
 interface Props {
     navigation: StackNavigationProp<any>,
     route: Route,
@@ -18,6 +24,9 @@ interface State {
     saved: boolean,
 }
 
+/**
+ * ServiceInfo component renders a card to represent a Services information on the service perspective.
+ */
 class ServiceInfo extends Component<Props, State> {
     static contextType = UserContext;
 
@@ -29,6 +38,10 @@ class ServiceInfo extends Component<Props, State> {
         }
     }
 
+    /**
+     * On component did mount, the data about the current service is loaded into this object such that is can be loaded
+     * faster if the user is to manuever around the map.
+     */
     async componentDidMount() {
         const resp = await getSavedServices();
         this.setState({
@@ -39,11 +52,17 @@ class ServiceInfo extends Component<Props, State> {
         }
     }
 
+    /**
+     * Get the name of the Service on the ServicePerspective.
+     */
     getServiceName() {
         if (!this.props.serviceData?.Name) return 'Unknown';
         else return this.props.serviceData.Name;
     }
 
+    /**
+     * Toggles the service from being saved/unsaved.
+     */
     async toggleSaved() {
         const resp = await toggleSavedService(this.props.code, this.context);
         this.setState({
@@ -51,6 +70,14 @@ class ServiceInfo extends Component<Props, State> {
         })
     }
 
+    /**
+     * Renders the component in the following order:
+     *  - Title
+     *  - Divider
+     *  - Code
+     *  - ActionButton
+     *  - if pressed: Action Sheet
+     */
     render() {
         this.getServiceName()
         console.log(this.props.code)

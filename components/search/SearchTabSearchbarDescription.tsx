@@ -2,6 +2,10 @@ import React from "react";
 import {Card, Text} from "react-native-elements";
 import {StyleSheet} from "react-native";
 
+/**
+ * SearchTabSearchBarDescriptionCard renders a card with a description of the purpose of the search bar. How to use it,
+ * with examples.
+ */
 function SearchTabSearchbarDescriptionCard() {
     return (
         <Card>

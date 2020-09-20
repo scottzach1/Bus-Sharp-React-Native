@@ -6,10 +6,17 @@ import {mapStyles} from "./GoogleMapWidgetStyles";
 import {navigateToMetlink} from "../../navigation/LinkingConfiguration";
 
 
+/**
+ * Navigation: The navigation stack used to get to this component.
+ * Route: The route currently taken to get to this component.
+ * StopMarkers: All StopMarkers that should be presented on the google widget.
+ * RoutePaths: All paths that should be presented on the google maps widget.
+ * SearchResult: The result of some searched location, in the form of an object with a lat/lng and address.
+ */
 interface Props {
-    stopMarkers: StopMarker[] | null,
     navigation: StackNavigationProp<any>,
     route: Route,
+    stopMarkers: StopMarker[] | null,
     routePaths: ServiceRoute[] | null,
     searchResult?: { address: string, latitude: number, longitude: number } | null,
 }
@@ -23,6 +30,10 @@ let searchLocation: StopMarker | undefined = undefined
 let googleLoaded = false;
 let stopOneLoaded = false;
 
+/**
+ * Location of where where the map is to go, and the last loaded location. The current preset places the user in the
+ * middle of Wellington.
+ */
 let region = {
     latitude: -41.286461,
     longitude: 174.776230,
@@ -30,6 +41,13 @@ let region = {
     longitudeDelta: 0.0121,
 }
 
+
+/**
+ * A widget that can be used in multiple places to show the user a view of a Google Maps, loaded with relevant information.
+ *
+ * @param props - As seen in the Props interface above.
+ * @constructor - None exist. This a purely hook object.
+ */
 const GoogleMapWidget: FC<Props> = (props) => {
     const [selectedItem, setSelectedItem] = useState<StopMarker | null>(null)
     const [stopMarkers, setStopMarkers] = useState<any[]>([])
@@ -38,12 +56,16 @@ const GoogleMapWidget: FC<Props> = (props) => {
     // CHECKS RUN EVERY RENDER
     // -------------------------------------------------------------------------------------------------------------
 
+    // If there are search results then set the location of the map to the search location.
     if (props.searchResult) {
         setSearchLocation()
     }
 
+    // Generate the markers to present them on the map as soon as possible.
     generateMarkers().then();
 
+    // If the map has been given some routes, then load these routes into the object such that the user can be presented
+    // with them on the map.
     if (props.routePaths) {
         if (props.routePaths.length !== 0) {
             let route = props.routePaths[Math.round(props.routePaths.length / 2) - 1]
@@ -70,6 +92,7 @@ const GoogleMapWidget: FC<Props> = (props) => {
         }
     }
 
+    // If the object has been parsed some stop markers then load those onto the map and select the first one.
     if (props.stopMarkers?.length === 1 && googleLoaded && !stopOneLoaded) {
         stopOneLoaded = true
         selectedId = "Stop"
@@ -101,6 +124,10 @@ const GoogleMapWidget: FC<Props> = (props) => {
         }
     }
 
+    /**
+     * Selects a stop marker on the map, and relocated the maps position to center on that location.
+     * @param marker - The marker to center on.
+     */
     function selectItem(marker: StopMarker) {
         region = {
             latitude: marker.location.latitude,
@@ -111,6 +138,9 @@ const GoogleMapWidget: FC<Props> = (props) => {
         setSelectedItem(marker)
     }
 
+    /**
+     * Generate stop markers for all the data given to the object through a prop from local storage.
+     */
     async function generateMarkers() {
         if (!props.stopMarkers || stopMarkers.length !== 0) return;
 
