@@ -5,6 +5,7 @@ import {doShare} from "../../external/ShareManager";
 import {StackNavigationProp} from "@react-navigation/stack";
 import {Route} from "react-native";
 import CustomBottomSheet, {CustomBottomSheetProp} from "../common/CustomBottomSheet";
+import {navigateToStopMap} from "../../navigation/LinkingConfiguration";
 
 interface Props {
     navigation: StackNavigationProp<any>,
@@ -31,7 +32,7 @@ const StopActionButton: FC<Props> = (props) => {
         new CustomBottomSheetProp(
             'View on Map',
             () => {
-                console.log('TODO: This needs to be implemented, perhaps an optional URL prop?')
+                navigateToStopMap(props.stopCode, props.navigation, props.route);
             },
             'map'
         ),

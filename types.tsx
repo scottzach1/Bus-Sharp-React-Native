@@ -15,6 +15,7 @@ export type SearchTabParamList = {
   SearchServiceScreen: undefined;
   SearchStopScreen: undefined;
   SearchScheduleScreen: undefined;
+  SearchStopMapScreen: undefined;
 }
 
 export type MapTabParamList = {
@@ -22,6 +23,7 @@ export type MapTabParamList = {
   MapServiceScreen: undefined;
   MapStopScreen: undefined;
   MapScheduleScreen: undefined;
+  MapStopMapScreen: undefined;
 }
 
 export type SavedTabParamList = {
@@ -29,6 +31,7 @@ export type SavedTabParamList = {
   SavedServiceScreen: undefined;
   SavedStopScreen: undefined;
   SavedScheduleScreen: undefined;
+  SavedStopMapScreen: undefined;
 }
 
 export type SettingsTabParamList = {
