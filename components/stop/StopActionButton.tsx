@@ -16,8 +16,19 @@ interface Props {
     toggleSaved: () => void,
 }
 
+/**
+ * This component is responsible for handling the different actions regarding a stop. This component consists of a
+ * button that when pressed, will load a bottom sheet with the user actions.
+ *
+ * NOTE: This only works on mobile.
+ *
+ * @param props - `Props` interface defined above.
+ */
 const StopActionButton: FC<Props> = (props) => {
+    // State whether to show sheet.
     const [showSheet, setShowSheet] = useState<boolean>(false);
+
+    // Components to pass the sheet.
     const actionList: CustomBottomSheetProp[] = [
         new CustomBottomSheetProp(
             'Save',
@@ -38,6 +49,7 @@ const StopActionButton: FC<Props> = (props) => {
         ),
     ];
 
+    // Handles sharing the specific stop via the share manager.
     const shareApp = async () => {
         const url = `https://welly.live/stop/${props.stopCode}`;
 
@@ -48,6 +60,7 @@ const StopActionButton: FC<Props> = (props) => {
         );
     }
 
+    // Returns a button controlling an bottom sheet encompassed within a view.
     return (
         <View>
             <Button

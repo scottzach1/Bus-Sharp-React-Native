@@ -18,10 +18,15 @@ interface Props {
 interface State {
 }
 
+/**
+ * This screen is responsible for handling any settings related options for the app, as well as link to hidden
+ * perspectives of the app (Twitter), access Account screens for data syncing and notify the user of any updates.
+ */
 class SettingsScreen extends Component<Props, State> {
     render() {
         return (
             <ScrollView>
+                {/* Settings Options and Links */}
                 <Card>
                     <Card.Title>General</Card.Title>
                     <Card.Divider/>
@@ -31,6 +36,7 @@ class SettingsScreen extends Component<Props, State> {
                     <SettingsTwitterFeedEntry navigation={this.props.navigation}/>
                     <SettingsShareEntry/>
                 </Card>
+                {/* Display information about the app */}
                 <Card>
                     <Card.Title>About</Card.Title>
                     <Card.Divider/>

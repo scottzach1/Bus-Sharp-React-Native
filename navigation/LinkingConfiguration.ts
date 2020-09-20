@@ -3,6 +3,9 @@ import {StackNavigationProp} from "@react-navigation/stack";
 import {Route} from "react-native";
 import {FirebaseAuthTypes} from "@react-native-firebase/auth";
 
+/**
+ * Describe application's path schema to be used (describes all valid path states the application can be in).
+ */
 const linkingOptions: LinkingOptions = {
     prefixes: ['/'],
     config: {
@@ -55,7 +58,14 @@ const linkingOptions: LinkingOptions = {
             NotFound: '*',
         },
     },
+    /**
+     * Attempts to determine the state of the application based off the path (reverse engineering navigation).
+     *
+     * @param path - the string path to obtain state from.
+     * @param config - the current configurations (see parent method).
+     */
     getStateFromPath(path, config) {
+        // Use default method to obtain target state, we want to manipulate this to inject our state into.
         let state: any = getStateFromPath(path, config);
 
         // State could not be found.
@@ -92,9 +102,18 @@ const linkingOptions: LinkingOptions = {
         return state;
     }
 };
-
 export default linkingOptions;
 
+
+/**
+ * Handles navigation to the schedule screen.
+ *
+ * @param stopCode - the code of the intersecting stop.
+ * @param serviceCode - the code of the intersecting service.
+ * @param arrivalTime - the time of intersection.
+ * @param navigation - the navigation prop passed to the screen.
+ * @param route - the route prop passed to the screen.
+ */
 export const navigateToSchedule = (stopCode: string, serviceCode: string,
                                    arrivalTime: Date, navigation: StackNavigationProp<any>, route: Route) => {
     const params = {
@@ -111,6 +130,13 @@ export const navigateToSchedule = (stopCode: string, serviceCode: string,
         navigation.navigate(`SavedScheduleScreen`, params);
 }
 
+/**
+ *  Handles navigation to the Metlink stop map screen (single stop on the map).
+ *
+ * @param stopCode - the stop code.
+ * @param navigation - the navigation prop passed ot the screen.
+ * @param route - the route prop passed to the screen.
+ */
 export const navigateToStopMap = (stopCode: string, navigation: StackNavigationProp<any>, route: Route) => {
 
     const params = {
@@ -126,34 +152,60 @@ export const navigateToStopMap = (stopCode: string, navigation: StackNavigationP
 }
 
 
-
+/**
+ * Handles navigation to Metlink stop and service screens.
+ *
+ * @param code - the stop or service code.
+ * @param isStop - whether the code is for a stop or service.
+ * @param navigation - the navigation prop passed to the screen.
+ * @param route - the route prop passed to the screen.
+ */
 export const navigateToMetlink = (code: string, isStop: boolean, navigation: StackNavigationProp<any>, route: Route) => {
     const targScreen: string = (isStop) ? 'Stop' : 'Service';
 
+    const params = {
+        code: code,
+    }
+
     if (route.name.startsWith('Search'))
-        navigation.navigate(`Search${targScreen}Screen`, {code: code});
+        navigation.navigate(`Search${targScreen}Screen`, params);
     else if (route.name.startsWith('Map'))
-        navigation.navigate(`Map${targScreen}Screen`, {code: code});
+        navigation.navigate(`Map${targScreen}Screen`, params);
     else if (route.name.startsWith('Saved'))
-        navigation.navigate(`Saved${targScreen}Screen`, {code: code});
+        navigation.navigate(`Saved${targScreen}Screen`, params);
 }
 
 
+/**
+ * Handles navigation to the different account screens based on the provided UserContext.
+ *
+ * @param context - the UserContext of the caller.
+ * @param navigation - the navigation prop passed to the screen.
+ * @param route - the route prop passed to the screen.
+ */
 export const checkAccountPath = (context: FirebaseAuthTypes.User | null | undefined, navigation: StackNavigationProp<any>, route: Route) => {
     // Context has not mounted, defer to loading screen.
     if (typeof context === 'undefined') return;
 
     if (context && context.uid) {
-        if (['SettingsAccountLoginScreen', 'SettingsAcountSignupScreen', 'SettingsAccountPasswordResetScreen']
-            .includes(route.name))
+        // User context loaded and user logged in.
+        if (['SettingsAccountLoginScreen', 'SettingsAcountSignupScreen', 'SettingsAccountPasswordResetScreen'].includes(route.name))
             navigation.navigate('SettingsAccountInfoScreen');
     } else {
-        if (['SettingsAccountInfoScreen'].includes(route.name))
+        // User context loaded, but no user logged in.
+        if (['SettingsAccountInfoScreen'].includes(route.name)) {
             navigation.navigate('SettingsAccountLoginScreen');
+        } else {
+            // User context has not loaded, don't redirect user.
+        }
     }
 }
 
-
+/**
+ * Helper method to capitalize the first letter of a string.
+ *
+ * @param text - input string.
+ */
 const capitalizeFirstLetter = (text: string) => {
     return text.charAt(0).toUpperCase() + text.slice(1);
 }

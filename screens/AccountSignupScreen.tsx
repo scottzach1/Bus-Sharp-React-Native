@@ -2,7 +2,7 @@ import {StackNavigationProp} from "@react-navigation/stack";
 import {Route, ScrollView} from "react-native";
 import React, {Component} from "react";
 import {Text} from "../components/styles/Themed";
-import AuthenticationResponse, {createUserWithCredentials, signInWithGoogle} from "../external/Firebase";
+import {AuthenticationResponse, createUserWithCredentials, signInWithGoogle} from "../external/FirebaseManager";
 import {Card} from "react-native-elements";
 import EmailInput from "../components/account/EmailInput";
 import PasswordInput from "../components/account/PasswordInput";
@@ -27,6 +27,14 @@ interface State {
     errorMessage: string | null,
 }
 
+/**
+ * This screen is responsible for handling any user signup activities. This can include with credentials (display name +
+ * username + password + password confirmation) or via the signup with Google with Google button.
+ *
+ * The user should also be able to use this screen to navigate to the sign up screen and the forgot password screen.
+ *
+ * Sadly login with Google is currently broken :'/.
+ */
 class AccountSignupScreen extends Component<Props, State> {
     constructor(props: Readonly<Props>) {
         super(props);
@@ -40,12 +48,23 @@ class AccountSignupScreen extends Component<Props, State> {
         };
     }
 
+    /**
+     * Attempt to configure sign in with Google authentication (in case user clicks button).
+     *
+     * This requires configuration but sadly wasn't working as we appear to require a different API key.
+     * See here: https://rnfirebase.io/auth/social-auth#google
+     */
     componentDidMount() {
         GoogleSignin.configure({
             // webClientId: "483376447021-ev7ocmauqblulvsfppk05pokj638uamg.apps.googleusercontent.com",
         });
     }
 
+    /**
+     * Signs up and authenticates the user with Firebase using email and password credentials, as well as a display name
+     * (for user profile). This is handled by the FirebaseManager. Any errors are propagated to the users via the
+     * `errorMessage` state.
+     */
     async signupWithUserCredentials() {
         this.setState({
             errorMessage: null,
@@ -72,6 +91,9 @@ class AccountSignupScreen extends Component<Props, State> {
         }
     }
 
+    /**
+     * Renders the Account Signup screen.
+     */
     render() {
         return (
             <AccountRedirectWrapper route={this.props.route} navigation={this.props.navigation}>
@@ -88,7 +110,7 @@ class AccountSignupScreen extends Component<Props, State> {
                             setPassword={(password) => this.setState({passwordConfirmation: password})}
                             confirmation={true}
                         />
-                        <AccountActionButton type={"signup"} submit={() => this.signupWithUserCredentials()}/>
+                        <AccountActionButton type={"signup"} onPress={() => this.signupWithUserCredentials()}/>
                     </Card>
                     <Card>
                         <AccountBlurb type={"login"} navigation={this.props.navigation}/>

@@ -5,7 +5,13 @@ interface Props {
     setEmail: (email: string) => void,
 }
 
+/**
+ * This component is responsible for styling the input where the user enters their email address on authentication.
+ *
+ * @param props - `Props` interface defined above.
+ */
 const EmailInput: FC<Props> = (props) => {
+    // Render styled input.
     return (
         <Input
             label={"Your Email Address"}

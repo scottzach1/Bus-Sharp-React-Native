@@ -10,7 +10,7 @@ import {UserContext} from "../../providers/UserProvider";
 interface Props {
     navigation: StackNavigationProp<any>,
     route: Route,
-    stopData: any | null | undefined,
+    stopInfo: any | null | undefined,
     code: string,
 }
 
@@ -18,6 +18,12 @@ interface State {
     saved: boolean,
 }
 
+/**
+ * This component represents a card containing the different information about a given stop. This component also
+ * encompasses the stop action button which can be used to trigger a bottom sheet of actions.
+ *
+ * The information includes the stops name, code and fare zone.
+ */
 class StopInfo extends Component<Props, State> {
     static contextType = UserContext;
 
@@ -29,6 +35,9 @@ class StopInfo extends Component<Props, State> {
         }
     }
 
+    /**
+     * Gets saved stop data to check whether this stop is saved.
+     */
     async componentDidMount() {
         const resp = await getSavedStops();
         this.setState({
@@ -39,21 +48,33 @@ class StopInfo extends Component<Props, State> {
         }
     }
 
+    /**
+     * Extracts the stop name from the stop info prop.
+     */
     getStopName() {
-        if (!this.props.stopData?.Stop?.Name) return 'Unknown';
-        else return this.props.stopData.Stop.Name;
+        if (!this.props.stopInfo?.Stop?.Name) return 'Unknown';
+        else return this.props.stopInfo.Stop.Name;
     }
 
+    /**
+     * Extracts the fare zone from the stop info prop.
+     */
     getFareZone() {
-        if (!this.props.stopData?.Stop?.Farezone) return 'Unknown';
-        else return this.props.stopData.Stop.Farezone;
+        if (!this.props.stopInfo?.Stop?.Farezone) return 'Unknown';
+        else return this.props.stopInfo.Stop.Farezone;
     }
 
+    /**
+     * Extracts the notice count from the stop info prop.
+     */
     getNumberNotices() {
-        if (!this.props.stopData?.Notices) return 'Unknown';
-        else return this.props.stopData.Notices.length;
+        if (!this.props.stopInfo?.Notices) return 'Unknown';
+        else return this.props.stopInfo.Notices.length;
     }
 
+    /**
+     * Toggles the saved status within local storage, also updating local state.
+     */
     async toggleSaved() {
         const resp = await toggleSavedStop('stop', this.context);
         this.setState({
@@ -61,13 +82,16 @@ class StopInfo extends Component<Props, State> {
         })
     }
 
+    /**
+     * Renders a card containing the stop information as well as the stop actions button (triggers action sheet).
+     */
     render() {
         return (
             <View>
                 <Card key={`stop-info-card`}>
                     <Card.Title>{this.getStopName()}</Card.Title>
                     <Card.Divider/>
-                    {this.props.stopData ?
+                    {this.props.stopInfo ?
                         <View>
                             <Text key={`stop-info-code`}>
                                 Code {this.props.code}

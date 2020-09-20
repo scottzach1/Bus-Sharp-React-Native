@@ -1,4 +1,4 @@
-import React, {Component} from "react";
+import React, {FC} from "react";
 import {Badge, Icon, ListItem} from "react-native-elements";
 import {StackNavigationProp} from "@react-navigation/stack";
 import {navigateToMetlink, navigateToSchedule} from "../../navigation/LinkingConfiguration";
@@ -19,56 +19,62 @@ interface Props {
     arrivalTime?: Date | null,
 }
 
-interface State {
-    saved: boolean,
-}
+/**
+ * This component is responsible for displaying any Metlink entry within a list throughout the app.
+ *
+ * The requirements for this component vary depending on the use case so there are a lot of props. It is not recommended
+ * to interface with this component directly. Instead, checkout the `ServiceListContainer` and `StopListContainer` props
+ * that provide a more streamlined experience.
+ *
+ * @param props - `Props` interface defined above.
+ */
+const MetlinkListItem: FC<Props> = (props) => {
 
-class MetlinkListItem extends Component<Props, State> {
-    constructor(props: Readonly<Props>) {
-        super(props);
+    /**
+     * Attempts to redirect the user to the schedule screen passing the appropriate parameters. If insufficient
+     * information is present, then this will simply not do anything.
+     */
+    const doSchedule = () => {
+        if (!props.arrivalTime || !props.originStopCode) return;
 
-        this.state = {
-            saved: false,
-        }
+        navigateToSchedule(props.originStopCode, props.code, props.arrivalTime, props.navigation, props.route);
     }
 
-    doSchedule() {
-        if (!this.props.arrivalTime || !this.props.originStopCode) return;
+    // Attempt to align text within the list entries.
+    let badgeSpacing = " ".repeat(Math.max(0, 4 - props.name.length));
 
-        navigateToSchedule(this.props.originStopCode, this.props.code,
-            this.props.arrivalTime, this.props.navigation, this.props.route)
-    }
-
-    render() {
-        let badgeSpacing = "";
-        for (let i = this.props.name.length; i < 4; ++i) badgeSpacing += " ";
-
-        return (
-            <ListItem
-                onPress={() => navigateToMetlink(this.props.code, this.props.isStop, this.props.navigation, this.props.route)}
-                bottomDivider
-            >
-                <Badge status={(this.props.isStop) ? "primary" : "warning"} value={this.props.code}/>
-                <ListItem.Content>
-                    <ListItem.Title>{badgeSpacing}{this.props.name}</ListItem.Title>
-                    {this.props.timeRemaining &&
-                    <Text>{badgeSpacing}{this.props.timeRemaining}</Text>}
-                </ListItem.Content>
-                {this.props.isLive && <Badge status={"success"} value={"live"}/>}
-                <Icon
-                    name={(this.props.isFavourite) ? "star" : "star-outline"}
-                    type={"material-community"}
-                    onPress={() => this.props.toggleFavourite()}
-                />
-                {this.props.arrivalTime &&
-                <Icon
-                    onPress={() => this.doSchedule()}
-                    name={'timer'}
-                    type={'material-community'}
-                />}
-            </ListItem>
-        );
-    }
+    // Render styled list item.
+    return (
+        <ListItem
+            onPress={() => navigateToMetlink(props.code, props.isStop, props.navigation, props.route)}
+            bottomDivider
+        >
+            {/* Badge containing stop / service code. */}
+            <Badge status={(props.isStop) ? "primary" : "warning"} value={props.code}/>
+            {/* List Item's text, containing name. */}
+            <ListItem.Content>
+                <ListItem.Title>{badgeSpacing}{props.name}</ListItem.Title>
+                {/* Additionally, optionally the time remaining too. */}
+                {props.timeRemaining &&
+                <Text>{badgeSpacing}{props.timeRemaining}</Text>}
+            </ListItem.Content>
+            {/* Live badge at end if relevant. */}
+            {props.isLive && <Badge status={"success"} value={"live"}/>}
+            {/* Favourite icon at end. */}
+            <Icon
+                name={(props.isFavourite) ? "star" : "star-outline"}
+                type={"material-community"}
+                onPress={() => props.toggleFavourite()}
+            />
+            {/* Schedule button at end if relevant. */}
+            {(props.arrivalTime && !props.isStop) &&
+            <Icon
+                onPress={() => doSchedule()}
+                name={'timer'}
+                type={'material-community'}
+            />}
+        </ListItem>
+    );
 }
 
 export default MetlinkListItem;

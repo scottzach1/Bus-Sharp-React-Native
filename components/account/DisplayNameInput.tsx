@@ -5,7 +5,13 @@ interface Props {
     setEmail: (email: string) => void,
 }
 
+/**
+ * This component is responsible for styling the input where the user enters their display name on signup.
+ *
+ * @param props - `Props` interface defined above.
+ */
 const DisplayNameInput: FC<Props> = (props) => {
+    // Render styled input.
     return (
         <Input
             label={"Your Display Name"}

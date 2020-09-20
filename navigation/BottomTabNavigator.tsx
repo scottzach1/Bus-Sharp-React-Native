@@ -10,7 +10,7 @@ import {
     SavedTabParamList,
     SearchTabParamList,
     SettingsTabParamList
-} from '../types';
+} from './tabParameters';
 import SearchScreen from "../screens/SearchScreen";
 import MapScreen from "../screens/MapScreen";
 import SavedScreen from "../screens/SavedScreen";
@@ -27,8 +27,12 @@ import AccountPasswordResetScreen from "../screens/AccountPasswordResetScreen";
 import ScheduleScreen from "../screens/ScheduleScreen";
 import StopMapScreen from "../screens/StopMapScreen";
 
+// Bottom Tab navigator containing all of the different tab.
 const BottomTab = createBottomTabNavigator<BottomTabParamList>();
 
+/**
+ * Creates new bottom tab containing all of the tabs for the application (defined below).
+ */
 export default function BottomTabNavigator() {
     const colorScheme = useColorScheme();
 

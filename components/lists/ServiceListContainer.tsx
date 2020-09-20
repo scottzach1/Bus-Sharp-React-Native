@@ -20,6 +20,16 @@ interface State {
     savedServices: string[] | undefined,
 }
 
+/**
+ * This component provides a convenient wrapper to display a list of Metlink services within a card.
+ *
+ * Within this component there are a variety of different helper methods to manage each of the underlying
+ * `MetlinkListItem`'s (eg. Saved service state). Information for each of the services to be rendered is propagated to
+ * this component via the class `ServiceListProp` defined at the bottom of the file and passed via the prop `services`
+ *
+ * Additionally there are other optional props that can passed if relevant to customise the appearance and of the
+ * internal `MetlinkListItem`'s.
+ */
 class ServiceListContainer extends Component<Props, State> {
 
     constructor(props: Readonly<Props>) {
@@ -31,44 +41,77 @@ class ServiceListContainer extends Component<Props, State> {
         };
     }
 
+    /**
+     * Obtains the list of saved services from local storage.
+     */
     componentDidMount() {
         getSavedServices().then((resp) => {
             this.setState({savedServices: resp.data});
         });
     }
 
+    /**
+     * Checks whether a service is within the saved services (from local state). If this has not loaded, then this will
+     * default to `false`.
+     *
+     * @param serviceCode - to check whether saved.
+     */
     checkFavourite(serviceCode: string) {
         if (!this.state?.savedServices) return false;
         else return this.state.savedServices.includes(serviceCode);
     }
 
+    /**
+     * Toggles the saved status of a given service by service code. The change is propagated to both the local storage
+     * as well as any of the other `MetlinkListItem`'s within this container.
+     *
+     * @param serviceCode - to toggle saved on.
+     */
     async toggleFavourite(serviceCode: string) {
         const savedServices = (await toggleSavedService(serviceCode)).data.savedServices;
         this.setState({savedServices: savedServices});
         if (this.props.setSavedServices) await this.props.setSavedServices(savedServices);
     }
 
+    /**
+     * Formats a date as a string to represent the total time distance from now..
+     *
+     * @param arrivalTime - time to format as duration string.
+     */
     getHoursRemaining(arrivalTime: Date) {
         return formatDistanceToNowStrict(arrivalTime, {
             unit: 'minute',
         });
     }
 
-    getTime(arrivalTime: Date) {
+    /**
+     * Formats the time as a string that can be displayed within the `MetlinkListItem`'s
+     *
+     * @param arrivalTime - time to format is time string.
+     */
+    formatTime(arrivalTime: Date) {
         return format(arrivalTime, 'ccc cc MMM, p');
     }
 
-    generateServices() {
+    /**
+     * Generates the list of `MetlinkListItem`'s to be rendered within this container. These will be styled based upon
+     * the different props that have been passed to this component.
+     */
+    generateServiceItems() {
+        // Not present.
         if (!this.props.services) return undefined;
 
+        // Helper variable.
         let services: ServiceListProp[] = this.props.services;
         let counter = 0;
 
         return services.map((service) => {
+            // Extract additional information.
             const arrivalTime = (service.arrival) ? new Date(service.arrival) : null;
             const timeRemaining: string = (arrivalTime) ? ((this.props.showHours) ?
-                this.getHoursRemaining(arrivalTime) : this.getTime(arrivalTime)) : ' ';
+                this.getHoursRemaining(arrivalTime) : this.formatTime(arrivalTime)) : ' ';
 
+            // Generate styled list items.
             return (
                 <MetlinkListItem
                     code={service.code}
@@ -88,21 +131,33 @@ class ServiceListContainer extends Component<Props, State> {
         });
     }
 
+    // Return view containing styled `MetlinkListItem`'s.
     render() {
         return (
             <View>
-                {this.generateServices()}
+                {this.generateServiceItems()}
             </View>
         );
     }
 }
 
+/**
+ * Defines a new prop that represents a new service entry within the ServiceListContainer.
+ */
 export class ServiceListProp {
     public name: string;
     public code: string;
     public live?: boolean;
     public arrival?: string;
 
+    /**
+     * Creates a new prop that represents a new service entry within the ServiceListContainer.
+     *
+     * @param name - of the service.
+     * @param code - the service code.
+     * @param live (optional) - whether to display the live badge.
+     * @param arrival (optional) - when the service arrives.
+     */
     constructor(name: string, code: string, live?: boolean, arrival?: string) {
         this.name = name;
         this.code = code;

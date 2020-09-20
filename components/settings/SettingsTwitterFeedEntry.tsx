@@ -6,7 +6,12 @@ interface Props {
     navigation: StackNavigationProp<any>,
 }
 
+/**
+ * THis component represents an entry within the settings screen directing the user to the Twitter Feed screen.
+ * @param props - `Props` interface defined above.
+ */
 const SettingsTwitterFeedEntry: FC<Props> = (props) => {
+    // Return styled clickable list item.
     return (
         <ListItem
             key={"settings-twitter-entry"}

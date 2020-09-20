@@ -8,6 +8,17 @@ interface Props {
     actionList: CustomBottomSheetProp[],
 }
 
+/**
+ * This component is responsible for rendering a bottom sheet. The bottom sheet pops up from the bottom of the screen
+ * and renders the `CustomBottomSheetProp` objects defined at footer of the file.
+ *
+ * This component will automatically inject a 'cancel' button and perform any additional styles not defined within the
+ * props.
+ *
+ * NOTE: This only works on mobile!
+ *
+ * @param props - `Props` interface defined above.
+ */
 const CustomBottomSheet: FC<Props> = (props) => {
     const items = [
         ...props.actionList,
@@ -26,6 +37,7 @@ const CustomBottomSheet: FC<Props> = (props) => {
         )
     ];
 
+    // Styled bottom sheet containing the entries specified within the `CustomBottomSheetProp` props.
     return (
         <BottomSheet
             isVisible={props.isVisible}
@@ -52,6 +64,9 @@ const CustomBottomSheet: FC<Props> = (props) => {
     );
 }
 
+/**
+ * Defines an entry for the custom bottom sheet prop.
+ */
 export class CustomBottomSheetProp {
     public title: string;
     public titleStyle: StyleProp<TextStyle>;
@@ -60,6 +75,16 @@ export class CustomBottomSheetProp {
     public iconColor: string | undefined;
     public onPress: () => void;
 
+    /**
+     * Creates a new prop that represents a new entry within a CustomBottomSheet.
+     *
+     * @param title - Name of the action.
+     * @param onPress (optional) - Action preformed when the entry is clicked.
+     * @param iconName (optional) - Name of the icon to render (defaults to question mark).
+     * @param iconColor (optional) - Color of the icon to render.
+     * @param titleStyle - (optional) - Styles to pass the title (See line `23` for example).
+     * @param containerStyle - (optional) - Styles to pass the container (See line `23` for example).
+     */
     constructor(title: string, onPress?: () => void | Promise<void> | undefined, iconName?: string, iconColor?: string | undefined, titleStyle?: StyleProp<TextStyle> | undefined, containerStyle?: StyleProp<ViewStyle> | undefined) {
         this.title = title;
         this.onPress = (onPress) ? onPress : () => {
