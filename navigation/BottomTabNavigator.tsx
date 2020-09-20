@@ -25,6 +25,7 @@ import AccountSignupScreen from "../screens/AccountSignupScreen";
 import AccountInfoScreen from "../screens/AccountInfoScreen";
 import AccountPasswordResetScreen from "../screens/AccountPasswordResetScreen";
 import ScheduleScreen from "../screens/ScheduleScreen";
+import StopMapScreen from "../screens/StopMapScreen";
 
 // Bottom Tab navigator containing all of the different tab.
 const BottomTab = createBottomTabNavigator<BottomTabParamList>();
@@ -112,6 +113,11 @@ function SearchTabNavigator() {
                 component={ScheduleScreen}
                 options={{headerTitle: "Schedule Reminder"}}
             />
+            <SearchTabStack.Screen
+                name={"SearchStopMapScreen"}
+                component={StopMapScreen}
+                options={{headerTitle: "Stop on Map"}}
+            />
         </SearchTabStack.Navigator>
     )
 }
@@ -141,6 +147,11 @@ function MapTabNavigator() {
                 component={ScheduleScreen}
                 options={{headerTitle: "Schedule Reminder"}}
             />
+            <MapTabStack.Screen
+                name={"MapStopMapScreen"}
+                component={StopMapScreen}
+                options={{headerTitle: "Stop on Map"}}
+            />
         </MapTabStack.Navigator>
     )
 }
@@ -169,6 +180,11 @@ function SavedTabNavigator() {
                 name={"SavedScheduleScreen"}
                 component={ScheduleScreen}
                 options={{headerTitle: "Schedule Reminder"}}
+            />
+            <SavedTabStack.Screen
+                name={"SavedStopMapScreen"}
+                component={StopMapScreen}
+                options={{headerTitle: "Stop on Map"}}
             />
         </SavedTabStack.Navigator>
     )

@@ -10,6 +10,7 @@ import {NotificationContext} from "../providers/NotificationProvider";
 import {formatDistanceToNow, sub} from "date-fns";
 import {getAllServices, getAllStops} from "../external/StorageManager";
 import SuccessCard from "../components/common/SuccessCard";
+import {getEstimatedWalkTime} from "../external/TimeEstimater";
 
 interface Props {
     route: Route,
@@ -112,6 +113,7 @@ class ScheduleScreen extends Component<Props, State> {
      * @param minutes - number of travel minutes to set within local state.
      */
     setWalkTime(minutes: number) {
+        if (minutes === this.state.walkTime) return;
         this.setState({walkTime: minutes});
     }
 
@@ -176,6 +178,9 @@ class ScheduleScreen extends Component<Props, State> {
      * Renders the Schedule Screen.
      */
     render() {
+        // Calculate the time to walk to the location (locally).
+        getEstimatedWalkTime(this.state.stopInfo, this.setWalkTime.bind(this)).then();
+
         return (
             <ScrollView>
                 {/* Main View */}

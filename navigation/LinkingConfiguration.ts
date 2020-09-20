@@ -18,7 +18,8 @@ const linkingOptions: LinkingOptions = {
                             SearchHomeScreen: '',
                             SearchServiceScreen: 'service/:code',
                             SearchStopScreen: 'stop/:code',
-                            SearchScheduleScreen: 'schedule,'
+                            SearchScheduleScreen: 'schedule,',
+                            SearchStopMapScreen: 'stop/:code/map',
                         }
                     },
                     MapTab: {
@@ -28,6 +29,7 @@ const linkingOptions: LinkingOptions = {
                             MapServiceScreen: 'service/:code',
                             MapStopScreen: 'stop/:code',
                             MapScheduleScreen: 'schedule',
+                            MapStopMapScreen: 'stop/:code/map',
                         }
                     },
                     SavedTab: {
@@ -37,6 +39,7 @@ const linkingOptions: LinkingOptions = {
                             SavedServiceScreen: 'service/:code',
                             SavedStopScreen: 'stop/:code',
                             SavedScheduleScreen: 'schedule',
+                            SavedStopMapScreen: 'stop/:code/map',
                         }
                     },
                     SettingsTab: {
@@ -100,6 +103,54 @@ const linkingOptions: LinkingOptions = {
     }
 };
 export default linkingOptions;
+
+
+/**
+ * Handles navigation to the schedule screen.
+ *
+ * @param stopCode - the code of the intersecting stop.
+ * @param serviceCode - the code of the intersecting service.
+ * @param arrivalTime - the time of intersection.
+ * @param navigation - the navigation prop passed to the screen.
+ * @param route - the route prop passed to the screen.
+ */
+export const navigateToSchedule = (stopCode: string, serviceCode: string,
+                                   arrivalTime: Date, navigation: StackNavigationProp<any>, route: Route) => {
+    const params = {
+        date: arrivalTime.toJSON(),
+        serviceCode: serviceCode,
+        stopCode: stopCode,
+    };
+
+    if (route.name.startsWith('Search'))
+        navigation.navigate(`SearchScheduleScreen`, params);
+    else if (route.name.startsWith('Map'))
+        navigation.navigate(`MapScheduleScreen`, params);
+    else if (route.name.startsWith('Saved'))
+        navigation.navigate(`SavedScheduleScreen`, params);
+}
+
+/**
+ *  Handles navigation to the Metlink stop map screen (single stop on the map).
+ *
+ * @param stopCode - the stop code.
+ * @param navigation - the navigation prop passed ot the screen.
+ * @param route - the route prop passed to the screen.
+ */
+export const navigateToStopMap = (stopCode: string, navigation: StackNavigationProp<any>, route: Route) => {
+
+    const params = {
+        code: stopCode
+    }
+
+    if (route.name.startsWith('Search'))
+        navigation.navigate(`SearchStopMapScreen`, params);
+    else if (route.name.startsWith('Map'))
+        navigation.navigate(`MapStopMapScreen`, params);
+    else if (route.name.startsWith('Saved'))
+        navigation.navigate(`SavedStopMapScreen`, params);
+}
+
 
 /**
  * Handles navigation to Metlink stop and service screens.

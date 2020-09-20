@@ -1,7 +1,7 @@
-import {ActivityIndicator, Route, View} from "react-native";
+import {ActivityIndicator, Button, Route, View} from "react-native";
 import {StackNavigationProp} from "@react-navigation/stack";
 import React, {Component} from "react";
-import {getAllServices, getSavedServices} from "../../external/StorageManager";
+import {getAllServices, getSavedServices, setSavedServices} from "../../external/StorageManager";
 import {Card} from "react-native-elements";
 import ServiceListContainer, {ServiceListProp} from "../lists/ServiceListContainer";
 import ErrorCard from "../common/ErrorCard";
@@ -63,6 +63,11 @@ class SavedServiceList extends Component<Props, State> {
         this.setState({savedServices: savedServices});
     }
 
+    async clearSavedServices() {
+        await setSavedServices([], this.context)
+        this.setState({savedServices: []});
+    }
+
     /**
      * Generates the list of `MetlinkListItem`'s to be rendered within this container. These will be styled based upon
      * the different props that have been passed to this component.
@@ -89,6 +94,7 @@ class SavedServiceList extends Component<Props, State> {
             <View>
                 <Card>
                     <Card.Title>Saved Services</Card.Title>
+                    <Button title={"Clear"} onPress={() => this.clearSavedServices()}/>
                     <Card.Divider/>
                     {(this.state.savedServices && this.state.allServices) ?
                         <ServiceListContainer

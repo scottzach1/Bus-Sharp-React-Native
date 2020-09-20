@@ -16,6 +16,8 @@ import NotificationProvider from "./providers/NotificationProvider";
  * This component not only encompasses the different view components but also any provider, state or context components.
  */
 export default function App() {
+    console.disableYellowBox = true;
+
     const isLoadingComplete = useCachedResources();
     const colorScheme = useColorScheme();
 

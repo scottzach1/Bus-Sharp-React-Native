@@ -1,9 +1,10 @@
 import React, {Component} from "react";
-import {ActivityIndicator, Route, View} from "react-native";
+import {ActivityIndicator, Button, Route, View} from "react-native";
 import {StackNavigationProp} from "@react-navigation/stack";
-import {getAllStops, getSavedStops} from "../../external/StorageManager";
+import {getAllStops, getSavedStops, setSavedStops} from "../../external/StorageManager";
 import {Card} from "react-native-elements";
 import StopListContainer, {StopListProp} from "../lists/StopListContainer";
+import {UserContext} from "../../providers/UserProvider";
 
 interface Props {
     route: Route,
@@ -23,6 +24,8 @@ interface State {
  * the entire component re-renders updating all other containing Metlink list entries.
  */
 class SavedStopList extends Component<Props, State> {
+    static contextType = UserContext;
+
     constructor(props: Readonly<Props>) {
         super(props);
 
@@ -63,6 +66,14 @@ class SavedStopList extends Component<Props, State> {
     }
 
     /**
+     * Clears saved within local storage, updating this components state once the action completes.
+     */
+    async clearSavedStops() {
+        await setSavedStops([], this.context)
+        this.setState({savedStops: []});
+    }
+
+    /**
      * Generates the list of `MetlinkListItem`'s to be rendered within this container. These will be styled based upon
      * the different props that have been passed to this component.
      */
@@ -88,6 +99,7 @@ class SavedStopList extends Component<Props, State> {
             <View>
                 <Card>
                     <Card.Title>Saved Stops</Card.Title>
+                    <Button title={"Clear"} onPress={() => this.clearSavedStops()}/>
                     <Card.Divider/>
                     {(this.state.savedStops && this.state.allStops) ?
                         <StopListContainer

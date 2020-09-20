@@ -1,7 +1,7 @@
 import React, {FC} from "react";
 import {Badge, Icon, ListItem} from "react-native-elements";
 import {StackNavigationProp} from "@react-navigation/stack";
-import {navigateToMetlink} from "../../navigation/LinkingConfiguration";
+import {navigateToMetlink, navigateToSchedule} from "../../navigation/LinkingConfiguration";
 import {Route} from "react-native";
 import {Text} from "../styles/Themed";
 
@@ -37,11 +37,7 @@ const MetlinkListItem: FC<Props> = (props) => {
     const doSchedule = () => {
         if (!props.arrivalTime || !props.originStopCode) return;
 
-        props.navigation.navigate("SavedScheduleScreen", {
-            date: props.arrivalTime.toJSON(),
-            serviceCode: props.code,
-            stopCode: props.originStopCode,
-        });
+        navigateToSchedule(props.originStopCode, props.code, props.arrivalTime, props.navigation, props.route);
     }
 
     // Attempt to align text within the list entries.
