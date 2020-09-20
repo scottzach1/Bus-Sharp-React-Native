@@ -26,6 +26,7 @@ interface State {
     serviceInfo: any | null,
     errorMessage: string | null,
     successMessage: string | null,
+    userSetTime: boolean,
 }
 
 /**
@@ -71,6 +72,7 @@ class ScheduleScreen extends Component<Props, State> {
             serviceInfo: null,
             errorMessage: error,
             successMessage: null,
+            userSetTime: false,
         }
     }
 
@@ -114,7 +116,10 @@ class ScheduleScreen extends Component<Props, State> {
      */
     setWalkTime(minutes: number) {
         if (minutes === this.state.walkTime) return;
-        this.setState({walkTime: minutes});
+        this.setState({
+            walkTime: minutes,
+            userSetTime: true,
+        });
     }
 
     /**
@@ -175,11 +180,19 @@ class ScheduleScreen extends Component<Props, State> {
     }
 
     /**
+     * Calculate the time to walk to the location (locally).
+     */
+    calculateWalkTime() {
+        if (!this.state.userSetTime && this.state.stopInfo) {
+            getEstimatedWalkTime(this.state.stopInfo, this.setWalkTime.bind(this)).then();
+        }
+    }
+
+    /**
      * Renders the Schedule Screen.
      */
     render() {
-        // Calculate the time to walk to the location (locally).
-        getEstimatedWalkTime(this.state.stopInfo, this.setWalkTime.bind(this)).then();
+       this.calculateWalkTime();
 
         return (
             <ScrollView>

@@ -69,7 +69,6 @@ const GoogleMapWidget: FC<Props> = (props) => {
     // If the map has been given some routes, then load these routes into the object such that the user can be presented
     // with them on the map.
     if (props.routePaths) {
-        console.log(props.routePaths);
         if (props.routePaths.length !== 0) {
             let route = props.routePaths[Math.round(props.routePaths.length / 2) - 1]
             let midLoc = route.path[Math.round(route.path.length / 2) - 1]
