@@ -10,7 +10,7 @@ interface Props {
     stopMarkers: StopMarker[] | null,
     navigation: StackNavigationProp<any>,
     route: Route,
-    routePaths: any | null,
+    routePaths: ServiceRoute[] | null,
     searchResult?: { address: string, latitude: number, longitude: number } | null,
 }
 
@@ -149,6 +149,8 @@ const GoogleMapWidget: FC<Props> = (props) => {
                             latitude: position.latitude,
                             longitude: position.longitude,
                         }))}
+                        strokeColor={route.color}
+                        strokeWidth={3}
                     />
                 ))}
 
