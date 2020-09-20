@@ -5,11 +5,22 @@ import {View} from "../components/styles/Themed";
 import GoogleMapWidget, {Position, ServiceRoute, StopMarker} from "../components/maps/GoogleMapWidget";
 import {fetchServiceData} from "../external/StorageManager";
 
+/**
+ * Route: The route currently taken to get to this component.
+ * Navigation: The navigation stack used to get to this component.
+ */
 interface Props {
     route: Route,
     navigation: StackNavigationProp<any>,
 }
 
+/**
+ * serviceData: All the service data ripped from the local storage.
+ * serviceCode: The Code for the service. I.e. "21" represents bus number 21.
+ * errorMessage: Any error message received from the local storage component.
+ * serviceRoutes: An array of ServiceRoute objects to create polylines on the GoogleMapsWidget.
+ * stopMarkers: An array of StopMarker objects to create stop markers on the GoogleMapsWidget.
+ */
 interface State {
     serviceData: any | null,
     serviceCode: string,
@@ -18,6 +29,9 @@ interface State {
     stopMarkers: StopMarker[],
 }
 
+/**
+ * A screen to present the user with a presentation of the route for some bus.
+ */
 class ServiceScreen extends Component<Props, State> {
 
     constructor(props: Readonly<any>) {
