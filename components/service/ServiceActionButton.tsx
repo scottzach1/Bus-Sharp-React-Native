@@ -26,9 +26,6 @@ interface Props {
 /**
  * ServiceActionButton renders a button and relevant action sheet to the user to offer them some options when looking
  * at the service perspective.
- *
- * @param props
- * @constructor
  */
 const ServiceActionButton: FC<Props> = (props) => {
     const [showSheet, setShowSheet] = useState<boolean>(false);
