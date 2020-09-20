@@ -5,7 +5,7 @@ import {StackNavigationProp} from "@react-navigation/stack";
 import {Button, Card} from "react-native-elements";
 import SearchTabFilter from "../components/search/SearchTabFilter";
 import SearchTabSearchbarDescriptionCard from "../components/search/SearchTabSearchbarDescription";
-import SearchTabTabsDescription from "../components/search/SearchTabTabsDescription";
+import SearchTabTabsDescriptionCard from "../components/search/SearchTabTabsDescriptionCard";
 import {getAllServices, getAllStops} from "../external/StorageManager";
 import StopListContainer, {StopListProp} from "../components/lists/StopListContainer";
 import ServiceListContainer, {ServiceListProp} from "../components/lists/ServiceListContainer";
@@ -232,7 +232,7 @@ class SearchScreen extends Component<Props, State> {
                     {!this.state.searchText && (
                         <View>
                             <SearchTabSearchbarDescriptionCard/>
-                            <SearchTabTabsDescription/>
+                            <SearchTabTabsDescriptionCard/>
                         </View>
                     )}
                     {(services && services.length > 0) && (

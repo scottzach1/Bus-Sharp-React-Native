@@ -1,14 +1,23 @@
 import React, {Component} from "react";
 import {ButtonGroup} from "../styles/Themed";
 
+/**
+ * UpdateIndex: a callback function to update the parent component with the currently selected item.
+ */
 interface Props{
     updateIndex: (e: number) => void
 }
 
+/**
+ * SelectedIndex: Maintains a record of the currently selected item.
+ */
 interface State{
     selectedIndex: number
 }
 
+/**
+ * A component that renders in a ButtonGroup that can alter the filter options presented to the user.
+ */
 class SearchTabFilter extends Component<Props, State> {
 
     constructor(props: Readonly<Props>) {

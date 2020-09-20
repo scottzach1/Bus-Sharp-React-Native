@@ -2,7 +2,12 @@ import React from "react";
 import {StyleSheet} from "react-native";
 import {Card, Text} from "react-native-elements";
 
-function SearchTabTabsDescription() {
+/**
+ * SearchTabTabsDescriptionCard renders a card with information the aids the user with understanding how to
+ * use the filter bar across the top of the screen.
+ * @constructor
+ */
+function SearchTabTabsDescriptionCard() {
     return (
         <Card>
             <Card.Title style={styles.title}>Tabs</Card.Title>
@@ -50,4 +55,4 @@ const styles = StyleSheet.create({
     subtitle: {fontWeight: "bold", fontSize: 20}
 })
 
-export default SearchTabTabsDescription;
+export default SearchTabTabsDescriptionCard;
