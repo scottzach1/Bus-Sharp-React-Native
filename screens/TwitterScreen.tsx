@@ -9,6 +9,9 @@ interface Props {
 interface State {
 }
 
+/**
+ * BROKEN ON MOBILE: Displays the latest Twitter feed by utilising `widget.js`.
+ */
 class TwitterScreen extends Component<Props, State> {
     render() {
         return (
@@ -21,6 +24,9 @@ class TwitterScreen extends Component<Props, State> {
     }
 }
 
+/**
+ * Styles unique to the Twitter screen.
+ */
 const styles = StyleSheet.create({
     container: {
         flex: 1,

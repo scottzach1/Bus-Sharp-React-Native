@@ -5,7 +5,7 @@ import {Text} from "../components/styles/Themed";
 import ErrorCard from "../components/common/ErrorCard";
 import AccountActionButton from "../components/account/AccountActionButton";
 import {Card} from "react-native-elements";
-import {getUserDocument} from "../external/Firebase";
+import {getUserDocument} from "../external/FirebaseManager";
 import auth from '@react-native-firebase/auth';
 import AccountRedirectWrapper from "../navigation/AccountRedirectWrapper";
 import {UserContext} from "../providers/UserProvider";
@@ -20,6 +20,12 @@ interface State {
     errorMessage: string | null,
 }
 
+/**
+ * This screen is responsible for showing an account overview for the user when the user is signed in.
+ *
+ * This screen contains a card showing the users name within the title and the body is a list of all of the users
+ * account information stored within Firebase. There is also a logout button that the user can use to stop syncing.
+ */
 class AccountInfoScreen extends Component<Props, State> {
     static contextType = UserContext;
 
@@ -32,26 +38,43 @@ class AccountInfoScreen extends Component<Props, State> {
         }
     }
 
+    /**
+     * Get user document when component loads. This will wait until the document is received within Firebase.
+     */
     async componentDidMount() {
         await this.getUserDocument();
     }
 
+    /**
+     * Gets the user document from Firebase by utilising the FirebaseManager.
+     */
     async getUserDocument() {
         if (this.context && !this.state.doc) {
+            // Doc hasn't been loaded but user context has.
             this.setState({
                 doc: await getUserDocument(this.context)
             });
         }
     }
 
+    /**
+     * Extracts the display name from the user document, if it exists.
+     */
     getName() {
         return (this.state.doc) ? this.state.doc.displayName : undefined;
     }
 
+    /**
+     * Signs out the user from Firebase Authentication, collecting any erros.
+     */
     signOut() {
         auth().signOut().catch((e: { message: any }) => this.setState({errorMessage: e.message}));
     }
 
+    /**
+     * Generates a list of `Text` entries, each mapping to a different property within the user document.
+     * If document hasn't loaded, show loading spinner.
+     */
     generateTable() {
         const doc = this.state.doc;
         if (!doc) return <ActivityIndicator/>;
@@ -71,7 +94,11 @@ class AccountInfoScreen extends Component<Props, State> {
         return listItems;
     }
 
+    /**
+     * Renders the AccountInfo screen.
+     */
     render() {
+        // Load document if hasn't been loaded yet.
         this.getUserDocument().then();
 
         return (
@@ -82,7 +109,7 @@ class AccountInfoScreen extends Component<Props, State> {
                         <Card.Divider/>
                         {this.generateTable()}
                         <Card.Divider/>
-                        <AccountActionButton type={"logout"} submit={() => this.signOut()}/>
+                        <AccountActionButton type={"logout"} onPress={() => this.signOut()}/>
                     </Card>
                     <ErrorCard
                         errorMessage={this.state.errorMessage}

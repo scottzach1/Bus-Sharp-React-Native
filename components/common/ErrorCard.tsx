@@ -7,7 +7,16 @@ interface Props {
     clearMessage: () => void,
 }
 
+/**
+ * This component is responsible for providing a standard design where we notify the user of any errors.
+ *
+ * This component will only render if the error message is not null.
+ * The `clearMessage` prop is called when the dismiss icon is pressed within the card.
+ *
+ * @param props - `Props` interface defined above.
+ */
 const ErrorCard: FC<Props> = (props) => {
+    // Return view wrapping a conditionally present styled card.
     return (
         <View>
             {props.errorMessage &&

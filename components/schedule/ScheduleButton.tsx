@@ -5,7 +5,13 @@ interface Props {
     onPress: () => void,
 }
 
+/**
+ * This component styles the schedule button within the schedule screen.
+ *
+ * @param props - `Props` interface defined above.
+ */
 const ScheduleButton: FC<Props> = (props) => {
+    // Returns a styled button.
     return (
         <Button
             title={' Schedule'}

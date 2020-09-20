@@ -1,5 +1,5 @@
 import {StackNavigationProp} from "@react-navigation/stack";
-import React, {Component} from "react";
+import React, {FC, useContext} from "react";
 import {Icon, ListItem} from "react-native-elements";
 import {UserContext} from "../../providers/UserProvider";
 
@@ -7,45 +7,39 @@ interface Props {
     navigation: StackNavigationProp<any>,
 }
 
-interface State {
-}
+/**
+ * This component represents an entry within the settings screen linking to the relevant account page. This is decided
+ * based on the user context (provided by UserProvider). This will link to the login screen if the user is not
+ * authenticated, otherwise the account info screen.
+ */
+const SettingsAccountEntry: FC<Props> = (props) => {
+    const context = useContext(UserContext);
 
-class SettingsAccountEntry extends Component<Props, State> {
-    static contextType = UserContext;
+    const userLoaded: boolean = Boolean(context?.uid);
 
-    constructor(props: Readonly<Props>) {
-        super(props);
-
-        this.state = {}
+    const doPress = () => {
+        const pageName = (userLoaded) ? 'Info' : 'Login';
+        props.navigation.navigate('SettingsAccount' + pageName + 'Screen');
     }
 
-    doPress() {
-        const pageName = (this.context?.uid) ? 'Info' : 'Login';
-        this.props.navigation.navigate('SettingsAccount' + pageName + 'Screen');
-    }
-
-
-    render() {
-        const userLoaded: boolean = this.context?.uid;
-
-        return (
-            <ListItem
-                key={"settings-account-entry"}
-                onPress={() => this.doPress()}
-            >
-                <Icon
-                    name={(userLoaded) ? "account" : "account-outline"}
-                    type={"material-community"}
-                />
-                <ListItem.Content>
-                    <ListItem.Title>
-                        {userLoaded ? "Account" : "Login / Signup"}
-                    </ListItem.Title>
-                </ListItem.Content>
-                <ListItem.Chevron/>
-            </ListItem>
-        );
-    }
+    // Render styled clickable list item.
+    return (
+        <ListItem
+            key={"settings-account-entry"}
+            onPress={() => doPress()}
+        >
+            <Icon
+                name={(userLoaded) ? "account" : "account-outline"}
+                type={"material-community"}
+            />
+            <ListItem.Content>
+                <ListItem.Title>
+                    {(userLoaded) ? "Account" : "Login / Signup"}
+                </ListItem.Title>
+            </ListItem.Content>
+            <ListItem.Chevron/>
+        </ListItem>
+    );
 }
 
 export default SettingsAccountEntry;

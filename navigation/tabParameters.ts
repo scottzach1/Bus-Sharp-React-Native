@@ -1,3 +1,7 @@
+/**
+ * Defines the different screens within each of the different tabs.
+ */
+
 export type RootStackParamList = {
   Root: undefined;
   NotFound: undefined;

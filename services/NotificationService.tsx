@@ -3,7 +3,11 @@ import PushNotification from 'react-native-push-notification';
 import NotificationHandler from './NotificationHandler';
 
 /**
- * Adapted from https://github.com/zo0r/react-native-push-notification.
+ * This service is concerned with platform native push notifications. Within this service the major function for us to
+ * note is the `scheduleServiceNotification()` function, which can be used to schedule a reminder for an upcoming
+ * service.
+ *
+ * Adapted from https://raw.githubusercontent.com/zo0r/react-native-push-notification/master/example/NotifService.js.
  */
 export default class NotificationService {
     private lastId: number;
@@ -28,6 +32,9 @@ export default class NotificationService {
         });
     }
 
+    /**
+     * Creates a new channel (or updates if present) that can be used to send push notifications.
+     */
     createOrUpdateChannel() {
         this.lastChannelCounter++;
         PushNotification.createChannel(
@@ -47,9 +54,18 @@ export default class NotificationService {
         PushNotification.popInitialNotification((notification: any) => console.log('InitialNotication:', notification));
     }
 
-    scheduleServiceNotification(n: NotificationInstance) {
+    /**
+     * Schedules an upcoming local push notification for an upcoming service.
+     *
+     * Information passed to this regarding the service schedule is passed by the `ScheduleNotificationInstance` class defined
+     * at the bottom of the file.
+     *
+     * @param n - information about the upcoming service schedule.
+     */
+    scheduleServiceNotification(n: ScheduleNotificationInstance) {
         this.lastId++;
 
+        // Define text to put within the push notification.
         const longText = `The bus ${n.serviceCode} (${n.serviceName}) leaves from ${n.stopName} (${n.stopCode}) at ${n.date.toTimeString()}.`;
         const shortText = `Leave now to catch the ${n.serviceCode} in ${n.walkTime} mins`;
 
@@ -95,32 +111,55 @@ export default class NotificationService {
 
     }
 
+    /**
+     * Checks that the valid permissions are set.
+     */
     checkPermission(cbk: any) {
         return PushNotification.checkPermissions(cbk);
     }
 
+    /**
+     * Requests user for the valid permissions (if aren't present).
+     */
     requestPermissions() {
         return PushNotification.requestPermissions();
     }
 
+    /**
+     * Cancels an upcoming notification.
+     */
     cancelNotification() {
         PushNotification.cancelLocalNotifications({id: '' + this.lastId});
     }
 
+    /**
+     * Cancels all upcoming notifications.
+     */
     cancelAll() {
         PushNotification.cancelAllLocalNotifications();
     }
 
+    /**
+     * Revokes all currently obtained permissions.
+     */
     abandonPermissions() {
         PushNotification.abandonPermissions();
     }
 
+    /**
+     * Gets a scheduled notification callback to notify.
+     *
+     * @param callback - callback.
+     */
     getScheduledLocalNotifications(callback: any) {
         PushNotification.getScheduledLocalNotifications(callback);
     }
 }
 
-class NotificationInstance {
+/**
+ * Defines a context for a push notification.
+ */
+class ScheduleNotificationInstance {
     public date: Date;
     public walkTime: number;
     public stopCode: string;
@@ -128,6 +167,17 @@ class NotificationInstance {
     public serviceCode: string;
     public serviceName: string;
 
+    /**
+     * Creates a new ScheduleNotificationInstance containing the information required to schedule an upcoming service
+     * notification.
+     *
+     * @param date - the date of arrival (intersection time).
+     * @param walkTime - the time before arrival date to notify the user (allow for travel time).
+     * @param stopCode - the code of the intersecting stop.
+     * @param stopName - the name of the intersecting stop.
+     * @param serviceCode - the code of the intersecting service.
+     * @param serviceName - the name of the intersecting service.
+     */
     constructor(date: Date, walkTime: number, stopCode: string, stopName: string, serviceCode: string, serviceName: string) {
         this.date = date;
         this.walkTime = walkTime;

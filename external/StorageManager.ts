@@ -1,8 +1,25 @@
 import AsyncStorage from '@react-native-community/async-storage';
-import {getUserDocument, updateUserDocument} from "./Firebase";
+import {getUserDocument, updateUserDocument} from "./FirebaseManager";
 import csv from 'csvtojson';
 import {FirebaseAuthTypes} from "@react-native-firebase/auth";
 
+/**
+ * DESCRIPTION: This library acts as an interface between the rest of the application and the local storage.
+ *
+ * This library utilises the AsyncStorage API exposed by React Native. By default when using a desktop web browser this
+ * will revert to the LocalStorage exposed by the API. However, when on mobile devices this library leverages other
+ * advanced techniques and libraries to help sustain persistence again factors such as periodic cache clearing. This
+ * library also tries its best to cache information such as stop departures. Some of the functions within this library
+ * return a StorageResponse object which contains additional metadata for success / failure as well as any error
+ * messages and the returned data. This is very similar to the fetch API exposed by the browser.
+ *
+ * NOTE: Some of the setters within this library also take an optional firebase.User reference. If this argument is
+ * present then the method will also try to sync the changes with Firestore.
+ */
+
+/**
+ * Keys for all entries created within local storage.
+ */
 const StorageKeys = {
     savedServices: '@savedServices',
     savedStops: '@savedStops',

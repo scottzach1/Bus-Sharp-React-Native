@@ -16,6 +16,12 @@ interface State {
     errorMessage: string | null,
 }
 
+/**
+ * This component provides a container to display all of the saved stops.
+ *
+ * Within this list, we also maintain the saved state of all of the stops. This means that when this state changes
+ * the entire component re-renders updating all other containing Metlink list entries.
+ */
 class SavedStopList extends Component<Props, State> {
     constructor(props: Readonly<Props>) {
         super(props);
@@ -27,6 +33,9 @@ class SavedStopList extends Component<Props, State> {
         }
     }
 
+    /**
+     * Obtains all of the saved stops, as well as all of the stop information for children (eg, name and code).
+     */
     componentDidMount() {
         getAllStops().then((resp) =>
             this.setState({
@@ -41,11 +50,23 @@ class SavedStopList extends Component<Props, State> {
             }));
     }
 
+    /**
+     * Updates the list of saved stops locally.
+     *
+     * NOTE: This acts as a callback received to refresh the other components instead of actually updating the local
+     * storage (already handled by the `StopListContainer`).
+     *
+     * @param savedStops - the new value to set locally.
+     */
     updateSavedStops(savedStops: string[]) {
         this.setState({savedStops: savedStops});
     }
 
-    generateStops() {
+    /**
+     * Generates the list of `MetlinkListItem`'s to be rendered within this container. These will be styled based upon
+     * the different props that have been passed to this component.
+     */
+    generateStopListItems() {
         if (!this.state.allStops || !this.state.savedStops) return [];
 
         let containerProps: StopListProp[] = [];
@@ -61,6 +82,7 @@ class SavedStopList extends Component<Props, State> {
         return containerProps;
     }
 
+    // Render styled card containing the stop list within a view with an optional error card.
     render() {
         return (
             <View>
@@ -69,7 +91,7 @@ class SavedStopList extends Component<Props, State> {
                     <Card.Divider/>
                     {(this.state.savedStops && this.state.allStops) ?
                         <StopListContainer
-                            stops={this.generateStops()}
+                            stops={this.generateStopListItems()}
                             setSavedStops={(savedStops) => this.updateSavedStops(savedStops)}
                             navigation={this.props.navigation}
                             route={this.props.route}

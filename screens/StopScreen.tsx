@@ -16,6 +16,13 @@ interface State {
     errorMessage: string | null,
 }
 
+/**
+ * This screen is responsible for letting the user view information about a given Metlink bus stop. This screen consists
+ * of two different parts, first of which is the info card which will provide the user information about the given stop,
+ * as well as perform actions on the given stop. The second part is a card which contains the full upcoming service
+ * timetable. Each of these entries will have options to favourite, schedule as well as be clickable to pivot to the
+ * services screen.
+ */
 class StopScreen extends Component<Props, State> {
 
     constructor(props: Readonly<any>) {
@@ -28,6 +35,11 @@ class StopScreen extends Component<Props, State> {
         }
     }
 
+    /**
+     * Load the stop data if it hasn't been loaded, or there previously was an error.
+     * (Error might occur where there is limited connectivity, StorageManager will provide cached information however
+     * preferably we want to be using latest fetched data).
+     */
     componentDidMount() {
         if (!this.state.stopData || this.state.errorMessage)
             fetchStopData(this.state.stopCode).then((resp) => {
@@ -38,12 +50,14 @@ class StopScreen extends Component<Props, State> {
             });
     }
 
+    /**
+     * Render the Stop screen.
+     */
     render() {
-
         return (
             <ScrollView>
                 <StopInfo
-                    stopData={this.state.stopData}
+                    stopInfo={this.state.stopData}
                     code={this.state.stopCode}
                     navigation={this.props.navigation}
                     route={this.props.route}

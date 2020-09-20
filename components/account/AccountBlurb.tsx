@@ -8,6 +8,16 @@ interface Props {
     type: 'login' | 'signup' | 'reset',
 }
 
+/**
+ * This component is responsible for providing the quick links within the account authentication screens. Each of the
+ * links will provide a description and navigate to the respective authentication pages.
+ *
+ * The context of the component will be provided by the strict property `type` within the Props interface.
+ *
+ * NOTE: This must be called within a `Card` component from `react-native-elements`.
+ *
+ * @param props - `Props` interface defined above.
+ */
 const AccountBlurb: FC<Props> = (props) => {
 
     let message: string, screen: string;
@@ -27,6 +37,7 @@ const AccountBlurb: FC<Props> = (props) => {
             break;
     }
 
+    // Render Styled Card Contents.
     return (
         <View>
             <Card.Title>

@@ -10,10 +10,16 @@ import {initSavedServices, initSavedStops, initServices, initStops, initTheme} f
 import UserProvider from "./providers/UserProvider";
 import NotificationProvider from "./providers/NotificationProvider";
 
+/**
+ * This components represents the entire application encompassing all of the components of the app.
+ *
+ * This component not only encompasses the different view components but also any provider, state or context components.
+ */
 export default function App() {
     const isLoadingComplete = useCachedResources();
     const colorScheme = useColorScheme();
 
+    // Initialise data within local storage (if not present).
     initTheme().then();
     initStops().then();
     initServices().then();
@@ -21,8 +27,10 @@ export default function App() {
     initSavedStops().then();
 
     if (!isLoadingComplete) {
+        // Component not loaded, don't return anything yet.
         return null;
     } else {
+        // Return the entire application wrapped within the provider components.
         return (
             <SafeAreaProvider>
                 <NotificationProvider>

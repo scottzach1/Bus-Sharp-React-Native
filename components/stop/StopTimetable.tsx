@@ -17,6 +17,13 @@ interface State {
     showHours: boolean,
 }
 
+/**
+ * This component represents the upcoming services timetable for a given stop.
+ *
+ * Within this component, we render a card full of `MetlinkListItem`'s containing not only the service information, the
+ * 'live' badge if relevant to the service, a toggleable list item to switch between hours and arrival time as well as
+ * the schedule button
+ */
 class StopTimetable extends Component<Props, State> {
     constructor(props: Readonly<Props>) {
         super(props);
@@ -26,6 +33,10 @@ class StopTimetable extends Component<Props, State> {
         }
     }
 
+    /**
+     * Generates the props to pass the `ServiceListContainer`, including additional information such as the arrival time
+     * and the live status.
+     */
     generateListContainerProps() {
         if (!this.props.stopData?.Services) return [];
 
@@ -46,10 +57,16 @@ class StopTimetable extends Component<Props, State> {
         return containerProps;
     }
 
+    /**
+     * Switches the show hours within local state forcing re-render.
+     */
     toggleMinutesHours() {
         this.setState({showHours: !(this.state.showHours)});
     }
 
+    /**
+     * Renders a card containing a stylised service list container and a toggle switch.
+     */
     render() {
         return (
             <View style={{height: '100%'}}>

@@ -10,6 +10,13 @@ interface Props {
     navigation: StackNavigationProp<any>,
 }
 
+/**
+ * This component acts as a dynamic routing handler to check the user does not access an account screen whilst they are
+ * in an invalid user state. An invalid user state would be where the user is authenticated and trying to access an
+ * authentication screen (login, signup, reset password), or is trying to view the account info screen whilst signed in.
+ *
+ * These redirects will happen dynamically and when the user account context changes (by using UserProvider).
+ */
 class AccountRedirectWrapper extends Component<Props, {}> {
     static contextType = UserContext;
 

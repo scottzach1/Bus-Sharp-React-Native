@@ -4,6 +4,18 @@ import {GoogleSignin} from '@react-native-community/google-signin';
 import {getSavedServices, getSavedStops} from "./StorageManager";
 
 /**
+ * DESCRIPTION: This file acts as a library that handles all interactions with Firebase.
+ *
+ * Within this file, we add various helper methods that can be used to perform the different actions related to
+ * authentication and updating fields within Firestore. Although this library provides helper files the actual user
+ * account logged in should be obtained via the `UserContext` exposed by `UserProvider`.
+ *
+ * NOTE: Circular dependency within `createUserWithCredentials` is present. This is to provide more simplified elsewhere
+ * throughout the project. There are no local mutable variables that could possibly cause out of sync conflicts.
+ */
+
+
+/**
  * Signs into a user with provided credentials.
  *
  * @param email: Of user account.
@@ -137,7 +149,7 @@ export const getUserDocument = async (user: FirebaseAuthTypes.User) => {
 /**
  * Describes the return type of requests.
  */
-class AuthenticationResponse {
+export class AuthenticationResponse {
     public success: boolean;
     public errorMessage: string | null;
 
@@ -152,5 +164,3 @@ class AuthenticationResponse {
         this.errorMessage = (errorMessage) ? errorMessage : null;
     }
 }
-
-export default AuthenticationResponse;
