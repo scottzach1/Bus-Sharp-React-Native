@@ -2,8 +2,8 @@ import {StackNavigationProp} from "@react-navigation/stack";
 import React, {FC, useState} from "react";
 import {Route, StyleSheet, Text, View} from "react-native";
 import MapView, {Callout, Marker, Polyline} from 'react-native-maps';
-import {navigateToMetlink} from "../../navigation/LinkingConfiguration";
 import {mapStyles} from "./GoogleMapWidgetStyles";
+import {navigateToMetlink} from "../../navigation/LinkingConfiguration";
 
 
 interface Props {
@@ -20,7 +20,6 @@ let selectedId = "";
 // STICK AROUND LOCATION TO ENSURE THEY DON'T RE-RENDER
 let searchLocation: StopMarker | undefined = undefined
 
-let routeLoaded = false
 let googleLoaded = false;
 let stopOneLoaded = false;
 
@@ -45,18 +44,29 @@ const GoogleMapWidget: FC<Props> = (props) => {
 
     generateMarkers().then();
 
-    if (props.routePaths && !routeLoaded && googleLoaded) {
+    if (props.routePaths) {
         if (props.routePaths.length !== 0) {
             let route = props.routePaths[Math.round(props.routePaths.length / 2) - 1]
             let midLoc = route.path[Math.round(route.path.length / 2) - 1]
-            selectedId = "Route"
-            selectItem(new StopMarker(
-                "Route",
-                route.key,
-                route.key,
-                "",
-                new Position(midLoc.latitude, midLoc.longitude)))
-            routeLoaded = true
+            let maxLat: number = 0, minLat: number = 0;
+            let maxLng: number = 0, minLng: number = 0;
+            route.path.forEach((loc) => {
+                maxLat = (maxLat === 0 || maxLat < loc.latitude) ? loc.latitude : maxLat;
+                minLat = (minLat === 0 || minLat > loc.latitude) ? loc.latitude : minLat;
+
+                maxLng = (maxLng === 0 || maxLng < loc.longitude) ? loc.longitude : maxLng;
+                minLng = (minLng === 0 || minLng > loc.longitude) ? loc.longitude : minLng;
+            })
+
+            let latDelta = (maxLat - minLat)
+            let lngDelta = (maxLng - minLng)
+
+            region = {
+                latitude: midLoc.latitude,
+                longitude: midLoc.longitude,
+                latitudeDelta: latDelta,
+                longitudeDelta: lngDelta,
+            }
         }
     }
 
